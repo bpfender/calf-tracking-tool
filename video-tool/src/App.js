@@ -27,11 +27,18 @@ class Video extends React.Component {
     this.getCurrentTime = this.getCurrentTime.bind(this);
 
     this.state = { time: '' };
+
+
   }
 
   getCurrentTime() {
+    let newStream = new MediaStream(this.videoRef.current.captureStream());
     this.setState({ time: this.videoRef.current.currentTime })
     console.log(this.state.time);
+    let track = newStream.getVideoTracks()[0];
+    let settings = track.getSettings();
+    console.log(settings.frameRate);
+
   }
 
 
@@ -41,8 +48,15 @@ class Video extends React.Component {
         <video ref={this.videoRef} onTimeUpdate={this.getCurrentTime} width="100%" src={video} type="video/mp4">
           <p>Video not supported</p>
         </video>
-        <PlayPause videoRef={this.videoRef}></PlayPause>
-        <VideoInfo videoRef={this.videoRef} videoTime={this.state.time}></VideoInfo>
+        <PlayPause
+          videoRef={this.videoRef}
+          getTime={this.getCurrentTime}>
+        </PlayPause>
+        <VideoInfo
+          videoRef={this.videoRef}
+          videoTime={this.state.time}>
+
+        </VideoInfo>
 
       </div>
     )
@@ -50,15 +64,12 @@ class Video extends React.Component {
 }
 
 class VideoInfo extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div>
         <h2>Time: {this.props.videoTime}</h2>
         <h2>Frame:</h2>
+        <h2>Framerate:</h2>
       </div>
     )
   }
@@ -80,6 +91,7 @@ class PlayPause extends React.Component {
 
   pauseVideo() {
     this.props.videoRef.current.pause();
+    this.props.getTime(); // Sync time on display on pause
   }
 
   render() {
