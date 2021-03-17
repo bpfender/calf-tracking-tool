@@ -24,16 +24,25 @@ class Video extends React.Component {
   constructor(props) {
     super(props);
     this.videoRef = React.createRef();
+    this.getCurrentTime = this.getCurrentTime.bind(this);
+
+    this.state = { time: '' };
   }
+
+  getCurrentTime() {
+    this.setState({ time: this.videoRef.current.currentTime })
+    console.log(this.state.time);
+  }
+
 
   render() {
     return (
       <div>
-        <video ref={this.videoRef} width="100%" src={video} type="video/mp4">
+        <video ref={this.videoRef} onTimeUpdate={this.getCurrentTime} width="100%" src={video} type="video/mp4">
           <p>Video not supported</p>
         </video>
         <PlayPause videoRef={this.videoRef}></PlayPause>
-        <VideoInfo videoRef={this.videoRef}></VideoInfo>
+        <VideoInfo videoRef={this.videoRef} videoTime={this.state.time}></VideoInfo>
 
       </div>
     )
@@ -43,25 +52,12 @@ class Video extends React.Component {
 class VideoInfo extends React.Component {
   constructor(props) {
     super(props);
-
-    this.mediaTime = 0;
-
-    this.getCurrentTime = this.getCurrentTime.bind(this);
-  }
-
-
-
-  getCurrentTime() {
-    if (!this.props.videoRef.current) {
-      return;
-    }
-    this.mediaTime = this.props.videoRef.current.currentTime;
   }
 
   render() {
     return (
       <div>
-        <h2>Time: {this.mediaTime}</h2>
+        <h2>Time: {this.props.videoTime}</h2>
         <h2>Frame:</h2>
       </div>
     )
