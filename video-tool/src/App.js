@@ -1,9 +1,10 @@
 import './App.css';
 // TODO how to manage dynamic imports?
 // QUESTION why is an import required?
-import video from './Big_Buck_Bunny_1080_10s_30MB.mp4'
+import video from './24fps.mp4'
 
 import React from 'react';
+
 
 function App(props) {
   let subject = props.subject;
@@ -19,6 +20,8 @@ function App(props) {
   );
 }
 
+
+
 // QUESTION can we update videoRef before render to avoid null ref?
 class Video extends React.Component {
   constructor(props) {
@@ -26,7 +29,7 @@ class Video extends React.Component {
     this.videoRef = React.createRef();
     this.getCurrentTime = this.getCurrentTime.bind(this);
 
-    this.state = { time: '' };
+    this.state = { time: '', framerate: '' };
 
 
   }
@@ -36,8 +39,8 @@ class Video extends React.Component {
     this.setState({ time: this.videoRef.current.currentTime })
     console.log(this.state.time);
     let track = newStream.getVideoTracks()[0];
-    let settings = track.getSettings();
-    console.log(settings.frameRate);
+    this.setState({ framerate: track.getSettings().frameRate });
+    console.log(this.state.framerate);
 
   }
 
@@ -52,13 +55,18 @@ class Video extends React.Component {
           videoRef={this.videoRef}
           getTime={this.getCurrentTime}>
         </PlayPause>
+        <FrameNavigation
+          videoRef={this.videoRef}
+          videoFramerate={24}
+        >
+        </FrameNavigation>
         <VideoInfo
           videoRef={this.videoRef}
-          videoTime={this.state.time}>
-
+          videoTime={this.state.time}
+          videoFramerate={24}>
         </VideoInfo>
 
-      </div>
+      </div >
     )
   }
 }
@@ -68,12 +76,39 @@ class VideoInfo extends React.Component {
     return (
       <div>
         <h2>Time: {this.props.videoTime}</h2>
-        <h2>Frame:</h2>
-        <h2>Framerate:</h2>
+        <h2>Frame: {this.props.videoTime * this.props.videoFramerate}</h2>
+        <h2>Framerate: {this.props.videoFramerate} </h2>
       </div>
     )
   }
 
+}
+
+class FrameNavigation extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.nextFrame = this.nextFrame.bind(this);
+    this.previousFrame = this.previousFrame.bind(this);
+
+  }
+
+  nextFrame() {
+    this.props.videoRef.current.currentTime += 1 / this.props.videoFramerate;
+  }
+
+  previousFrame() {
+    this.props.videoRef.current.currentTime -= 1 / this.props.videoFramerate;
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.nextFrame}>NEXT FRAME</button>
+        <button onClick={this.previousFrame}>PREV FRAME</button>
+      </div>
+    )
+  }
 }
 
 class PlayPause extends React.Component {
