@@ -1,3 +1,5 @@
 # Ignore video files
 *.avi
 *.mp4
+
+video-tool/.eslintcache
