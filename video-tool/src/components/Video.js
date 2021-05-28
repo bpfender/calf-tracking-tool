@@ -9,6 +9,10 @@ class Video extends React.Component {
         super(props);
 
         this.video = null; // This is set by callback ref in <video> element
+        this.canvas = null;
+        this.ctx = null;
+
+        this.drawFrameToCanvas = this.drawFrameToCanvas.bind(this);
 
         this.play = this.play.bind(this);
         this.pause = this.pause.bind(this);
@@ -22,11 +26,19 @@ class Video extends React.Component {
     }
 
     componentDidMount() {
+        this.ctx = this.canvas.getContext('2d'); // Setup canvas context
+        this.video.requestVideoFrameCallback(this.drawFrameToCanvas);
+
         this.setCurrentTime(0); // Initialise current time to avoid null ref
     }
 
+    drawFrameToCanvas() {
+        this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
+        this.video.requestVideoFrameCallback(this.drawFrameToCanvas);
+    }
+
     play() {
-        this.video.play().catch(console.log("Playback failed")); //TODO proper promise handling
+        this.video.play().catch(console.log("Playback failed")); //FIXME proper promise handling
     }
 
     pause() {
@@ -64,17 +76,32 @@ class Video extends React.Component {
 
     render() {
         return (
-            <div>
-                <video
-                    ref={element => {
-                        this.video = element;
-                    }}
-                    width="100%"
-                    src={video_src}
-                >
+            <div class="video">
+                <div>
+                    <h2>VIDEO</h2>
+                    <video
+                        ref={element => {
+                            this.video = element;
+                        }}
+                        width="100%"
+                        src={video_src}
+                    >
 
-                    <p>ERROR: Video not supported</p>
-                </video>
+                        <p>ERROR: Video not supported</p>
+                    </video>
+                </div>
+                <div>
+                    <h2>CANVAS</h2>
+                    <canvas
+                        ref={element => {
+                            this.canvas = element;
+                        }}
+                        width="800px"
+                        height="600px"
+                    >
+                    </canvas>
+                </div>
+
             </div>
         )
     }
