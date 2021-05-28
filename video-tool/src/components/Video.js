@@ -12,8 +12,10 @@ class Video extends React.Component {
         this.canvas = null;
         this.ctx = null;
 
+        // Canvas drawing
         this.drawFrameToCanvas = this.drawFrameToCanvas.bind(this);
 
+        // Video control
         this.play = this.play.bind(this);
         this.pause = this.pause.bind(this);
         this.nextFrame = this.nextFrame.bind(this);
@@ -22,9 +24,9 @@ class Video extends React.Component {
         this.getCurrentFrame = this.getCurrentFrame.bind(this);
         this.setCurrentFrame = this.setCurrentFrame.bind(this);
         this.getFramesAsTime = this.getFramesAsTime.bind(this);
-
     }
 
+    // TODO not quite sure about lifecycle and where forceupdates() are needed
     componentDidMount() {
         this.ctx = this.canvas.getContext('2d'); // Setup canvas context
         this.video.requestVideoFrameCallback(this.drawFrameToCanvas);
@@ -32,9 +34,30 @@ class Video extends React.Component {
         this.setCurrentTime(0); // Initialise current time to avoid null ref
     }
 
-    drawFrameToCanvas() {
+    drawFrameToCanvas(now, metadata) {
+        this.fpsCalc(now);
         this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
         this.video.requestVideoFrameCallback(this.drawFrameToCanvas);
+    }
+
+    fpsCalc(now) {
+        if (typeof this.fpsCalc.start_time == 'undefined') {
+            this.fpsCalc.start_time = 0.0;
+            this.fpsCalc.count = 0;
+        }
+
+        if (this.fpsCalc.start_time === 0.0) {
+            this.fpsCalc.start_time = now;
+        }
+
+        let elapsed = (now - this.fpsCalc.start_time) / 1000.0;
+        let fps = ++this.fpsCalc.count / elapsed;
+
+        if (this.fpsCalc.count > 50) {
+            this.fpsCalc.start_time = 0.0;
+            this.fpsCalc.count = 0;
+            console.log(Math.floor(fps));
+        }
     }
 
     play() {
