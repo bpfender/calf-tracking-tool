@@ -4,7 +4,8 @@ class Info extends React.Component {
     render() {
         return (
             <div>
-                <p>Time: </p>
+                <p>Media time:</p>
+                <p>Current time: </p>
                 <p>Frame: </p>
             </div>
         )

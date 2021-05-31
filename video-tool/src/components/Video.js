@@ -2,7 +2,8 @@ import React from 'react';
 
 import video_src from '../resources/Amfeed 2 3 16-1.m4v';
 
-let FRAME_DELTA = 1 / 20;
+let FPS = 20
+let FRAME_DELTA = 1 / FPS;
 
 class Video extends React.Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class Video extends React.Component {
         this.ctx = null;
 
         // Canvas drawing
+        this.handleFrameUpdate = this.handleFrameUpdate.bind(this);
         this.drawFrameToCanvas = this.drawFrameToCanvas.bind(this);
 
         // Video control
@@ -29,33 +31,50 @@ class Video extends React.Component {
     // TODO not quite sure about lifecycle and where forceupdates() are needed
     componentDidMount() {
         this.ctx = this.canvas.getContext('2d'); // Setup canvas context
-        this.video.requestVideoFrameCallback(this.drawFrameToCanvas);
 
-        this.setCurrentTime(0); // Initialise current time to avoid null ref
+        this.video.requestVideoFrameCallback(this.handleFrameUpdate);
+
+        this.setCurrentTime(0); // Initialise current time to avoid null ref. TODO, not sure this is actually required
     }
 
-    drawFrameToCanvas(now, metadata) {
-        this.fpsCalc(now);
+    handleFrameUpdate(now, metadata) {
+        this.calculateFPS(now);
+
+        console.log("NEXT FRAME:")
+        console.log("Media time (callback): " + metadata.mediaTime);
+        console.log("Current time: " + this.getCurrentTime());
+        console.log("VSYNC?: " + (metadata.expectedDisplayTime - now))
+        console.log("Callback frame: " + (1 + (metadata.mediaTime * FPS)));
+        console.log("Calculated frame: " + this.getCurrentFrame());
+
+
+        this.drawFrameToCanvas();
+        this.video.requestVideoFrameCallback(this.handleFrameUpdate);
+
+        // TODO add a requestAnimationFrame() to ensure vsync? Might be possible to rely on video callback
+    }
+
+    drawFrameToCanvas() {
         this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
-        this.video.requestVideoFrameCallback(this.drawFrameToCanvas);
     }
 
-    fpsCalc(now) {
-        if (typeof this.fpsCalc.start_time == 'undefined') {
-            this.fpsCalc.start_time = 0.0;
-            this.fpsCalc.count = 0;
+    // FIXME this is very rudimentary currently. Will need to be integrated into setup routine
+    calculateFPS(now) {
+        if (typeof this.calculateFPS.start_time == 'undefined') {
+            this.calculateFPS.start_time = 0.0;
+            this.calculateFPS.count = 0;
         }
 
-        if (this.fpsCalc.start_time === 0.0) {
-            this.fpsCalc.start_time = now;
+        if (this.calculateFPS.start_time === 0.0) {
+            this.calculateFPS.start_time = now;
         }
 
-        let elapsed = (now - this.fpsCalc.start_time) / 1000.0;
-        let fps = ++this.fpsCalc.count / elapsed;
+        let elapsed = (now - this.calculateFPS.start_time) / 1000.0;
+        let fps = ++this.calculateFPS.count / elapsed;
 
-        if (this.fpsCalc.count > 50) {
-            this.fpsCalc.start_time = 0.0;
-            this.fpsCalc.count = 0;
+        if (this.calculateFPS.count > 40) {
+            this.calculateFPS.start_time = 0.0;
+            this.calculateFPS.count = 0;
             console.log(Math.floor(fps));
         }
     }
@@ -99,7 +118,7 @@ class Video extends React.Component {
 
     render() {
         return (
-            <div class="video">
+            <div className="video">
                 <div>
                     <h2>VIDEO</h2>
                     <video
@@ -108,6 +127,7 @@ class Video extends React.Component {
                         }}
                         width="100%"
                         src={video_src}
+                        controls={true}
                     >
 
                         <p>ERROR: Video not supported</p>
