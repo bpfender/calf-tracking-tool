@@ -4,9 +4,9 @@ class Info extends React.Component {
     render() {
         return (
             <div>
-                <p>Media time:</p>
+                <p>Media time: {this.props.videoState.currentTime}</p>
                 <p>Current time: </p>
-                <p>Frame: </p>
+                <p>Frame: {this.props.videoState.currentFrame} </p>
             </div>
         )
     }

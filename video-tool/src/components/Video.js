@@ -30,15 +30,16 @@ class Video extends React.Component {
 
     // TODO not quite sure about lifecycle and where forceupdates() are needed
     componentDidMount() {
+        this.setCurrentTime(0); // Initialise current time to avoid null ref. TODO, not sure this is actually required
+
         this.ctx = this.canvas.getContext('2d'); // Setup canvas context
 
         this.video.requestVideoFrameCallback(this.handleFrameUpdate);
-
-        this.setCurrentTime(0); // Initialise current time to avoid null ref. TODO, not sure this is actually required
     }
 
     handleFrameUpdate(now, metadata) {
-        this.calculateFPS(now);
+        this.props.setCurrentFrame();
+        this.props.setCurrentTime();
 
         console.log("NEXT FRAME:")
         console.log("Media time (callback): " + metadata.mediaTime);
@@ -58,7 +59,7 @@ class Video extends React.Component {
         this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
     }
 
-    // FIXME this is very rudimentary currently. Will need to be integrated into setup routine
+    // TODO this is very rudimentary currently. Will need to be integrated into setup routine
     calculateFPS(now) {
         if (typeof this.calculateFPS.start_time == 'undefined') {
             this.calculateFPS.start_time = 0.0;
@@ -104,7 +105,7 @@ class Video extends React.Component {
     }
 
     getCurrentFrame() {
-        return this.getCurrentTime() / FRAME_DELTA;
+        return this.getCurrentTime() * FPS;
     }
 
     setCurrentFrame(n) {

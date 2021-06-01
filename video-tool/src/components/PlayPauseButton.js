@@ -21,7 +21,6 @@ class PlayPauseButton extends React.Component {
     render() {
         return (
             <div>
-                {/*TODO button actually needs to do something*/}
                 <button onClick={this.handlePlayClick}>PLAY</button>
                 <button onClick={this.handlePauseClick}>PAUSE</button>
             </div>
