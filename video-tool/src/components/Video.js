@@ -58,6 +58,7 @@ class Video extends React.Component {
     }
 
     drawFrameToCanvas() {
+        requestAnimationFrame(this.drawFrameToCanvas);
         this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -91,11 +92,13 @@ class Video extends React.Component {
     }
 
     nextFrame(n = 1) {
-        this.setCurrentTime(this.getCurrentTime() + this.getFramesAsTime(n));
+        console.log("nextFrame: " + (this.getCurrentTime() + this.getFramesAsTime(n)));
+
+        this.setCurrentTime(this.getCurrentTime() + FRAME_DELTA / 2 + this.getFramesAsTime(n));
     }
 
     prevFrame(n = 1) {
-        this.setCurrentTime(this.getCurrentTime() - this.getFramesAsTime(n));
+        this.setCurrentTime(this.getCurrentTime() + FRAME_DELTA / 2 - this.getFramesAsTime(n));
     }
 
     getCurrentTime() {
@@ -108,7 +111,7 @@ class Video extends React.Component {
     }
 
     getCurrentFrame() {
-        return (this.getCurrentTime() * FPS) + 1;
+        return (this.getCurrentTime() * FPS + 1); // adding starting frame offset
     }
 
     setCurrentFrame(n) {
@@ -118,7 +121,6 @@ class Video extends React.Component {
     getFramesAsTime(n) {
         return (n) * FRAME_DELTA;
     }
-
 
     render() {
         return (
@@ -148,7 +150,6 @@ class Video extends React.Component {
                     >
                     </canvas>
                 </div>
-
             </div>
         )
     }

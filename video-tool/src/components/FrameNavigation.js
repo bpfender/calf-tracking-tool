@@ -4,9 +4,14 @@ class FrameNavigation extends React.Component {
     constructor(props) {
         super(props)
 
+        this.handleRewindClick = this.handleRewindClick.bind(this);
         this.handleForwardClick = this.handleForwardClick.bind(this);
         this.handleBackwardClick = this.handleBackwardClick.bind(this);
         this.handleFrameInput = this.handleFrameInput.bind(this);
+    }
+
+    handleRewindClick() {
+        this.props.video.setCurrentTime(0.0);
     }
 
     handleForwardClick() {
@@ -26,6 +31,7 @@ class FrameNavigation extends React.Component {
     render() {
         return (
             <div>
+                <button onClick={this.handleRewindClick}> REWIND</button>
                 <button onClick={this.handleForwardClick}>FRAME FORWARD</button>
                 <button onClick={this.handleBackwardClick}>FRAME BACKWARD</button>
                 <input onChange={this.handleFrameInput}></input>

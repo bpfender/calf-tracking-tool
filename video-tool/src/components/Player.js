@@ -4,6 +4,7 @@ import FrameNavigation from './FrameNavigation';
 import PlayPauseButton from './PlayPauseButton';
 import Video from './Video';
 import Info from './Info';
+import SourceSelector from './SourceSelector';
 
 const defaultVideoState = {
     currentSrc: null,
@@ -54,6 +55,7 @@ class Player extends React.Component {
                 <PlayPauseButton video={this.video}></PlayPauseButton>
                 <FrameNavigation video={this.video}></FrameNavigation>
                 <Info videoState={this.state}></Info>
+                <SourceSelector></SourceSelector>
             </div>
         )
     }
