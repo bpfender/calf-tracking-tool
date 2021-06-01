@@ -5,7 +5,6 @@ class Info extends React.Component {
         return (
             <div>
                 <p>Media time: {this.props.videoState.currentTime}</p>
-                <p>Current time: </p>
                 <p>Frame: {this.props.videoState.currentFrame} </p>
             </div>
         )

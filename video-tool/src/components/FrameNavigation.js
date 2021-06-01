@@ -6,6 +6,7 @@ class FrameNavigation extends React.Component {
 
         this.handleForwardClick = this.handleForwardClick.bind(this);
         this.handleBackwardClick = this.handleBackwardClick.bind(this);
+        this.handleFrameInput = this.handleFrameInput.bind(this);
     }
 
     handleForwardClick() {
@@ -18,11 +19,16 @@ class FrameNavigation extends React.Component {
         this.props.video.prevFrame();
     }
 
+    handleFrameInput(event) {
+        this.props.video.setCurrentFrame(event.target.value);
+    }
+
     render() {
         return (
             <div>
                 <button onClick={this.handleForwardClick}>FRAME FORWARD</button>
                 <button onClick={this.handleBackwardClick}>FRAME BACKWARD</button>
+                <input onChange={this.handleFrameInput}></input>
             </div>
         )
     }

@@ -2,7 +2,7 @@ import React from 'react';
 
 import video_src from '../resources/Amfeed 2 3 16-1.m4v';
 
-let FPS = 20
+let FPS = 20.0
 let FRAME_DELTA = 1 / FPS;
 
 class Video extends React.Component {
@@ -12,6 +12,7 @@ class Video extends React.Component {
         this.video = null; // This is set by callback ref in <video> element
         this.canvas = null;
         this.ctx = null;
+        this.videoFrameCallbackMetadata = null;
 
         // Canvas drawing
         this.handleFrameUpdate = this.handleFrameUpdate.bind(this);
@@ -38,8 +39,9 @@ class Video extends React.Component {
     }
 
     handleFrameUpdate(now, metadata) {
-        this.props.setCurrentFrame();
-        this.props.setCurrentTime();
+        this.videoFrameCallbackMetadata = metadata;
+
+        this.props.setFrameCallbackState();
 
         console.log("NEXT FRAME:")
         console.log("Media time (callback): " + metadata.mediaTime);
@@ -97,7 +99,8 @@ class Video extends React.Component {
     }
 
     getCurrentTime() {
-        return this.video.currentTime;
+        return this.videoFrameCallbackMetadata.mediaTime;
+        //return this.video.currentTime;
     }
 
     setCurrentTime(time) {
@@ -105,7 +108,7 @@ class Video extends React.Component {
     }
 
     getCurrentFrame() {
-        return this.getCurrentTime() * FPS;
+        return (this.getCurrentTime() * FPS) + 1;
     }
 
     setCurrentFrame(n) {
@@ -113,7 +116,7 @@ class Video extends React.Component {
     }
 
     getFramesAsTime(n) {
-        return n * FRAME_DELTA;
+        return (n) * FRAME_DELTA;
     }
 
 

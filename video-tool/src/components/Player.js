@@ -29,22 +29,17 @@ class Player extends React.Component {
         this.video = null;
         this.state = defaultVideoState;
 
-        this.setCurrentTime = this.setCurrentTime.bind(this);
-        this.setCurrentFrame = this.setCurrentFrame.bind(this);
+        this.setFrameCallbackState = this.setFrameCallbackState.bind(this)
     }
 
     componentDidMount() {
         this.forceUpdate(); // Required to generate correct refs
     }
 
-    setCurrentTime() {
+    setFrameCallbackState() {
         this.setState({ currentTime: this.video.getCurrentTime() });
-    }
-
-    setCurrentFrame() {
         this.setState({ currentFrame: this.video.getCurrentFrame() });
     }
-
 
     render() {
         return (
@@ -53,8 +48,7 @@ class Player extends React.Component {
                     ref={element => {
                         this.video = element;
                     }}
-                    setCurrentFrame={this.setCurrentFrame}
-                    setCurrentTime={this.setCurrentTime}
+                    setFrameCallbackState={this.setFrameCallbackState}
                 >
                 </Video>
                 <PlayPauseButton video={this.video}></PlayPauseButton>
