@@ -23,7 +23,16 @@ class Video extends React.Component {
         this.pause = this.pause.bind(this);
         this.nextFrame = this.nextFrame.bind(this);
         this.prevFrame = this.prevFrame.bind(this);
+        this.seekTime = this.seekTime.bind(this);
+        this.seekFrame = this.seekFrame.bind(this);
+        this.rewind = this.seekFrame.bind(this);
+        this.changePlaybackRate = this.changePlaybackRate.bind(this);
+        this.changeFramesToSkip = this.changeFramesToSkip.bind(this);
+
+        // Video utils
+        this.getMediaTime = this.getMediaTime.bind(this);
         this.getCurrentTime = this.getCurrentTime.bind(this);
+        this.setCurrentTime = this.setCurrentTime.bind(this);
         this.getCurrentFrame = this.getCurrentFrame.bind(this);
         this.setCurrentFrame = this.setCurrentFrame.bind(this);
         this.getFramesAsTime = this.getFramesAsTime.bind(this);
@@ -31,13 +40,14 @@ class Video extends React.Component {
 
     // TODO not quite sure about lifecycle and where forceupdates() are needed
     componentDidMount() {
-        this.setCurrentTime(0); // Initialise current time to avoid null ref. TODO, not sure this is actually required
+        this.seekTime(0); // Initialise current time to avoid null ref. TODO, not sure this is actually required
 
         this.ctx = this.canvas.getContext('2d'); // Setup canvas context
 
         this.video.requestVideoFrameCallback(this.handleFrameUpdate);
     }
 
+    /* ---- CANVAS DRAWING ---- */
     handleFrameUpdate(now, metadata) {
         this.videoFrameCallbackMetadata = metadata;
 
@@ -45,7 +55,7 @@ class Video extends React.Component {
 
         console.log("NEXT FRAME:")
         console.log("Media time (callback): " + metadata.mediaTime);
-        console.log("Current time: " + this.getCurrentTime());
+        console.log("Current time: " + this.getMediaTime());
         console.log("VSYNC?: " + (metadata.expectedDisplayTime - now))
         console.log("Callback frame: " + (1 + (metadata.mediaTime * FPS)));
         console.log("Calculated frame: " + this.getCurrentFrame());
@@ -58,31 +68,11 @@ class Video extends React.Component {
     }
 
     drawFrameToCanvas() {
-        requestAnimationFrame(this.drawFrameToCanvas);
         this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
+        requestAnimationFrame(this.drawFrameToCanvas);
     }
 
-    // TODO this is very rudimentary currently. Will need to be integrated into setup routine
-    calculateFPS(now) {
-        if (typeof this.calculateFPS.start_time == 'undefined') {
-            this.calculateFPS.start_time = 0.0;
-            this.calculateFPS.count = 0;
-        }
-
-        if (this.calculateFPS.start_time === 0.0) {
-            this.calculateFPS.start_time = now;
-        }
-
-        let elapsed = (now - this.calculateFPS.start_time) / 1000.0;
-        let fps = ++this.calculateFPS.count / elapsed;
-
-        if (this.calculateFPS.count > 40) {
-            this.calculateFPS.start_time = 0.0;
-            this.calculateFPS.count = 0;
-            console.log(Math.floor(fps));
-        }
-    }
-
+    /* ---- VIDEO CONTROLS ---- */
     play() {
         this.video.play().catch(console.log("Playback failed")); //FIXME proper promise handling
     }
@@ -92,18 +82,41 @@ class Video extends React.Component {
     }
 
     nextFrame(n = 1) {
-        console.log("nextFrame: " + (this.getCurrentTime() + this.getFramesAsTime(n)));
-
-        this.setCurrentTime(this.getCurrentTime() + FRAME_DELTA / 2 + this.getFramesAsTime(n));
+        this.setCurrentTime(this.getMediaTime() + FRAME_DELTA / 2 + this.getFramesAsTime(n));
     }
 
     prevFrame(n = 1) {
-        this.setCurrentTime(this.getCurrentTime() + FRAME_DELTA / 2 - this.getFramesAsTime(n));
+        this.setCurrentTime(this.getMediaTime() + FRAME_DELTA / 2 - this.getFramesAsTime(n));
+    }
+
+    seekTime(time) {
+        this.setCurrentTime(time);
+    }
+
+    seekFrame(frame) {
+        this.setCurrentFrame(frame);
+    }
+
+    rewind() {
+        this.setCurrentTime(0);
+    }
+
+    changePlaybackRate(rate) {
+        this.video.playbackRate = rate;
+    }
+
+    changeFramesToSkip() {
+
+    }
+
+
+    /* ---- VIDEO UTILS ---- */
+    getMediaTime() {
+        return this.videoFrameCallbackMetadata.mediaTime;
     }
 
     getCurrentTime() {
-        return this.videoFrameCallbackMetadata.mediaTime;
-        //return this.video.currentTime;
+        return this.video.currentTime;
     }
 
     setCurrentTime(time) {
@@ -111,7 +124,7 @@ class Video extends React.Component {
     }
 
     getCurrentFrame() {
-        return (this.getCurrentTime() * FPS + 1); // adding starting frame offset
+        return (this.getMediaTime() * FPS + 1); // adding starting frame offset
     }
 
     setCurrentFrame(n) {
@@ -121,6 +134,7 @@ class Video extends React.Component {
     getFramesAsTime(n) {
         return (n) * FRAME_DELTA;
     }
+
 
     render() {
         return (

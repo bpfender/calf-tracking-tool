@@ -5,6 +5,7 @@ import PlayPauseButton from './PlayPauseButton';
 import Video from './Video';
 import Info from './Info';
 import SourceSelector from './SourceSelector';
+import PlaybackRate from './PlaybackRate';
 
 const defaultVideoState = {
     currentSrc: null,
@@ -54,6 +55,7 @@ class Player extends React.Component {
                 </Video>
                 <PlayPauseButton video={this.video}></PlayPauseButton>
                 <FrameNavigation video={this.video}></FrameNavigation>
+                <PlaybackRate video={this.video}></PlaybackRate>
                 <Info videoState={this.state}></Info>
                 <SourceSelector></SourceSelector>
             </div>
