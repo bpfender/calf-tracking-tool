@@ -38,7 +38,11 @@ class Video extends React.Component {
         this.getFramesAsTime = this.getFramesAsTime.bind(this);
 
         //Video events
+        this.handlePause = this.handlePause.bind(this);
+        this.handlePlay = this.handlePlay.bind(this);
 
+        this.handleSeeked = this.handleSeeked.bind(this);
+        this.handleSeeking = this.handleSeeking.bind(this);
 
     }
 
@@ -52,20 +56,11 @@ class Video extends React.Component {
     }
 
     /* ---- FRAME CALLBACKS ---- */
+    //TODO this is a bit messy. Needs to be tidied
     handleFrameUpdate(now, metadata) {
         this.videoFrameCallbackMetadata = metadata;
 
-        this.props.setFrameCallbackState();
-
-        /*
-        console.log("NEXT FRAME:")
-        console.log("Media time (callback): " + metadata.mediaTime);
-        console.log("Current time: " + this.getMediaTime());
-        console.log("VSYNC?: " + (metadata.expectedDisplayTime - now))
-        console.log("Callback frame: " + (1 + (metadata.mediaTime * FPS)));
-        console.log("Calculated frame: " + this.getCurrentFrame());
-        */
-
+        this.props.playerDispatch({ type: 'FRAME_CALLBACK', payload: { metadata: metadata, video: this } });
 
         this.drawFrameToCanvas();
         this.video.requestVideoFrameCallback(this.handleFrameUpdate);
@@ -139,6 +134,27 @@ class Video extends React.Component {
     }
 
 
+    /* ---- VIDEO EVENTS ---- */
+    handlePause() {
+        this.props.playerDispatch({ type: 'PAUSE' });
+    }
+
+    handlePlay() {
+        this.props.playerDispatch({ type: 'PLAY' });
+    }
+
+    handleSeeked() {
+        this.props.playerDispatch({ type: 'SEEKED' });
+    }
+
+    handleSeeking() {
+        this.props.playerDispatch({ type: 'SEEKING' });
+    }
+
+
+
+
+
     render() {
         return (
             <div className="video">
@@ -151,6 +167,28 @@ class Video extends React.Component {
                         width="100%"
                         src={video_src}
                         controls={true}
+
+                        onAbort={() => { }}
+                        onCanPlay={() => { }}
+                        onCanPlayThrough={() => { }}
+                        onDurationChange={() => { }}
+                        onEmptied={() => { }}
+                        onEnded={() => { }}
+                        onError={() => { }}
+                        onLoadedData={() => { }}
+                        onLoadedMetadata={() => { }}
+                        onLoadStart={() => { }}
+                        onPause={this.handlePause}
+                        onPlay={this.handlePlay}
+                        onPlaying={() => { }}
+                        onProgress={() => { }}
+                        onRateChange={() => { }}
+                        onSeeked={this.handleSeeked}
+                        onSeeking={this.handleSeeking}
+                        onStalled={() => { }}
+                        onSuspend={() => { }}
+                        onTimeUpdate={() => { }}
+                        onWaiting={() => { }}
                     >
 
                         <p>ERROR: Video not supported</p>

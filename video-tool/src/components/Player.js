@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useReducer, useState } from 'react';
 
 import FrameNavigation from './controls/FrameNavigation';
 import PlayPauseButton from './controls/PlayPauseButton';
@@ -11,29 +11,31 @@ import { defaultPlayerState, playerReducer } from './state/player-context';
 
 
 function Player() {
+    // QUESTION not totally sure about my use of callback ref
     const [video, setVideo] = useState();
+    const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 
+    /* 
     const [state, setState] = useState(defaultPlayerState);
-
     const updateState = () => setState(prevState => {
-        return {
-            ...prevState,
-            currentTime: video.getCurrentTime(),
-            currentFrame: video.getCurrentFrame()
-        };
-    });
+         return {
+             ...prevState,
+             currentTime: video.getCurrentTime(),
+             currentFrame: video.getCurrentFrame()
+         };
+     });*/
 
     return (
         <div>
             <Video
                 ref={useCallback(node => { setVideo(node) }, [])}
-                setFrameCallbackState={updateState}
+                playerDispatch={playerDispatch}
             >
             </Video>
             <PlayPauseButton video={video}></PlayPauseButton>
             <FrameNavigation video={video}></FrameNavigation>
             <PlaybackRate video={video}></PlaybackRate>
-            <Info videoState={state}></Info>
+            <Info videoState={playerState}></Info>
             <SourceSelector></SourceSelector>
         </div >
     )
