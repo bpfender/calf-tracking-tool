@@ -14,7 +14,7 @@ class Video extends React.Component {
         this.ctx = null;
         this.videoFrameCallbackMetadata = null;
 
-        // Canvas drawing
+        // Frame callbacks
         this.handleFrameUpdate = this.handleFrameUpdate.bind(this);
         this.drawFrameToCanvas = this.drawFrameToCanvas.bind(this);
 
@@ -36,6 +36,10 @@ class Video extends React.Component {
         this.getCurrentFrame = this.getCurrentFrame.bind(this);
         this.setCurrentFrame = this.setCurrentFrame.bind(this);
         this.getFramesAsTime = this.getFramesAsTime.bind(this);
+
+        //Video events
+
+
     }
 
     // TODO not quite sure about lifecycle and where forceupdates() are needed
@@ -47,18 +51,20 @@ class Video extends React.Component {
         this.video.requestVideoFrameCallback(this.handleFrameUpdate);
     }
 
-    /* ---- CANVAS DRAWING ---- */
+    /* ---- FRAME CALLBACKS ---- */
     handleFrameUpdate(now, metadata) {
         this.videoFrameCallbackMetadata = metadata;
 
         this.props.setFrameCallbackState();
 
+        /*
         console.log("NEXT FRAME:")
         console.log("Media time (callback): " + metadata.mediaTime);
         console.log("Current time: " + this.getMediaTime());
         console.log("VSYNC?: " + (metadata.expectedDisplayTime - now))
         console.log("Callback frame: " + (1 + (metadata.mediaTime * FPS)));
         console.log("Calculated frame: " + this.getCurrentFrame());
+        */
 
 
         this.drawFrameToCanvas();

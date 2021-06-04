@@ -1,11 +1,11 @@
 import React from 'react';
 
-import FrameNavigation from './FrameNavigation';
-import PlayPauseButton from './PlayPauseButton';
+import FrameNavigation from './controls/FrameNavigation';
+import PlayPauseButton from './controls/PlayPauseButton';
 import Video from './Video';
 import Info from './Info';
 import SourceSelector from './SourceSelector';
-import PlaybackRate from './PlaybackRate';
+import PlaybackRate from './controls/PlaybackRate';
 
 const defaultVideoState = {
     currentSrc: null,

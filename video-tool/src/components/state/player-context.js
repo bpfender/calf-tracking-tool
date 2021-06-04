@@ -32,7 +32,7 @@ const defaultPlayerState = {
     seekingTime: 0,
     seekingFrame: 0,
     framesToSkip: 1,
-    timeToSkip: null,
+    timeToSkip: 1,
 };
 
 function playerReducer(state = defaultPlayerState, action) {
