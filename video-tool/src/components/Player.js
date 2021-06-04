@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 import FrameNavigation from './controls/FrameNavigation';
 import PlayPauseButton from './controls/PlayPauseButton';
@@ -11,32 +11,31 @@ import { defaultPlayerState, playerReducer } from './state/player-context';
 
 
 function Player() {
-    const video = useRef();
+    const [video, setVideo] = useState();
 
-    const [state, setState] = React.useState(defaultPlayerState);
+    const [state, setState] = useState(defaultPlayerState);
 
     const updateState = () => setState(prevState => {
         return {
             ...prevState,
-            currentTime: video.current.getCurrentTime(),
-            currentFrame: video.current.getCurrentFrame()
+            currentTime: video.getCurrentTime(),
+            currentFrame: video.getCurrentFrame()
         };
     });
 
     return (
         <div>
             <Video
-                ref={video}
+                ref={useCallback(node => { setVideo(node) }, [])}
                 setFrameCallbackState={updateState}
             >
             </Video>
-            <PlayPauseButton video={video.current}></PlayPauseButton>
-            <FrameNavigation video={video.current}></FrameNavigation>
-            <PlaybackRate video={video.current}></PlaybackRate>
+            <PlayPauseButton video={video}></PlayPauseButton>
+            <FrameNavigation video={video}></FrameNavigation>
+            <PlaybackRate video={video}></PlaybackRate>
             <Info videoState={state}></Info>
             <SourceSelector></SourceSelector>
-        </div>
-
+        </div >
     )
 }
 
