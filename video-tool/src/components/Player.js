@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import FrameNavigation from './controls/FrameNavigation';
 import PlayPauseButton from './controls/PlayPauseButton';
@@ -9,6 +9,40 @@ import PlaybackRate from './controls/PlaybackRate';
 
 import { defaultPlayerState, playerReducer } from './state/player-context';
 
+
+function Player() {
+    const video = useRef();
+
+    const [state, setState] = React.useState(defaultPlayerState);
+
+    const updateState = () => setState(prevState => {
+        return {
+            ...prevState,
+            currentTime: video.current.getCurrentTime(),
+            currentFrame: video.current.getCurrentFrame()
+        };
+    });
+
+    return (
+        <div>
+            <Video
+                ref={video}
+                setFrameCallbackState={updateState}
+            >
+            </Video>
+            <PlayPauseButton video={video.current}></PlayPauseButton>
+            <FrameNavigation video={video.current}></FrameNavigation>
+            <PlaybackRate video={video.current}></PlaybackRate>
+            <Info videoState={state}></Info>
+            <SourceSelector></SourceSelector>
+        </div>
+
+    )
+}
+
+
+
+/*
 class Player extends React.Component {
     constructor(props) {
         super(props);
@@ -46,6 +80,6 @@ class Player extends React.Component {
             </div>
         )
     }
-}
+}*/
 
 export default Player;
