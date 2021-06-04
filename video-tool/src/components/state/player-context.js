@@ -37,7 +37,7 @@ export function playerReducer(state = defaultPlayerState, action) {
         case 'FRAME_CALLBACK':
             return {
                 ...state,
-                currentFrame: action.payload.video.getCurrentFrame(),
+                currentFrame: action.payload.currentFrame,
                 presentationTime: action.payload.metadata.presentationTime,
                 expectedDisplayTime: action.payload.metadata.expectedDisplayTime,
                 mediaTime: action.payload.metadata.mediaTime,
@@ -45,6 +45,7 @@ export function playerReducer(state = defaultPlayerState, action) {
                 processingDuration: action.payload.metadata.processingDuration,
             };
         case 'ABORT':
+            return state;
         case 'CAN_PLAY':
         case 'CAN_PLAY_THROUGH':
         case 'DURATION_CHANGE':
@@ -55,8 +56,20 @@ export function playerReducer(state = defaultPlayerState, action) {
                 ended: true,
             };
         case 'ERROR':
+            return {
+                ...state,
+                error: action.payload.error,
+            };
         case 'LOADED_DATA':
+            return {
+                ...state,
+                readyState: action.payload.readyState,
+            };
         case 'LOADED_METADATA':
+            return {
+                ...state,
+                readyState: action.payload.readyState,
+            };
         case 'LOAD_START':
         case 'PAUSE':
             return {
@@ -71,6 +84,10 @@ export function playerReducer(state = defaultPlayerState, action) {
         case 'PLAYING':
         case 'PROGRESS':
         case 'RATE_CHANGE':
+            return {
+                ...state,
+                playbackRate: action.payload.playbackRate,
+            };
         case 'SEEKED':
             return {
                 ...state,
@@ -86,7 +103,11 @@ export function playerReducer(state = defaultPlayerState, action) {
         case 'SUSPEND':
         case 'TIME_UPDATE':
         case 'WAITING':
-            break;
+        case 'FRAMES_TO_SKIP':
+            return {
+                ...state,
+                framesToSkip: action.payload,
+            };
         default: {
             throw new Error(`Unknown action type: ${action.type}`);
         }

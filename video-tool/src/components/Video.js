@@ -43,6 +43,7 @@ class Video extends React.Component {
 
         this.handleSeeked = this.handleSeeked.bind(this);
         this.handleSeeking = this.handleSeeking.bind(this);
+        this.handleError = this.handleError.bind(this);
 
     }
 
@@ -60,7 +61,7 @@ class Video extends React.Component {
     handleFrameUpdate(now, metadata) {
         this.videoFrameCallbackMetadata = metadata;
 
-        this.props.playerDispatch({ type: 'FRAME_CALLBACK', payload: { metadata: metadata, video: this } });
+        this.props.playerDispatch({ type: 'FRAME_CALLBACK', payload: { metadata: metadata, currentFrame: this.getCurrentFrame() } });
 
         this.drawFrameToCanvas();
         this.video.requestVideoFrameCallback(this.handleFrameUpdate);
@@ -103,8 +104,8 @@ class Video extends React.Component {
         this.video.playbackRate = rate;
     }
 
-    changeFramesToSkip() {
-
+    changeFramesToSkip(n) {
+        this.props.playerDispatch({ type: 'FRAMES_TO_SKIP', payload: n })
     }
 
 
@@ -151,8 +152,21 @@ class Video extends React.Component {
         this.props.playerDispatch({ type: 'SEEKING' });
     }
 
+    handleError() {
+        this.props.playerDispatch({ type: 'ERROR', payload: { error: this.video.error } });
+    }
 
+    handleLoadedData() {
+        this.props.playerDispatch({ type: 'LOADED_DATA', payload: { readyState: this.video.readyState } });
+    }
 
+    handleLoadedMetadata() {
+        this.props.playerDispatch({ type: 'LOADED_METADATA', payload: { readyState: this.video.readyState } });
+    }
+
+    handleRateChange() {
+        this.props.playerDispatch({ type: 'RATE_CHANGE', payload: { playbackRate: this.video.playbackRate } })
+    }
 
 
     render() {

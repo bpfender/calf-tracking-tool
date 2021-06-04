@@ -2,10 +2,13 @@ import React from 'react';
 
 
 function Info(props) {
-    console.log(props.videoState);
+    //console.log(props.videoState);
+
+    let button = props.videoState.seeking === true ? <p>seeking</p> : <p> playing </p>;
 
     return (
         <div>
+            {button}
             <p>Media time: {props.videoState.mediaTime}</p>
             <p>Frame: {props.videoState.currentFrame} </p>
         </div>
