@@ -7,29 +7,14 @@ import Info from './Info';
 import SourceSelector from './SourceSelector';
 import PlaybackRate from './controls/PlaybackRate';
 
-const defaultVideoState = {
-    currentSrc: null,
-    duration: 0,
-    totalFrames: 0,
-    fps: undefined,
-    playbackRate: 1,
-
-    ready: null,
-    loading: null,
-    playing: null,
-    seeking: null,
-    ended: null,
-
-    currentTime: 0,
-    currentFrame: 0,
-};
+import { defaultPlayerState, playerReducer } from './state/player-context';
 
 class Player extends React.Component {
     constructor(props) {
         super(props);
 
         this.video = null;
-        this.state = defaultVideoState;
+        this.state = defaultPlayerState;
 
         this.setFrameCallbackState = this.setFrameCallbackState.bind(this)
     }
@@ -39,7 +24,7 @@ class Player extends React.Component {
     }
 
     setFrameCallbackState() {
-        this.setState({ currentTime: this.video.getCurrentTime() });
+        this.setState({ currentTime: this.video.getMediaTime() });
         this.setState({ currentFrame: this.video.getCurrentFrame() });
     }
 

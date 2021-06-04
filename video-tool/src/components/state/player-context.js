@@ -1,8 +1,4 @@
-import React from 'react';
-
-const playerContext = React.createContext();
-
-const defaultPlayerState = {
+export const defaultPlayerState = {
     // requestVideoFrameCallback() metadata
     presentationTime: 0,
     expectedDisplayTime: 0,
@@ -35,7 +31,7 @@ const defaultPlayerState = {
     timeToSkip: 1,
 };
 
-function playerReducer(state = defaultPlayerState, action) {
+export function playerReducer(state = defaultPlayerState, action) {
 
     let newState = { ...state };
 
@@ -71,8 +67,10 @@ function playerReducer(state = defaultPlayerState, action) {
         case 'SUSPEND':
         case 'TIME_UPDATE':
         case 'WAITING':
+        case 'FRAME_CALLBACK':
         default: {
             throw new Error(`Unknown action type: ${action.type}`);
         }
     }
 }
+

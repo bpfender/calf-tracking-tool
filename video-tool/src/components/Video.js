@@ -48,7 +48,7 @@ class Video extends React.Component {
 
         this.ctx = this.canvas.getContext('2d'); // Setup canvas context
 
-        this.video.requestVideoFrameCallback(this.handleFrameUpdate);
+        this.video.requestVideoFrameCallback(this.handleFrameUpdate); // Setup frame callback
     }
 
     /* ---- FRAME CALLBACKS ---- */
@@ -69,13 +69,10 @@ class Video extends React.Component {
 
         this.drawFrameToCanvas();
         this.video.requestVideoFrameCallback(this.handleFrameUpdate);
-
-        // TODO add a requestAnimationFrame() to ensure vsync? Might be possible to rely on video callback
     }
 
     drawFrameToCanvas() {
         this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
-        requestAnimationFrame(this.drawFrameToCanvas);
     }
 
     /* ---- VIDEO CONTROLS ---- */
