@@ -1,7 +1,7 @@
 import React, { useCallback, useReducer, useState } from 'react';
 
 import FrameNavigation from './controls/FrameNavigation';
-import PlayPauseButton from './controls/PlayPauseButton';
+import PlayPause from './controls/PlayPause';
 import Video from './Video';
 import Info from './Info';
 import SourceSelector from './SourceSelector';
@@ -32,7 +32,7 @@ function Player() {
                 playerDispatch={playerDispatch}
             >
             </Video>
-            <PlayPauseButton video={video}></PlayPauseButton>
+            <PlayPause video={video} videoState={playerState}></PlayPause>
             <FrameNavigation video={video}></FrameNavigation>
             <PlaybackRate video={video}></PlaybackRate>
             <Info videoState={playerState}></Info>

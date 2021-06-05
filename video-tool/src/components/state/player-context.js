@@ -106,7 +106,12 @@ export function playerReducer(state = defaultPlayerState, action) {
         case 'FRAMES_TO_SKIP':
             return {
                 ...state,
-                framesToSkip: action.payload,
+                framesToSkip: action.payload.framesToSkip,
+            };
+        case 'TIME_TO_SKIP':
+            return {
+                ...state,
+                timeToSkip: action.payload.timeToSkip,
             };
         default: {
             throw new Error(`Unknown action type: ${action.type}`);

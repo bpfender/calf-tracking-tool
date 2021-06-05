@@ -38,13 +38,27 @@ class Video extends React.Component {
         this.getFramesAsTime = this.getFramesAsTime.bind(this);
 
         //Video events
+        this.handleAbort = null;
+        this.handleCanPlay = null;
+        this.handleCanPlayThrough = null;
+        this.handleDurationChange = null;
+        this.handleEmptied = null;
+        this.handleEnded = this.handleEnded.bind(this);
+        this.handleError = this.handleError.bind(this);
+        this.handleLoadedData = this.handleLoadedData.bind(this);
+        this.handleLoadedMetadata = this.handleLoadedMetadata.bind(this);
+        this.handleLoadStart = null;
         this.handlePause = this.handlePause.bind(this);
         this.handlePlay = this.handlePlay.bind(this);
-
+        this.handlePlaying = null;
+        this.handleProgress = null;
+        this.handleRateChange = this.handleRateChange.bind(this);
         this.handleSeeked = this.handleSeeked.bind(this);
         this.handleSeeking = this.handleSeeking.bind(this);
-        this.handleError = this.handleError.bind(this);
-
+        this.handleStalled = null;
+        this.handleSuspend = null;
+        this.handleTimeUpdate = null;
+        this.handleWaiting = null;
     }
 
     // TODO not quite sure about lifecycle and where forceupdates() are needed
@@ -105,7 +119,11 @@ class Video extends React.Component {
     }
 
     changeFramesToSkip(n) {
-        this.props.playerDispatch({ type: 'FRAMES_TO_SKIP', payload: n })
+        this.props.playerDispatch({ type: 'FRAMES_TO_SKIP', payload: { framesToSkip: n } })
+    }
+
+    changeTimeToSkip(t) {
+        this.props.playerDispatch({ type: 'TIME_TO_SKIP', payload: { timeToSkip: t } });
     }
 
 
@@ -152,6 +170,10 @@ class Video extends React.Component {
         this.props.playerDispatch({ type: 'SEEKING' });
     }
 
+    handleEnded() {
+        this.props.playerDispatch({ type: 'ENDED' });
+    }
+
     handleError() {
         this.props.playerDispatch({ type: 'ERROR', payload: { error: this.video.error } });
     }
@@ -187,16 +209,16 @@ class Video extends React.Component {
                         onCanPlayThrough={() => { }}
                         onDurationChange={() => { }}
                         onEmptied={() => { }}
-                        onEnded={() => { }}
-                        onError={() => { }}
-                        onLoadedData={() => { }}
-                        onLoadedMetadata={() => { }}
+                        onEnded={this.handleEnded}
+                        onError={this.handleError}
+                        onLoadedData={this.handleLoadedData}
+                        onLoadedMetadata={this.handleLoadedMetadata}
                         onLoadStart={() => { }}
                         onPause={this.handlePause}
                         onPlay={this.handlePlay}
                         onPlaying={() => { }}
                         onProgress={() => { }}
-                        onRateChange={() => { }}
+                        onRateChange={this.handleRateChange}
                         onSeeked={this.handleSeeked}
                         onSeeking={this.handleSeeking}
                         onStalled={() => { }}
