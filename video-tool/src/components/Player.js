@@ -1,15 +1,10 @@
 import React, { useCallback, useReducer, useState } from 'react';
+import { defaultPlayerState, playerReducer } from './state/player-context';
 
-import FrameNavigation from './controls/FrameNavigation';
-import PlayPause from './controls/PlayPause';
 import Video from './Video';
+import ControlBar from './controls/ControlBar';
 import Info from './Info';
 import SourceSelector from './SourceSelector';
-import PlaybackRate from './controls/PlaybackRate';
-
-
-import { defaultPlayerState, playerReducer } from './state/player-context';
-import ControlBar from './controls/ControlBar';
 
 
 function Player() {
@@ -35,9 +30,6 @@ function Player() {
             >
             </Video>
             <ControlBar video={video} playerState={playerState}></ControlBar>
-            <PlayPause video={video} playerState={playerState}></PlayPause>
-            <FrameNavigation video={video}></FrameNavigation>
-            <PlaybackRate video={video}></PlaybackRate>
             <Info videoState={playerState}></Info>
             <SourceSelector></SourceSelector>
 

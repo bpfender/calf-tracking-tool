@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PlaybackRate(props) {
+export function PlaybackRate(props) {
 
     const handlePlaybackRateClick = (rate) => {
         props.video.changePlaybackRate(rate);
@@ -16,5 +16,3 @@ function PlaybackRate(props) {
         </div>
     )
 }
-
-export default PlaybackRate;
