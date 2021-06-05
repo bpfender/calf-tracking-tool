@@ -5,6 +5,7 @@ import Video from './Video';
 import ControlBar from './controls/ControlBar';
 import Info from './Info';
 import SourceSelector from './SourceSelector';
+import { VideoSlider } from './controls/VideoSlider';
 
 
 function Player() {
@@ -29,6 +30,7 @@ function Player() {
                 playerDispatch={playerDispatch}
             >
             </Video>
+            <VideoSlider></VideoSlider>
             <ControlBar video={video} playerState={playerState}></ControlBar>
             <Info videoState={playerState}></Info>
             <SourceSelector></SourceSelector>
