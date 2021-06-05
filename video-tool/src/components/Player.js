@@ -7,7 +7,9 @@ import Info from './Info';
 import SourceSelector from './SourceSelector';
 import PlaybackRate from './controls/PlaybackRate';
 
+
 import { defaultPlayerState, playerReducer } from './state/player-context';
+import ControlBar from './controls/ControlBar';
 
 
 function Player() {
@@ -32,11 +34,13 @@ function Player() {
                 playerDispatch={playerDispatch}
             >
             </Video>
-            <PlayPause video={video} videoState={playerState}></PlayPause>
+            <ControlBar video={video} playerState={playerState}></ControlBar>
+            <PlayPause video={video} playerState={playerState}></PlayPause>
             <FrameNavigation video={video}></FrameNavigation>
             <PlaybackRate video={video}></PlaybackRate>
             <Info videoState={playerState}></Info>
             <SourceSelector></SourceSelector>
+
         </div >
     )
 }

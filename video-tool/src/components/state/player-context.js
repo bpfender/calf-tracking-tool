@@ -27,7 +27,7 @@ export const defaultPlayerState = {
     currentFrame: 0,
     seekingTime: 0,
     seekingFrame: 0,
-    framesToSkip: 1,
+    framesToSkip: 5,
     timeToSkip: 1,
 };
 

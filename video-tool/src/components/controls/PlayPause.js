@@ -1,14 +1,14 @@
 import React from 'react';
 
 function PlayPause(props) {
-    const { video, videoState } = props;
+    const { video, playerState } = props;
     const handlePlayClick = () => { video.play() };
     const handlePauseClick = () => { video.pause() };
 
-    if (videoState.paused === true) {
+    if (playerState.paused === true) {
         return <button onClick={handlePlayClick}>PLAY</button>;
     } else {
-        return <button onClick={handlePauseClick}>PAUSE</button>
+        return <button onClick={handlePauseClick}>PAUSE</button>;
     }
 }
 
