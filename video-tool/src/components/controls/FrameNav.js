@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // TODO rewrite below to use generic button component
 function FrameButton(props) {
@@ -54,4 +54,23 @@ export function FramesToSkip(props) {
             <button onClick={() => handleFramesClick(100)}>100</button>
         </div>
     )
+}
+
+export function JumpToFrame(props) {
+    const { video } = props;
+    const [input, setInput] = useState();
+    const handleChange = (event) => { setInput(event.target.value) };
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        video.setCurrentFrame(input);
+    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <label>Select Frame:
+                <input type='number' onChange={handleChange}></input>
+            </label>
+            <input type='submit' value='Submit'></input>
+        </form>
+    );
 }

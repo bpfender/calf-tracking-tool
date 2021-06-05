@@ -1,11 +1,12 @@
 import React from 'react';
 
 import PlayPause from './PlayPause';
-import { NextFrame, PrevFrame, NextNFrames, PrevNFrames, FramesToSkip } from './FrameNav';
+import { NextFrame, PrevFrame, NextNFrames, PrevNFrames, FramesToSkip, JumpToFrame } from './FrameNav';
 import { PlaybackRate } from './PlaybackRate';
 
 function ControlBar(props) {
     const { video, playerState } = props;
+
     return (
         <div>
             <PrevNFrames video={video} playerState={playerState}></PrevNFrames>
@@ -15,7 +16,7 @@ function ControlBar(props) {
             <NextNFrames video={video} playerState={playerState}></NextNFrames>
             <FramesToSkip video={video}></FramesToSkip>
             <PlaybackRate video={video}></PlaybackRate>
-
+            <JumpToFrame video={video}></JumpToFrame>
         </div>
     );
 }

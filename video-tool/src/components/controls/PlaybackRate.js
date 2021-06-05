@@ -1,9 +1,9 @@
 import React from 'react';
 
 export function PlaybackRate(props) {
-
+    const { video } = props;
     const handlePlaybackRateClick = (rate) => {
-        props.video.changePlaybackRate(rate);
+        video.changePlaybackRate(rate);
     };
 
     return (

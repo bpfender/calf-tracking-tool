@@ -1,11 +1,11 @@
 import React from 'react';
 
 function FrameNavigation(props) {
-
-    const handleRewindClick = () => { props.video.setCurrentTime(0) };
-    const handleForwardClick = () => { props.video.nextFrame() };
-    const handleBackwardClick = () => { props.video.prevFrame() };
-    const handleFrameInput = (event) => props.video.setCurrentFrame(event.target.value);
+    const { video } = props;
+    const handleRewindClick = () => { video.setCurrentTime(0) };
+    const handleForwardClick = () => { video.nextFrame() };
+    const handleBackwardClick = () => { video.prevFrame() };
+    const handleFrameInput = (event) => {video.setCurrentFrame(event.target.value)};
 
 
     return (
