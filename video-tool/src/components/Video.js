@@ -193,8 +193,8 @@ class Video extends React.Component {
 
     render() {
         return (
-            <div className="video">
-                <div>
+            <div>
+                <div className="video_elem">
                     <h2>VIDEO</h2>
                     <video
                         ref={element => {

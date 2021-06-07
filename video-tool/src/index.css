@@ -12,7 +12,6 @@ code {
     monospace;
 }
 
-.video {
-  display: flex;
-  flex-direction: row;
+.video_elem {
+  display:none;
 }

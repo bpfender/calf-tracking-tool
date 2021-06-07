@@ -1,5 +1,5 @@
 import React, { useCallback, useReducer, useState } from 'react';
-import { defaultPlayerState, playerReducer } from './state/player-context';
+import { defaultPlayerState, playerReducer } from './state/player-state.js';
 
 import Video from './Video';
 import ControlBar from './controls/ControlBar';

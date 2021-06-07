@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
 // TODO rewrite below to use generic button component
-function FrameButton(props) {
+/*function FrameButton(props) {
     const { type, action } = props;
     const handleClick = () => { action() };
 
     return <button onClick={handleClick}>{type}</button>;
-}
+}*/
 
 
 export function NextFrame(props) {
@@ -21,7 +21,7 @@ export function PrevFrame(props) {
     const { video } = props;
     const handleClick = () => { video.prevFrame() };
 
-    return <button onClick={handleClick}>NEXT FRAME</button>;
+    return <button onClick={handleClick}>PREV FRAME</button>;
 }
 
 export function NextNFrames(props) {
@@ -33,7 +33,7 @@ export function NextNFrames(props) {
 
 export function PrevNFrames(props) {
     const { video, playerState } = props;
-    const handleClick = () => { video.nextFrame(playerState.framesToSkip) };
+    const handleClick = () => { video.prevFrame(playerState.framesToSkip) };
 
     return <button onClick={handleClick}>PREV N FRAMES</button>;
 }
