@@ -13,5 +13,9 @@ code {
 }
 
 .video_elem {
+  display:flex;
+}
+
+canvas {
   display:none;
 }

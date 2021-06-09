@@ -1,8 +1,8 @@
 import React from 'react';
 
-import video_src from '../resources/Amfeed 2 3 16-1.m4v';
+import video_src from '../resources/Amfeed 2 3 16-1 23976fps timecode.mp4';
 
-let FPS = 20.0
+let FPS = 23.976;
 let FRAME_DELTA = 1 / FPS;
 
 class Video extends React.Component {
@@ -63,8 +63,7 @@ class Video extends React.Component {
 
     // TODO not quite sure about lifecycle and where forceupdates() are needed
     componentDidMount() {
-        this.seekTime(0); // Initialise current time to avoid null ref. TODO, not sure this is actually required
-
+        this.seekTime(FRAME_DELTA / 2); // Initialise current time to avoid null ref. TODO, not sure this is actually required
         this.ctx = this.canvas.getContext('2d'); // Setup canvas context
 
         this.video.requestVideoFrameCallback(this.handleFrameUpdate); // Setup frame callback
@@ -141,11 +140,11 @@ class Video extends React.Component {
     }
 
     getCurrentFrame() {
-        return (this.getMediaTime() * FPS + 1); // adding starting frame offset
+        return (Math.round(this.getMediaTime() * FPS + 1)); // adding starting frame offset
     }
 
     setCurrentFrame(n) {
-        this.setCurrentTime(this.getFramesAsTime(n));
+        this.setCurrentTime(this.getFramesAsTime(n) - FRAME_DELTA / 2); //TODO why am i minusing here?
     }
 
     getFramesAsTime(n) {
@@ -195,7 +194,6 @@ class Video extends React.Component {
         return (
             <div>
                 <div className="video_elem">
-                    <h2>VIDEO</h2>
                     <video
                         ref={element => {
                             this.video = element;
@@ -226,12 +224,10 @@ class Video extends React.Component {
                         onTimeUpdate={() => { }}
                         onWaiting={() => { }}
                     >
-
                         <p>ERROR: Video not supported</p>
                     </video>
                 </div>
                 <div>
-                    <h2>CANVAS</h2>
                     <canvas
                         ref={element => {
                             this.canvas = element;

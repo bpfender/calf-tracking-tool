@@ -8,9 +8,6 @@ function App(props) {
   return (
     <div className="App">
       <header className="App-header">
-        <p>
-          Welcome to VAT!
-        </p>
         <Player></Player>
       </header>
     </div>

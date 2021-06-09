@@ -4,9 +4,7 @@ import { defaultPlayerState, playerReducer } from './state/player-state.js';
 import Video from './Video';
 import ControlBar from './controls/ControlBar';
 import Info from './Info';
-import SourceSelector from './SourceSelector';
-import { VideoSlider } from './controls/VideoSlider';
-
+import Annotation from './Annotation.js';
 
 function Player() {
     // QUESTION not totally sure about my use of callback ref
@@ -30,11 +28,9 @@ function Player() {
                 playerDispatch={playerDispatch}
             >
             </Video>
-            <VideoSlider></VideoSlider>
+            <Annotation></Annotation>
             <ControlBar video={video} playerState={playerState}></ControlBar>
             <Info videoState={playerState}></Info>
-            <SourceSelector></SourceSelector>
-
         </div >
     )
 }
