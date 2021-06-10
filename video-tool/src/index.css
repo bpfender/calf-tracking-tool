@@ -16,6 +16,7 @@ code {
   display:flex;
 }
 
-canvas {
+#video-canvas{
   display:none;
 }
+

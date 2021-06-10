@@ -198,7 +198,7 @@ class Video extends React.Component {
                         ref={element => {
                             this.video = element;
                         }}
-                        width="100%"
+                        width="800px"
                         src={video_src}
                         controls={true}
 
@@ -229,6 +229,7 @@ class Video extends React.Component {
                 </div>
                 <div>
                     <canvas
+                        id="video-canvas"
                         ref={element => {
                             this.canvas = element;
                         }}
