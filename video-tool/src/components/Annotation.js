@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { drawRectangle, detectMouseOver } from './annotation/annotation';
+import { drawRectangle, detectMouseOver, moveBBox } from './annotation/annotation';
 
 function Annotation(props) {
     const canvasRef = React.useRef();
@@ -14,7 +14,7 @@ function Annotation(props) {
         if (mouseDown === false) {
             detectMouseOver(event.nativeEvent);
         } else {
-
+            moveBBox(event.nativeEvent);
         }
     };
 
