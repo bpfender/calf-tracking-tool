@@ -33,10 +33,21 @@ export function detectMouseOver(event) {
     redrawScene(objects, context);
 }
 
-export function moveBBox(event) {
+export function moveBBox(event, XY) {
     const context = globalctx;
+    const xStart = XY.x;
+    const yStart = XY.y;
+    console.log(XY);
+    console.log(event.offsetX, event.offsetY)
 
-    const BBox = getMouseoverHit(objects, context, event.offsetX, event.offsetY);
+    let BBox;
+    if ((BBox = getMouseoverHit(objects, context, event.offsetX, event.offsetY))) {
+        BBox.x = event.offsetX;
+        BBox.y = event.offsetY;
+        redrawScene(objects, context);
+    }
+
+
 }
 
 

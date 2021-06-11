@@ -4,6 +4,7 @@ import { drawRectangle, detectMouseOver, moveBBox } from './annotation/annotatio
 function Annotation(props) {
     const canvasRef = React.useRef();
     let mouseDown = false;
+    let mouseDownXY = { x: null, y: null };
 
     useEffect(() => {
         const context = canvasRef.current.getContext('2d');
@@ -11,24 +12,24 @@ function Annotation(props) {
     }, [canvasRef]);
 
     const handleMouseMove = (event) => {
+        console.log("MOUSE MOVE");
         if (mouseDown === false) {
             detectMouseOver(event.nativeEvent);
         } else {
-            moveBBox(event.nativeEvent);
+            moveBBox(event.nativeEvent, mouseDownXY);
         }
     };
 
     const handleMouseDown = (event) => {
+        console.log("MOUSE DOWN");
         mouseDown = true;
+        mouseDownXY.x = event.nativeEvent.offsetX;
+        mouseDownXY.y = event.nativeEvent.offsetY;
     };
 
     const handleMouseUp = (event) => {
         mouseDown = false;
     };
-
-    const handleMouseClick = (event) => {
-
-    }
 
     return (
         <canvas
@@ -36,7 +37,6 @@ function Annotation(props) {
             onMouseMove={handleMouseMove}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
-            onMouseClick={handleMouseClick}
             id="annotation-canvas"
             width="800px"
             height="600px">
