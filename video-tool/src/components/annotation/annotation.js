@@ -13,6 +13,7 @@ const rect1 = new Rect(55, 55, 45, 400, 300, 'red');
 const rect2 = new Rect(65, 65, 0, 400, 300, 'green');
 const rect3 = new Rect(50, 50, 78, 300, 250, 'blue');
 
+let objects = [rect1, rect2, rect3];
 
 export function drawRectangle(context) {
     globalctx = context
@@ -22,25 +23,28 @@ export function drawRectangle(context) {
     drawBoundingBox(rect3, context);
 }
 
-export function detect(event) {
-    detectBoundingBox(rect1, globalctx, event.offsetX, event.offsetY);
-    detectBoundingBox(rect2, globalctx, event.offsetX, event.offsetY);
-    detectBoundingBox(rect3, globalctx, event.offsetX, event.offsetY);
+export function detectMouseOver(event) {
+
+    for (let index = 0; index < objects.length; index++) {
+        const element = objects[index];
+
+        detectBoundingBox(element, globalctx, event.offsetX, event.offsetY);
+    }
 };
+
+
 
 function detectBoundingBox(Rect, context, eventX, eventY) {
     const box = setupBoundingBox(Rect, context);
 
     if (context.isPointInPath(box, eventX, eventY)) {
-        context.strokeStyle = 'purple'
+        context.strokeStyle = 'purple';
     } else {
         context.strokeStyle = Rect.colour;
     }
 
     context.stroke(box);
-
     resetContext(context);
-
 }
 
 function setupBoundingBox(Rect, context) {
