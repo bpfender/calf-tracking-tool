@@ -1,23 +1,33 @@
 import React, { useEffect } from 'react';
-import { drawRectangle, detectMouseOver, moveBBox } from './annotation/annotation';
+import BoundingBox from './annotation/bounding-box';
+import Context from './annotation/context';
+import Scene from './annotation/scene';
 
 function Annotation(props) {
     const canvasRef = React.useRef();
+
+    const ctxRef = React.useRef();
+    const sceneRef = React.useRef();
+
+    const BBoxArray = [];
+    BBoxArray.push(new BoundingBox(55, 150, 470, 310, 45, 'red'));
+    BBoxArray.push(new BoundingBox(65, 65, 400, 300, 0, 'green'));
+    BBoxArray.push(new BoundingBox(50, 50, 300, 250, 78, 'blue'));
+
     let mouseDown = false;
 
     useEffect(() => {
-        const context = canvasRef.current.getContext('2d');
-        drawRectangle(context);
+        ctxRef.current = new Context(canvasRef.current.getContext('2d'));
+        sceneRef.current = new Scene(BBoxArray, ctxRef.current);
+
+        sceneRef.current.redrawScene();
     }, [canvasRef]);
 
+
     const handleMouseMove = (event) => {
-        console.log("MOUSE MOVE");
-        if (mouseDown === false) {
-            detectMouseOver(event.nativeEvent);
-        } else {
-            moveBBox(event.nativeEvent);
-        }
+
     };
+
 
     const handleMouseDown = () => {
         mouseDown = true;

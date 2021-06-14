@@ -2,6 +2,7 @@ let globalctx;
 
 const HANDLE_RADIUS = 5;
 const ROTATION_HANDLE_LENGTH = 20;
+let BBox = null;
 
 function Rect(height, width, rotation, x, y, colour) {
     this.height = height;
@@ -36,9 +37,11 @@ export function detectMouseOver(event) {
 export function moveBBox(event) {
     const context = globalctx;
 
+    if (BBox === null) {
+        BBox = getMouseoverHit(objects, context, event.offsetX, event.offsetY)
+    }
 
-    let BBox;
-    if ((BBox = getMouseoverHit(objects, context, event.offsetX, event.offsetY))) {
+    if (BBox) {
         BBox.x += event.movementX / 2; // QUESTION not sure why these are being divided by two
         BBox.y += event.movementY / 2;
         redrawScene(objects, context);
@@ -129,7 +132,9 @@ function redrawScene(BBoxes, context) {
 function drawAll(BBoxes, context) {
     BBoxes.forEach(BBox => {
         drawBox(BBox, context);
-        drawHandles(BBox, context);
+        if (BBox.hit) {
+            drawHandles(BBox, context);
+        }
     });
 }
 
