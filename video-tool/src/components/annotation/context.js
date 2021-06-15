@@ -3,10 +3,6 @@ class Context {
         this.context = context;
     }
 
-    setContext(context) {
-        this.context = context;
-    }
-
     stroke(Path) {
         this.context.stroke(Path);
     }
@@ -22,8 +18,16 @@ class Context {
         this.context.setTransform(x, y, -y, x, originX, originY);
     }
 
-    setContextStyle(colour) {
+    isPointInPath(Path, x, y) {
+        return this.context.isPointInPath(Path, x, y);
+    }
+
+    setStrokeStyle(colour) {
         this.context.strokeStyle = colour;
+    }
+
+    setFillStyle(colour) {
+        this.context.fillStyle = colour;
     }
 
     clearContext() {

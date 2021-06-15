@@ -14,27 +14,26 @@ function Annotation(props) {
     BBoxArray.push(new BoundingBox(65, 65, 400, 300, 0, 'green'));
     BBoxArray.push(new BoundingBox(50, 50, 300, 250, 78, 'blue'));
 
-    let mouseDown = false;
-
     useEffect(() => {
         ctxRef.current = new Context(canvasRef.current.getContext('2d'));
         sceneRef.current = new Scene(BBoxArray, ctxRef.current);
 
         sceneRef.current.redrawScene();
+
     }, [canvasRef]);
 
 
     const handleMouseMove = (event) => {
-
+        sceneRef.current.redrawScene();
     };
 
 
     const handleMouseDown = () => {
-        mouseDown = true;
+        sceneRef.current.redrawScene();
     };
 
     const handleMouseUp = () => {
-        mouseDown = false;
+        sceneRef.current.redrawScene();
     };
 
     return (

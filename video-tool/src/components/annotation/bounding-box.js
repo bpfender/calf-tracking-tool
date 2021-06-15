@@ -9,8 +9,9 @@ class BoundingBox {
         this.y = y;
         this.rotation = rotation;
         this.colour = colour;
+
         this.mouseover = false;
-        this.select = false;
+        this.select = true;
     }
 
     draw(Context) {
@@ -18,14 +19,13 @@ class BoundingBox {
         this.drawHandles(Context);
     }
 
-
     drawBox(Context) {
         Context.setContextTransform(this.x, this.y, this.rotation);
 
         if (this.mouseover) {
-            Context.setContextStyle('purple');
+            Context.setStrokeStyle('purple');
         } else {
-            Context.setContextStyle(this.colour);
+            Context.setStrokeStyle(this.colour);
         }
 
         Context.stroke(this.getBoxPath());
@@ -36,13 +36,12 @@ class BoundingBox {
             const path = this.getHandlesPath();
 
             Context.setContextTransform(this.x, this.y, this.rotation);
-            Context.setContextStyle('green');
-            Context.fill(path);
-            Context.setContextStyle('colour');
+            Context.setStrokeStyle('purple');
             Context.stroke(path);
+            Context.setFillStyle('green');
+            Context.fill(path);
         }
     }
-
 
     getBoxPath() {
         const x = Math.floor(-this.width / 2);
@@ -82,21 +81,36 @@ class BoundingBox {
         return path;
     }
 
-    updatePostion(deltaX, deltaY) {
-        this.x += deltaX;
-        this.y += deltaY;
+    hitTestBox(mouseX, mouseY, Context) {
+        const path = this.getBoxPath();
+        Context.setContextTransform(this.x, this.y, this.rotation);
+
+        return Context.isPointInPath(path, mouseX, mouseY);
+
     }
 
-    updateWidth(deltaWidth) {
-        this.width += deltaWidth;
+    hitTestHandles(mouseX, mouseY, Context) {
+        const path = this.getHandlesPath();
+        Context.setContextTransform(this.x, this.y, this.rotation);
+
+        return Context.isPointInPath(path, mouseX, mouseY);
     }
 
-    updateHeight(deltaHeight) {
-        this.height += deltaHeight;
+    updatePosition(x, y) {
+        this.x = x;
+        this.y = y;
     }
 
-    updateRotation(deltaRotation) {
-        this.rotation += deltaRotation;
+    updateWidth(w) {
+        this.width = w;
+    }
+
+    updateHeight(h) {
+        this.height = h;
+    }
+
+    updateRotation(rotation) {
+        this.rotation = rotation;
     }
 
     setColour(colour) {
