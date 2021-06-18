@@ -19,9 +19,9 @@ class Scene {
 
         if (this.handle) {
             console.log("HANDLE MOVE");
-            const deltaX = event.movementX;
-            const deltaY = event.movementY;
-            const rotation = this.select.rotation;
+            const deltaX = event.movementX / 2;
+            const deltaY = event.movementY / 2;
+            const rotation = this.select.rotation * Math.PI / 180;
 
 
             if (this.handle instanceof RotationHandle) {
@@ -40,10 +40,11 @@ class Scene {
 
             } else {
                 const w = deltaX * Math.cos(rotation) + deltaY * Math.sin(rotation);
-                const h = -deltaX * Math.sin(rotation) + deltaY * Math.cos(rotation);
+                const h = deltaX * Math.sin(rotation) - deltaY * Math.cos(rotation);
 
                 this.select.setWidth(w);
                 this.select.setHeight(h);
+                this.select.setPosition(this.select.x + deltaX / 2, this.select.y + deltaY / 2);
             }
 
         }
