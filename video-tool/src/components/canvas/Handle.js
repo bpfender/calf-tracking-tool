@@ -6,7 +6,7 @@ class Handle {
         this.x = relX;
         this.y = relY;
 
-        this.HANDLE_RADIUS = 5;
+        this.HANDLE_RADIUS = 10;
 
         this.path = null;
         this._setPath();
@@ -18,8 +18,8 @@ class Handle {
         this._setPath();
     }
 
-    hitTest(context) {
-        return context.isPointInPath(this.path, this.x, this.y);
+    hitTest(hitX, hitY, context) {
+        return context.isPointInPath(this.path, hitX, hitY);
     }
 
     draw(context) {

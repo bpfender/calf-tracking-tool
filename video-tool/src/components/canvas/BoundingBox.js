@@ -35,18 +35,18 @@ class BoundingBox {
     }
 
     setRotation(rotation) {
-        this.rotation = rotation;
+        this.rotation += rotation * Math.PI / 180;
         this._setTransform();
     }
 
     setWidth(w) {
-        this.width = w;
-        this._setPath();
+        this.width += w;
+        this._setPaths();
     }
 
     setHeight(h) {
-        this.height = h;
-        this._setPath();
+        this.height += h;
+        this._setPaths();
     }
 
     setMouseover(bool) {
@@ -57,13 +57,16 @@ class BoundingBox {
         this.select = bool;
     }
 
+    setLocalTransform(context) {
+        context.setTransform(this.transform);
+    }
+
     hitTest(hitX, hitY, context) {
         context.setTransform(this.transform);
         this.hit = context.isPointInPath(this.path, hitX, hitY)
     }
 
     draw(context) {
-        context.setTransform(this.transform);
         this._drawBox(context);
         if (this.hit) {
             this._drawHandles(context);
@@ -71,6 +74,7 @@ class BoundingBox {
     }
 
     _drawBox(context) {
+        context.setTransform(this.transform);
         context.stroke(this.path);
     }
 
