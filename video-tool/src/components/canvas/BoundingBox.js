@@ -5,7 +5,7 @@ class BoundingBox {
     constructor(x, y, w, h, rotation, colour) {
         this.x = x;
         this.y = y;
-        this.rotation = rotation * Math.PI / 180;
+        this.rotation = rotation;
         this.colour = colour;
 
         this.width = w;
@@ -35,7 +35,7 @@ class BoundingBox {
     }
 
     setRotation(rotation) {
-        this.rotation += rotation * Math.PI / 180;
+        this.rotation = rotation;
         this._setTransform();
     }
 
@@ -113,8 +113,9 @@ class BoundingBox {
     }
 
     _setTransform() {
-        const x = Math.cos(this.rotation);
-        const y = Math.sin(this.rotation);
+        const rotation = this.rotation * Math.PI / 180
+        const x = Math.cos(rotation);
+        const y = Math.sin(rotation);
         this.transform = new DOMMatrix([x, y, -y, x, this.x, this.y]);
     }
 }

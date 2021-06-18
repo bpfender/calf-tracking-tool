@@ -19,12 +19,31 @@ class Scene {
 
         if (this.handle) {
             console.log("HANDLE MOVE");
+            const deltaX = event.movementX;
+            const deltaY = event.movementY;
+            const rotation = this.select.rotation;
+
+
             if (this.handle instanceof RotationHandle) {
                 console.log("ROTATION");
-                this.select.setRotation(event.movementX)
+                const x = mouseX - this.select.x;
+                const y = this.select.y - mouseY;
+                let angle;
+
+                if (x === 0) {
+                    angle = y >= 0 ? 0 : 180;
+                } else {
+                    const update = 90 - Math.atan(y / x) * 180 / Math.PI;
+                    angle = x > 0 ? update : update + 180;
+                }
+                this.select.setRotation(angle);
+
             } else {
-                this.select.setWidth(event.movementX);
-                this.select.setHeight(event.movementY);
+                const w = deltaX * Math.cos(rotation) + deltaY * Math.sin(rotation);
+                const h = -deltaX * Math.sin(rotation) + deltaY * Math.cos(rotation);
+
+                this.select.setWidth(w);
+                this.select.setHeight(h);
             }
 
         }
