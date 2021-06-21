@@ -17,6 +17,7 @@ class Handle {
     updatePosition(x, y) {
         this.x = x;
         this.y = y;
+        this._setPath();
     }
 
     setPosition(x, y) {
@@ -38,14 +39,10 @@ class Handle {
     }
 
     _setPath() {
-        this.path = this._getPath();
-    }
-
-    _getPath() {
         const path = new Path2D();
         path.moveTo(this.x, this.y);
         path.arc(this.x, this.y, this.HANDLE_RADIUS, 0, Math.PI * 2);
-        return path;
+        this.path = path;
     }
 }
 

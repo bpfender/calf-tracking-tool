@@ -1,4 +1,5 @@
 import Handle from "./Handle";
+import RotationHandle from "./RotationHandle";
 
 export class BB2 {
     constructor(x, y, w, h, rotation, colour) {
@@ -13,9 +14,12 @@ export class BB2 {
         this.path = null;
         this.transform = null;
 
-        this.handles = this._initHandles();
+        this.handles = null;
+        this.rotationHandle = null;
 
         this.hit = false;
+
+        this._initHandles();
     }
 
     draw(context) {
@@ -23,7 +27,6 @@ export class BB2 {
         context.fillStyle = 'purple';
         context.fill(this.path);
         context.stroke(this.path);
-
 
         context.fillStyle = 'red'
         this.handles[0].draw(context);
@@ -61,33 +64,61 @@ export class BB2 {
         console.log("Abs: ", x, y, xold, yold);
         console.log("Rel: ", relX, relY);
 
+        this.x += deltaX / 2;
+        this.y += deltaY / 2;
+
         if (child === this.handles[0]) {
             this.width -= relX
             this.height -= relY;
-            this.x += deltaX / 2;
-            this.y += deltaY / 2;
+            const oX = Math.floor(-this.width / 2);
+            const oY = Math.floor(-this.height / 2);
+            // this._setHandle(this.handles[0], oX, oY);
+            this._setHandle(this.handles[1], oX + this.width, oY);
+            this._setHandle(this.handles[3], oX, oY + this.height);
+            // this._setHandle(this.handles[2], oX + this.width, oY + this.height);
         } else if (child === this.handles[1]) {
             this.width += relX
             this.height -= relY;
-            this.x += deltaX / 2;
-            this.y += deltaY / 2;
+            const oX = Math.floor(-this.width / 2);
+            const oY = Math.floor(-this.height / 2);
+            this._setHandle(this.handles[0], oX, oY);
+            //this._setHandle(this.handles[1], oX + this.width, oY);
+            //   this._setHandle(this.handles[3], oX, oY + this.height);
+            this._setHandle(this.handles[2], oX + this.width, oY + this.height);
         } else if (child === this.handles[2]) {
             this.width += relX
             this.height += relY;
-            this.x += deltaX / 2;
-            this.y += deltaY / 2;
+            const oX = Math.floor(-this.width / 2);
+            const oY = Math.floor(-this.height / 2);
+            //this._setHandle(this.handles[0], oX, oY);
+            this._setHandle(this.handles[1], oX + this.width, oY);
+            this._setHandle(this.handles[3], oX, oY + this.height);
+            //  this._setHandle(this.handles[2], oX + this.width, oY + this.height);
         } else {
             this.width -= relX
             this.height += relY;
-            this.x += deltaX / 2;
-            this.y += deltaY / 2;
+            const oX = Math.floor(-this.width / 2);
+            const oY = Math.floor(-this.height / 2);
+            this._setHandle(this.handles[0], oX, oY);
+            //this._setHandle(this.handles[1], oX + this.width, oY);
+            // this._setHandle(this.handles[3], oX, oY + this.height);
+            this._setHandle(this.handles[2], oX + this.width, oY + this.height);
         }
 
-        this.handles = this._initHandles();
         this.setPath();
 
     }
 
+    _setHandle(handle, relX, relY) {
+        const rotation = this._getRotationAsRad(this.rotation);
+        const cos = Math.cos(rotation);
+        const sin = Math.sin(rotation);
+
+        const x = relX * cos - relY * sin + this.x;
+        const y = relX * sin + relY * cos + this.y;
+
+        handle.updatePosition(x, y);
+    }
 
     _initHandles() {
         const x = Math.floor(-this.width / 2);
@@ -98,7 +129,7 @@ export class BB2 {
         const BL = this._initHandle(x, y + this.height);
         const BR = this._initHandle(x + this.width, y + this.height);
 
-        return [TL, TR, BR, BL];
+        this.handles = [TL, TR, BR, BL];
     }
 
     _initHandle(relX, relY) {
