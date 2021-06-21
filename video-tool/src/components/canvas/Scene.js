@@ -23,7 +23,6 @@ class Scene {
             const deltaY = event.movementY / 2;
             const rotation = this.select.rotation * Math.PI / 180;
 
-
             if (this.handle instanceof RotationHandle) {
                 console.log("ROTATION");
                 const x = mouseX - this.select.x;
@@ -42,17 +41,31 @@ class Scene {
                 const w = deltaX * Math.cos(rotation) + deltaY * Math.sin(rotation);
                 const h = deltaX * Math.sin(rotation) - deltaY * Math.cos(rotation);
 
-                this.select.setWidth(w);
-                this.select.setHeight(h);
+                if (this.handle === "TL") {
+                    console.log("TL");
+                    this.select.setWidth(-w);
+                    this.select.setHeight(h);
+                } else if (this.handle === "TR") {
+                    console.log("TR")
+                    this.select.setWidth(w);
+                    this.select.setHeight(h);
+                } else if (this.handle === "BL") {
+                    console.log("BL")
+                    this.select.setWidth(-w);
+                    this.select.setHeight(-h);
+                } else if (this.handle === "BR") {
+                    console.log("BR")
+                    this.select.setWidth(w);
+                    this.select.setHeight(-h);
+                }
                 this.select.setPosition(this.select.x + deltaX / 2, this.select.y + deltaY / 2);
+
             }
 
-        }
-        else if (this.select && this.mouseDown) {
+        } else if (this.select && this.mouseDown) {
             console.log("MOVE");
             this.select.setPosition(mouseX, mouseY, this.context);
-        }
-        else if (!this.select) {
+        } else if (!this.select) {
             this.BBox.hitTest(mouseX, mouseY, this.context);
         }
 
@@ -74,7 +87,18 @@ class Scene {
             for (const handle of handles) {
                 if (handle.hitTest(mouseX, mouseY, this.context)) {
                     console.log("HANDLE");
-                    this.handle = handle;
+                    if (handle === this.select.handleTL) {
+                        this.handle = "TL";
+                    } else if (handle === this.select.handleTR) {
+                        this.handle = "TR";
+                    } else if (handle === this.select.handleBL) {
+                        this.handle = "BL";
+                    } else if (handle === this.select.handleBR) {
+                        this.handle = "BR";
+                    } else {
+                        this.handle = handle;
+                    }
+                    break;
                 }
             }
 

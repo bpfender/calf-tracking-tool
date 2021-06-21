@@ -112,6 +112,7 @@ class BoundingBox {
         this.handleRot = new RotationHandle(this.height);
     }
 
+    // https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix
     _setTransform() {
         const rotation = this.rotation * Math.PI / 180
         const x = Math.cos(rotation);
