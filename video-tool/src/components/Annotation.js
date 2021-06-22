@@ -10,11 +10,14 @@ function Annotation(props) {
     const scene = sceneRef.current;
 
     const BBox = new BoundingBox(400, 300, 120, 120, 0, 'blue');
+    const BBox2 = new BoundingBox(200, 100, 50, 70, 80);
+    const BBox3 = new BoundingBox(50, 70, 55, 75, 0);
+    const BBoxes = [BBox, BBox2, BBox3];
     const test = new BB2(400, 300, 120, 120, 45);
 
 
     useEffect(() => {
-        sceneRef.current = new Scene(canvasRef.current.getContext('2d'), BBox);
+        sceneRef.current = new Scene(canvasRef.current.getContext('2d'), BBoxes);
 
         sceneRef.current.context.setTransform(1, 0, 0, 1, 0, 0);
         test.draw(canvasRef.current.getContext('2d'));
@@ -26,7 +29,7 @@ function Annotation(props) {
 
 
     const handleMouseMove = (event) => {
-        scene.handleMouseMove(event.nativeEvent);
+        scene.handleMouseMove(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
     };
 
 
