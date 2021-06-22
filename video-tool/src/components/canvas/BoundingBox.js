@@ -11,8 +11,6 @@ class BoundingBox {
         this.height = h;
         this.rotation = rotation;
 
-        this.colour = colour
-
         this.path = null;
         this.handles = null;
 
@@ -36,13 +34,29 @@ class BoundingBox {
     }
 
     setWidth(w) {
-        this.width += w;
+        this.width = w;
         this._setPaths();
     }
 
     setHeight(h) {
-        this.height += h;
+        this.height = h;
         this._setPaths();
+    }
+
+    updatePosition(deltaX, deltaY) {
+        this.setPosition(this.x + deltaX, this.y + deltaY);
+    }
+
+    updateRotation(deltaRotation) {
+        this.setRotation(this.rotation + deltaRotation);
+    }
+
+    updateWidth(deltaW) {
+        this.setWidth(this.width + deltaW);
+    }
+
+    updateHeight(deltaH) {
+        this.setHeight(this.height + deltaH);
     }
 
     hitTest(hitX, hitY, context) {
@@ -51,6 +65,7 @@ class BoundingBox {
     }
 
     draw(context) {
+        console.log("x: ", this.x, "y: ", this.y, "h: ", this.height, "w: ", this.width, "rot: ", this.rotation);
         context.setTransform(this.transform);
         this._drawBox(context);
         if (this.hit) {

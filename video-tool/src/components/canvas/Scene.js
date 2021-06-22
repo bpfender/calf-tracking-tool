@@ -29,7 +29,7 @@ class Scene {
                 this._calculateResize(deltaX, deltaY);
             }
         } else if (this.selected && this.mouseDown) {
-            this.selected.setPosition(this.selected.x + deltaX, this.selected.y + deltaY, this.context);
+            this.selected.updatePosition(deltaX, deltaY);
         }
 
         this._redraw();
@@ -45,7 +45,7 @@ class Scene {
         }
 
         if (!this.selected || !this.handle) {
-            this.selected = this._hitTestSelect(mouseX, mouseY);
+            this.selected = this._hitTestBox(mouseX, mouseY);
         }
 
         // TODO this redraw is superfluous sometimes
@@ -57,7 +57,7 @@ class Scene {
         this.handle = null;
     }
 
-    _hitTestSelect(mouseX, mouseY) {
+    _hitTestBox(mouseX, mouseY) {
         for (const element of this.BBoxes) {
             if (element.hitTest(mouseX, mouseY, this.context)) {
                 return element;
@@ -69,18 +69,13 @@ class Scene {
     _hitTestHandles(mouseX, mouseY) {
         this.context.setTransform(this.selected.transform);
         const handles = this.selected.handles;
-        let handle = null;
 
-        [...handles.values()].some(element => {
-            if (element.hitTest(mouseX, mouseY, this.context)) {
-                console.log("HANDLE");
-                handle = element;
-                return true;
+        for (const handle of handles.values()) {
+            if (handle.hitTest(mouseX, mouseY, this.context)) {
+                return handle;
             }
-            return false;
-        });
-
-        return handle;
+        }
+        return null;
     }
 
     _calculateRotation(mouseX, mouseY) {
@@ -92,32 +87,37 @@ class Scene {
         if (x === 0) {
             angle = y >= 0 ? 0 : 180;
         } else {
-            const update = 90 - Math.atan(y / x) * 180 / Math.PI;
-            angle = x > 0 ? update : update + 180;
+            angle = 90 - Math.atan(y / x) * 180 / Math.PI;
+            angle = x > 0 ? angle : angle + 180;
         }
-        this.selected.setRotation(angle);
+
+        // Make sure angle is set to whole number
+        this.selected.setRotation(Math.round(angle));
     }
 
     _calculateResize(deltaX, deltaY) {
         const rotation = this.selected.rotation * Math.PI / 180;
-        const w = deltaX * Math.cos(rotation) + deltaY * Math.sin(rotation);
-        const h = deltaX * Math.sin(rotation) - deltaY * Math.cos(rotation);
+        const cos = Math.cos(rotation);
+        const sin = Math.sin(rotation);
+
+        const w = Math.round(deltaX * cos + deltaY * sin);
+        const h = Math.round(deltaX * sin - deltaY * cos);
 
         if (this.handle === this.selected.handles.get('TL')) {
-            this.selected.setWidth(-w);
-            this.selected.setHeight(h);
+            this.selected.updateWidth(-w);
+            this.selected.updateHeight(h);
         } else if (this.handle === this.selected.handles.get('TR')) {
-            this.selected.setWidth(w);
-            this.selected.setHeight(h);
+            this.selected.updateWidth(w);
+            this.selected.updateHeight(h);
         } else if (this.handle === this.selected.handles.get('BL')) {
-            this.selected.setWidth(-w);
-            this.selected.setHeight(-h);
+            this.selected.updateWidth(-w);
+            this.selected.updateHeight(-h);
         } else if (this.handle === this.selected.handles.get('BR')) {
-            this.selected.setWidth(w);
-            this.selected.setHeight(-h);
+            this.selected.updateWidth(w);
+            this.selected.updateHeight(-h);
         }
-        this.selected.setPosition(this.selected.x + deltaX / 2, this.selected.y + deltaY / 2);
 
+        this.selected.updatePosition(deltaX / 2, deltaY / 2);
     }
 
     _redraw() {
