@@ -2,11 +2,11 @@
 // x and y coordinates are defined relative to parent. Transforms
 // must be applied to context in parent
 class Handle {
-    constructor(x, y, observer) {
+    constructor(x, y, parent) {
         this.x = x;
         this.y = y;
 
-        this.observer = observer;
+        this.parent = parent;
 
         this.HANDLE_RADIUS = 10;
 
@@ -14,20 +14,20 @@ class Handle {
         this._setPath();
     }
 
-    updatePosition(x, y) {
+    setPosition(x, y) {
         this.x = x;
         this.y = y;
         this._setPath();
     }
 
-    setPosition(x, y) {
+    setPositionHandleDirect(x, y) {
         const xold = this.x;
         const yold = this.y;
 
         this.x = x;
         this.y = y;
         this._setPath();
-        this.observer.recalculate(x, y, xold, yold, this);
+        this.parent.recalculate(x, y, xold, yold, this);
     }
 
     hitTest(hitX, hitY, context) {

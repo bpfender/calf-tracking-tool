@@ -3,26 +3,22 @@ import RotationHandle from "./RotationHandle";
 
 class BoundingBox {
     constructor(x, y, w, h, rotation, colour) {
+        // Coordinates are defined as centre of rectangle from top-left
+        // Rotation is clockwise
         this.x = x;
         this.y = y;
-        this.rotation = rotation;
-        this.colour = colour;
-
         this.width = w;
         this.height = h;
+        this.rotation = rotation;
+
+        this.colour = colour
 
         this.path = null;
+        this.handles = null;
+
         this.transform = null;
 
-        this.handleTL = null;
-        this.handleTR = null;
-        this.handleBL = null;
-        this.handleBR = null;
-        this.handleRot = null;
-
         this.hit = false;
-        this.mouseover = false;
-        this.select = false;
 
         this._setTransform();
         this._setPaths();
@@ -49,24 +45,13 @@ class BoundingBox {
         this._setPaths();
     }
 
-    setMouseover(bool) {
-        this.mouseover = bool;
-    }
-
-    setSelect(bool) {
-        this.select = bool;
-    }
-
-    setLocalTransform(context) {
-        context.setTransform(this.transform);
-    }
-
     hitTest(hitX, hitY, context) {
         context.setTransform(this.transform);
-        this.hit = context.isPointInPath(this.path, hitX, hitY)
+        return this.hit = context.isPointInPath(this.path, hitX, hitY)
     }
 
     draw(context) {
+        context.setTransform(this.transform);
         this._drawBox(context);
         if (this.hit) {
             this._drawHandles(context);
@@ -74,50 +59,62 @@ class BoundingBox {
     }
 
     _drawBox(context) {
-        context.setTransform(this.transform);
         context.stroke(this.path);
     }
 
     _drawHandles(context) {
-        this.handleTL.draw(context);
-        this.handleTR.draw(context);
-        this.handleBL.draw(context);
-        this.handleBR.draw(context);
-        this.handleRot.draw(context);
+        this.handles.forEach(handle => {
+            handle.draw(context);
+        });
     }
 
+    // Paths are currently defined relative to origin of BBOX
     _setPaths() {
-        this._setBox();
-        this._setHandles();
+        const { x, y } = this._getDrawingOrigin();
+        this._setBox(x, y);
+        this._setHandles(x, y);
     }
 
-    // TODO not happy about repetition of x,y calc
-    _setBox() {
-        const x = Math.floor(-this.width / 2);
-        const y = Math.floor(-this.height / 2);
-
-        const path = new Path2D();
-        path.rect(x, y, this.width, this.height);
-        this.path = path;
+    _setBox(x, y) {
+        this.path = new Path2D();
+        this.path.rect(x, y, this.width, this.height);
     }
 
-    _setHandles() {
-        const x = Math.floor(-this.width / 2);
-        const y = Math.floor(-this.height / 2);
-
-        this.handleTL = new Handle(x, y);
-        this.handleTR = new Handle(x + this.width, y);
-        this.handleBL = new Handle(x, y + this.height);
-        this.handleBR = new Handle(x + this.width, y + this.height);
-        this.handleRot = new RotationHandle(this.height);
+    _setHandles(x, y) {
+        if (this.handles) {
+            this.handles.get("TL").setPosition(x, y);
+            this.handles.get("TR").setPosition(x + this.width, y);
+            this.handles.get("BL").setPosition(x, y + this.height);
+            this.handles.get("BR").setPosition(x + this.width, y + this.height);
+            this.handles.get("Rot").setPosition(this.height);
+        } else {
+            this.handles = new Map([
+                ["TL", new Handle(x, y)],
+                ["TR", new Handle(x + this.width, y)],
+                ["BL", new Handle(x, y + this.height)],
+                ["BR", new Handle(x + this.width, y + this.height)],
+                ["Rot", new RotationHandle(this.height)]
+            ]);
+        }
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix
     _setTransform() {
-        const rotation = this.rotation * Math.PI / 180
-        const x = Math.cos(rotation);
-        const y = Math.sin(rotation);
-        this.transform = new DOMMatrix([x, y, -y, x, this.x, this.y]);
+        const rotation = this._getRotationAsRad();
+        const cos = Math.cos(rotation);
+        const sin = Math.sin(rotation);
+        this.transform = new DOMMatrix([cos, sin, -sin, cos, this.x, this.y]);
+    }
+
+    _getRotationAsRad() {
+        return this.rotation * Math.PI / 180;
+    }
+
+    _getDrawingOrigin() {
+        return {
+            x: Math.floor(-this.width / 2),
+            y: Math.floor(-this.height / 2)
+        };
     }
 }
 

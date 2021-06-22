@@ -5,14 +5,23 @@ class RotationHandle extends Handle {
 
     constructor(h) {
         super(0, -Math.floor(h / 2) - RotationHandle.ROTATION_HANDLE_LENGTH);
-        this.linePath = null;
 
+        this.linePath = null;
         this._setLinePath()
     }
 
+    setPosition(h) {
+        super.setPosition(0, -Math.floor(h / 2) - RotationHandle.ROTATION_HANDLE_LENGTH);
+    }
+
     draw(context) {
-        context.fill(this.path);
+        super.draw(context);
         context.stroke(this.linePath);
+    }
+
+    _setPath() {
+        super._setPath();
+        this._setLinePath();
     }
 
     _setLinePath() {

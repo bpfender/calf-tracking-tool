@@ -3,10 +3,12 @@ import RotationHandle from "./RotationHandle";
 class Scene {
     constructor(context, BBox) {
         this.context = context;
-        this.BBox = BBox;
+        this.BBoxes = [BBox];
 
-        this.select = null;
+        this.selected = null;
+        this.mouseover = null;
         this.handle = null;
+        this.hit = null;
 
         this.mouseDown = false;
         this._redraw();
@@ -21,12 +23,12 @@ class Scene {
             console.log("HANDLE MOVE");
             const deltaX = event.movementX / 2;
             const deltaY = event.movementY / 2;
-            const rotation = this.select.rotation * Math.PI / 180;
+            const rotation = this.selected.rotation * Math.PI / 180;
 
             if (this.handle instanceof RotationHandle) {
                 console.log("ROTATION");
-                const x = mouseX - this.select.x;
-                const y = this.select.y - mouseY;
+                const x = mouseX - this.selected.x;
+                const y = this.selected.y - mouseY;
                 let angle;
 
                 if (x === 0) {
@@ -35,38 +37,34 @@ class Scene {
                     const update = 90 - Math.atan(y / x) * 180 / Math.PI;
                     angle = x > 0 ? update : update + 180;
                 }
-                this.select.setRotation(angle);
+                this.selected.setRotation(angle);
 
             } else {
                 const w = deltaX * Math.cos(rotation) + deltaY * Math.sin(rotation);
                 const h = deltaX * Math.sin(rotation) - deltaY * Math.cos(rotation);
 
-                if (this.handle === "TL") {
-                    console.log("TL");
-                    this.select.setWidth(-w);
-                    this.select.setHeight(h);
-                } else if (this.handle === "TR") {
-                    console.log("TR")
-                    this.select.setWidth(w);
-                    this.select.setHeight(h);
-                } else if (this.handle === "BL") {
-                    console.log("BL")
-                    this.select.setWidth(-w);
-                    this.select.setHeight(-h);
-                } else if (this.handle === "BR") {
-                    console.log("BR")
-                    this.select.setWidth(w);
-                    this.select.setHeight(-h);
+                if (this.handle === this.selected.handles.get('TL')) {
+                    this.selected.setWidth(-w);
+                    this.selected.setHeight(h);
+                } else if (this.handle === this.selected.handles.get('TR')) {
+                    this.selected.setWidth(w);
+                    this.selected.setHeight(h);
+                } else if (this.handle === this.selected.handles.get('BL')) {
+                    this.selected.setWidth(-w);
+                    this.selected.setHeight(-h);
+                } else if (this.handle === this.selected.handles.get('BR')) {
+                    this.selected.setWidth(w);
+                    this.selected.setHeight(-h);
                 }
-                this.select.setPosition(this.select.x + deltaX / 2, this.select.y + deltaY / 2);
+                this.selected.setPosition(this.selected.x + deltaX / 2, this.selected.y + deltaY / 2);
 
             }
 
-        } else if (this.select && this.mouseDown) {
+        } else if (this.selected && this.mouseDown) {
             console.log("MOVE");
-            this.select.setPosition(mouseX, mouseY, this.context);
-        } else if (!this.select) {
-            this.BBox.hitTest(mouseX, mouseY, this.context);
+            this.selected.setPosition(mouseX, mouseY, this.context);
+        } else if (!this.selected) {
+            this.mouseover = this._hitTestSelect(mouseX, mouseY);
         }
 
         this._redraw();
@@ -75,42 +73,12 @@ class Scene {
     handleMouseDown(mouseX, mouseY) {
         this.mouseDown = true;
 
-        if (this.select) {
-            this.select.setLocalTransform(this.context);
-            const handles = [
-                this.BBox.handleTL,
-                this.BBox.handleTR,
-                this.BBox.handleBL,
-                this.BBox.handleBR,
-                this.BBox.handleRot];
-
-            for (const handle of handles) {
-                if (handle.hitTest(mouseX, mouseY, this.context)) {
-                    console.log("HANDLE");
-                    if (handle === this.select.handleTL) {
-                        this.handle = "TL";
-                    } else if (handle === this.select.handleTR) {
-                        this.handle = "TR";
-                    } else if (handle === this.select.handleBL) {
-                        this.handle = "BL";
-                    } else if (handle === this.select.handleBR) {
-                        this.handle = "BR";
-                    } else {
-                        this.handle = handle;
-                    }
-                    break;
-                }
-            }
-
+        if (this.selected) {
+            this._hitTestHandles(mouseX, mouseY);
         }
 
-        else {
-            this.BBox.hitTest(mouseX, mouseY, this.context);
-            if (this.BBox.hit) {
-                this.select = this.BBox;
-            } else {
-                this.select = null;
-            }
+        if (!this.selected || !this.handle) {
+            this.selected = this._hitTestSelect(mouseX, mouseY);
         }
 
         this._redraw();
@@ -121,9 +89,34 @@ class Scene {
         this.handle = null;
     }
 
+    _hitTestSelect(mouseX, mouseY) {
+        for (const element of this.BBoxes) {
+            if (element.hitTest(mouseX, mouseY, this.context)) {
+                return element;
+            }
+        }
+        return null;
+    }
+
+    _hitTestHandles(mouseX, mouseY) {
+        this.context.setTransform(this.selected.transform);
+        const handles = this.selected.handles;
+
+        [...handles.values()].some(element => {
+            if (element.hitTest(mouseX, mouseY, this.context)) {
+                console.log("HANDLE");
+                this.handle = element;
+                return true;
+            }
+            return false;
+        });
+    }
+
     _redraw() {
         this._clear();
-        this.BBox.draw(this.context);
+        this.BBoxes.forEach(element => {
+            element.draw(this.context);
+        });
     }
 
     _clear() {

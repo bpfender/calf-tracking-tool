@@ -1,40 +1,43 @@
 import React, { useEffect } from 'react';
-import BoundingBox from './annotation/bounding-box';
-import Context from './annotation/context';
-import Scene from './annotation/scene';
+import BoundingBox from './canvas/BoundingBox';
+import Scene from './canvas/Scene';
+
+import { BB2 } from './canvas/BoundingBox2';
 
 function Annotation(props) {
     const canvasRef = React.useRef();
-
-    const ctxRef = React.useRef();
     const sceneRef = React.useRef();
+    const scene = sceneRef.current;
 
-    const BBoxArray = [];
-    BBoxArray.push(new BoundingBox(55, 150, 470, 310, 45, 'red'));
-    BBoxArray.push(new BoundingBox(65, 65, 400, 300, 0, 'green'));
-    BBoxArray.push(new BoundingBox(50, 50, 300, 250, 78, 'blue'));
+    const BBox = new BoundingBox(400, 300, 120, 120, 0, 'blue');
+    const test = new BB2(400, 300, 120, 120, 45);
+
 
     useEffect(() => {
-        ctxRef.current = new Context(canvasRef.current.getContext('2d'));
-        sceneRef.current = new Scene(BBoxArray, ctxRef.current);
+        sceneRef.current = new Scene(canvasRef.current.getContext('2d'), BBox);
 
-        sceneRef.current.redrawScene();
+        sceneRef.current.context.setTransform(1, 0, 0, 1, 0, 0);
+        test.draw(canvasRef.current.getContext('2d'));
+
+        test.handles[3].setPositionHandleDirect(400, 300);
+        test.draw(canvasRef.current.getContext('2d'));
 
     }, [canvasRef]);
 
 
     const handleMouseMove = (event) => {
-        sceneRef.current.redrawScene();
+        scene.handleMouseMove(event.nativeEvent);
     };
 
 
-    const handleMouseDown = () => {
-        sceneRef.current.redrawScene();
+    const handleMouseDown = (event) => {
+        scene.handleMouseDown(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
     };
 
     const handleMouseUp = () => {
-        sceneRef.current.redrawScene();
+        scene.handleMouseUp();
     };
+
 
     return (
         <canvas

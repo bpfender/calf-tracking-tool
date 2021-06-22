@@ -2,11 +2,10 @@ import Handle from "./Handle";
 import RotationHandle from "./RotationHandle";
 
 export class BB2 {
-    constructor(x, y, w, h, rotation, colour) {
+    constructor(x, y, w, h, rotation) {
         this.x = x;
         this.y = y;
         this.rotation = rotation;
-        this.colour = colour;
 
         this.width = w;
         this.height = h;
@@ -117,7 +116,7 @@ export class BB2 {
         const x = relX * cos - relY * sin + this.x;
         const y = relX * sin + relY * cos + this.y;
 
-        handle.updatePosition(x, y);
+        handle.setPosition(x, y);
     }
 
     _initHandles() {
