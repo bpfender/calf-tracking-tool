@@ -27,7 +27,8 @@ class Scene {
             if (this.handle instanceof RotationHandle) {
                 this._calculateRotation(mouseX, mouseY);
             } else {
-                this._calculateResize(deltaX, deltaY);
+                //this._calculateResize(deltaX, deltaY);
+                this.handle.moveHandle(deltaX, deltaY)
             }
         } else if (this.selected && this.mouseDown) {
             this.selected.updatePosition(deltaX, deltaY);
@@ -48,7 +49,6 @@ class Scene {
         if (!this.selected || !this.handle) {
             this.selected = this._hitTestBox(mouseX, mouseY);
         }
-
         // TODO this redraw is superfluous sometimes
         this._redraw();
     }
@@ -69,14 +69,21 @@ class Scene {
 
     _hitTestHandles(mouseX, mouseY) {
         // FIXME don't like setting transform here
-        this.context.setTransform(this.selected.transform);
+        //this.context.setTransform(this.selected.transform);
         const handles = this.selected.handles;
 
-        for (const handle of handles.values()) {
+        for (const handle of handles) {
             if (handle.hitTest(mouseX, mouseY, this.context)) {
+                console.log("HANDLE HIT");
                 return handle;
             }
         }
+        /*
+                for (const handle of handles.values()) {
+                    if (handle.hitTest(mouseX, mouseY, this.context)) {
+                        return handle;
+                    }
+                }*/
         return null;
     }
 
@@ -102,8 +109,8 @@ class Scene {
         const cos = Math.cos(rotation);
         const sin = Math.sin(rotation);
 
-        const w = Math.round(deltaX * cos + deltaY * sin);
-        const h = Math.round(deltaX * sin - deltaY * cos);
+        const w = (deltaX * cos + deltaY * sin);
+        const h = (deltaX * sin - deltaY * cos);
 
         if (this.handle === this.selected.handles.get('TL')) {
             this.selected.updateWidth(-w);

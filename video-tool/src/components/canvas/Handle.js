@@ -20,13 +20,13 @@ class Handle {
         this._setPath();
     }
 
-    setPositionHandleDirect(mouseX, mouseY) {
+    moveHandle(movementX, movementY) {
         const xold = this.x;
         const yold = this.y;
 
-        //this.setPosition(mouseX, mouseY);
+        this.setPosition(xold + movementX, yold + movementY);
 
-        this.recalculateCallback(mouseX, mouseY, xold, yold, this);
+        this.recalculateCallback(xold + movementX, yold + movementY, xold, yold, this);
     }
 
     hitTest(hitX, hitY, context) {
@@ -40,8 +40,12 @@ class Handle {
 
     _setPath() {
         const path = new Path2D();
-        path.moveTo(this.x, this.y);
-        path.arc(this.x, this.y, this.HANDLE_RADIUS, 0, Math.PI * 2);
+        const x = Math.round(this.x);
+        const y = Math.round(this.y);
+
+
+        path.moveTo(x, y);
+        path.arc(x, y, this.HANDLE_RADIUS, 0, Math.PI * 2);
         this.path = path;
     }
 }

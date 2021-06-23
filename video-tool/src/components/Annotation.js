@@ -17,22 +17,9 @@ function Annotation(props) {
 
 
     useEffect(() => {
-        sceneRef.current = new Scene(canvasRef.current.getContext('2d'), BBoxes);
+        sceneRef.current = new Scene(canvasRef.current.getContext('2d'), [test]);
 
-        sceneRef.current.context.setTransform(1, 0, 0, 1, 0, 0);
-        test.draw(canvasRef.current.getContext('2d'));
 
-        test.handles[3].setPositionHandleDirect(400, 300);
-        test.draw(canvasRef.current.getContext('2d'));
-
-        test.setPosition(100, 200);
-        test.draw(canvasRef.current.getContext('2d'));
-
-        test.setWidth(100);
-        test.draw(canvasRef.current.getContext('2d'));
-
-        test.setRotation(53);
-        test.draw(canvasRef.current.getContext('2d'));
     }, [canvasRef]);
 
 

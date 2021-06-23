@@ -127,8 +127,8 @@ class BoundingBox {
 
     _getDrawingOrigin() {
         return {
-            x: Math.floor(-this.width / 2),
-            y: Math.floor(-this.height / 2)
+            x: -this.width / 2,
+            y: -this.height / 2
         };
     }
 }
