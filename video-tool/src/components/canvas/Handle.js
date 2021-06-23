@@ -2,11 +2,11 @@
 // x and y coordinates are defined relative to parent. Transforms
 // must be applied to context in parent
 class Handle {
-    constructor(x, y, parent) {
+    constructor(x, y, recalculateCallback) {
         this.x = x;
         this.y = y;
 
-        this.parent = parent;
+        this.recalculateCallback = recalculateCallback;
 
         this.HANDLE_RADIUS = 10;
 
@@ -20,17 +20,17 @@ class Handle {
         this._setPath();
     }
 
-    setPositionHandleDirect(x, y) {
+    setPositionHandleDirect(mouseX, mouseY) {
         const xold = this.x;
         const yold = this.y;
 
-        this.x = x;
-        this.y = y;
-        this._setPath();
-        this.parent.recalculate(x, y, xold, yold, this);
+        //this.setPosition(mouseX, mouseY);
+
+        this.recalculateCallback(mouseX, mouseY, xold, yold, this);
     }
 
     hitTest(hitX, hitY, context) {
+        // QUESTION, should i set transform of parent here?
         return context.isPointInPath(this.path, hitX, hitY);
     }
 

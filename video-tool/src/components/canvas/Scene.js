@@ -10,10 +10,11 @@ class Scene {
         this.handle = null;
 
         this.mouseDown = false;
-        this._redraw();
 
         this.lastX = null;
         this.lastY = null;
+
+        this._redraw();
     }
 
     handleMouseMove(mouseX, mouseY) {
@@ -67,6 +68,7 @@ class Scene {
     }
 
     _hitTestHandles(mouseX, mouseY) {
+        // FIXME don't like setting transform here
         this.context.setTransform(this.selected.transform);
         const handles = this.selected.handles;
 

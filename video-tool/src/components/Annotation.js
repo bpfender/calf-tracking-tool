@@ -25,6 +25,14 @@ function Annotation(props) {
         test.handles[3].setPositionHandleDirect(400, 300);
         test.draw(canvasRef.current.getContext('2d'));
 
+        test.setPosition(100, 200);
+        test.draw(canvasRef.current.getContext('2d'));
+
+        test.setWidth(100);
+        test.draw(canvasRef.current.getContext('2d'));
+
+        test.setRotation(53);
+        test.draw(canvasRef.current.getContext('2d'));
     }, [canvasRef]);
 
 

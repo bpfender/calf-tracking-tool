@@ -18,19 +18,19 @@ class BoundingBox {
 
         this.hit = false;
 
-        this._setTransform();
+        this._setTransformMatrix();
         this._setPaths();
     }
 
     setPosition(x, y) {
         this.x = x;
         this.y = y;
-        this._setTransform();
+        this._setTransformMatrix();
     }
 
     setRotation(rotation) {
         this.rotation = rotation;
-        this._setTransform();
+        this._setTransformMatrix();
     }
 
     setWidth(w) {
@@ -61,7 +61,7 @@ class BoundingBox {
 
     hitTest(hitX, hitY, context) {
         context.setTransform(this.transform);
-        return this.hit = context.isPointInPath(this.path, hitX, hitY)
+        return this.hit = context.isPointInPath(this.path, hitX, hitY);
     }
 
     draw(context) {
@@ -114,7 +114,7 @@ class BoundingBox {
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix
-    _setTransform() {
+    _setTransformMatrix() {
         const rotation = this._getRotationAsRad();
         const cos = Math.cos(rotation);
         const sin = Math.sin(rotation);
