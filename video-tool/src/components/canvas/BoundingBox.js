@@ -2,14 +2,12 @@ import Handle from "./Handle";
 import RotationHandle from "./RotationHandle";
 
 class BoundingBox {
-    constructor(x, y, w, h, rotation, colour) {
-        // Coordinates are defined as centre of rectangle from top-left
-        // Rotation is clockwise
+    constructor(x, y, w, h, rotation) {
         this.x = x;
         this.y = y;
+        this.rotation = rotation;
         this.width = w;
         this.height = h;
-        this.rotation = rotation;
 
         this.path = null;
         this.handles = null;
@@ -18,29 +16,31 @@ class BoundingBox {
 
         this.hit = false;
 
+        this._initHandles();
         this._setTransformMatrix();
-        this._setPaths();
     }
 
     setPosition(x, y) {
         this.x = x;
         this.y = y;
+        this._setHandles();
         this._setTransformMatrix();
     }
 
     setRotation(rotation) {
         this.rotation = rotation;
+        this._setHandles();
         this._setTransformMatrix();
     }
 
     setWidth(w) {
         this.width = w;
-        this._setPaths();
+        this._setHandles();
     }
 
     setHeight(h) {
         this.height = h;
-        this._setPaths();
+        this._setHandles();
     }
 
     updatePosition(deltaX, deltaY) {
@@ -61,56 +61,151 @@ class BoundingBox {
 
     hitTest(hitX, hitY, context) {
         context.setTransform(this.transform);
-        return this.hit = context.isPointInPath(this.path, hitX, hitY);
+        return context.isPointInPath(this.path, hitX, hitY);
     }
 
     draw(context) {
-        console.log("x: ", this.x, "y: ", this.y, "h: ", this.height, "w: ", this.width, "rot: ", this.rotation);
-        context.setTransform(this.transform);
-        this._drawBox(context);
-        if (this.hit) {
-            this._drawHandles(context);
-        }
-    }
+        this._setContextTransform(context);
+        //console.log("BOX: x: ", this.x, "y: ", this.y, "h: ", this.height, "rot: ", this.rotation);
+        // Ensure paths are up to date
 
-    _drawBox(context) {
+        context.fillStyle = 'purple';
+        //  context.fill(this.path);
         context.stroke(this.path);
+
+        context.fillStyle = 'red'
+        this.handles[0].draw(context);
+        context.fillStyle = 'blue'
+        this.handles[1].draw(context);
+        context.fillStyle = 'green'
+        this.handles[2].draw(context);
+        context.fillStyle = 'yellow'
+        this.handles[3].draw(context);
     }
 
-    _drawHandles(context) {
-        this.handles.forEach(handle => {
-            handle.draw(context);
+    _setPath() {
+        const path = new Path2D();
+
+        this.handles.forEach(element => {
+            path.lineTo(element.x, element.y);
         });
+        path.closePath();
+
+        this.path = path;
     }
 
-    // Paths are currently defined relative to origin of BBOX
-    _setPaths() {
-        const { x, y } = this._getDrawingOrigin();
-        this._setBox(x, y);
-        this._setHandles(x, y);
-    }
+    _updateOnHandleMove(deltaX, deltaY, child) {
+        //const { sin, cos } = this._getSinCos();
+        const sin = Math.sin(-this._getRotationAsRad() % Math.PI);
+        const cos = Math.cos(-this._getRotationAsRad() % Math.PI);
 
-    _setBox(x, y) {
-        this.path = new Path2D();
-        this.path.rect(x, y, this.width, this.height);
-    }
+        const deltaW = deltaX * cos - deltaY * sin;
+        const deltaH = deltaX * sin + deltaY * cos;
 
-    _setHandles(x, y) {
-        if (this.handles) {
-            this.handles.get("TL").setPosition(x, y);
-            this.handles.get("TR").setPosition(x + this.width, y);
-            this.handles.get("BL").setPosition(x, y + this.height);
-            this.handles.get("BR").setPosition(x + this.width, y + this.height);
-            this.handles.get("Rot").setPosition(this.height);
-        } else {
-            this.handles = new Map([
-                ["TL", new Handle(x, y)],
-                ["TR", new Handle(x + this.width, y)],
-                ["BL", new Handle(x, y + this.height)],
-                ["BR", new Handle(x + this.width, y + this.height)],
-                ["Rot", new RotationHandle(this.height)]
-            ]);
+
+
+        child.updatePosition(deltaW / 2, deltaH / 2);
+        //      const deltaW = deltaX * cos - deltaY * sin;
+        //    const deltaH = deltaX * sin + deltaY * cos;
+
+        // Update x,y coordinates of bounding box first
+        this.x += deltaX / 2;
+        this.y += deltaY / 2;
+        this._setTransformMatrix();
+
+
+        // Update position of handles depending on which one's get moved, relative to updated x,
+        // y coordinates of bounding box
+        if (child === this.handles[0]) {
+            this.width -= deltaW
+            this.height -= deltaH;
+            this._setHandles()//[1, 3]);
+        } else if (child === this.handles[1]) {
+            this.width += deltaW
+            this.height -= deltaH;
+            this._setHandles()//[2, 0]);
+        } else if (child === this.handles[2]) {
+            this.width += deltaW
+            this.height += deltaH;
+            this._setHandles()//[3, 1]);
+        } else if (child === this.handles[3]) {
+            this.width -= deltaW
+            this.height += deltaH;
+            this._setHandles()//[0, 2]);
         }
+
+        console.log(deltaW, deltaH, this.x, this.y, this.width, this.height);
+    }
+
+    // Either updates all handles for rotation or position change, or updates relevant handles
+    // for resize
+    _setHandles(indices) {
+        const { x, y } = this._getRelativeCoordinates();
+        const TL = () => { this._setHandle(this.handles[0], x, y) };
+        const TR = () => { this._setHandle(this.handles[1], x + this.width, y) };
+        const BR = () => { this._setHandle(this.handles[2], x + this.width, y + this.height) };
+        const BL = () => { this._setHandle(this.handles[3], x, y + this.height) };
+        const setHandles = [TL, TR, BR, BL];
+
+        if (!indices) {
+            setHandles.forEach(element => {
+                element();
+            })
+        } else {
+            indices.forEach(element => {
+                setHandles[element]();
+            });
+        }
+
+        this._setPath();
+    }
+
+    _setHandle(handle, relX, relY) {
+        const { x, y } = this._calculateXYAbsolute(relX, relY);
+        //handle.setPosition(x, y);
+
+        handle.setPosition(relX, relY);
+    }
+
+    _initHandles() {
+        const { x, y } = this._getRelativeCoordinates();
+        const TL = this._initHandle(x, y);
+        const TR = this._initHandle(x + this.width, y);
+        const BL = this._initHandle(x, y + this.height);
+        const BR = this._initHandle(x + this.width, y + this.height);
+
+        this.handles = [TL, TR, BR, BL];
+        this._setPath();
+    }
+
+    _initHandle(relX, relY) {
+        const { x, y } = this._calculateXYAbsolute(relX, relY);
+        //return new Handle(x, y, this);
+
+        return new Handle(relX, relY, this);
+    }
+
+    _calculateXYAbsolute(relX, relY) {
+        const { sin, cos } = this._getSinCos();
+
+        const x = relX * cos - relY * sin + this.x;
+        const y = relX * sin + relY * cos + this.y;
+        return { x: x, y: y };
+    }
+
+    _getRelativeCoordinates() {
+        return {
+            x: - this.width / 2,
+            y: - this.height / 2
+        };
+    }
+
+    _getSinCos() {
+        const rotation = this._getRotationAsRad();
+        return {
+            sin: Math.sin(rotation),
+            cos: Math.cos(rotation)
+        };
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix
@@ -125,11 +220,8 @@ class BoundingBox {
         return this.rotation * Math.PI / 180;
     }
 
-    _getDrawingOrigin() {
-        return {
-            x: -this.width / 2,
-            y: -this.height / 2
-        };
+    _setContextTransform(context) {
+        context.setTransform(this.transform);
     }
 }
 

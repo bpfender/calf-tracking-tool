@@ -2,11 +2,11 @@
 // x and y coordinates are defined relative to parent. Transforms
 // must be applied to context in parent
 class Handle {
-    constructor(x, y, recalculateCallback) {
+    constructor(x, y, parent) {
         this.x = x;
         this.y = y;
 
-        this.recalculateCallback = recalculateCallback;
+        this.parent = parent;
 
         this.HANDLE_RADIUS = 10;
 
@@ -20,17 +20,17 @@ class Handle {
         this._setPath();
     }
 
+    updatePosition(deltaX, deltaY) {
+        this.setPosition(this.x + deltaX, this.y + deltaY);
+    }
+
     moveHandle(deltaX, deltaY) {
-        const xold = this.x;
-        const yold = this.y;
-
-        this.setPosition(xold + deltaX, yold + deltaY);
-
-        this.recalculateCallback(xold + deltaX, yold + deltaY, xold, yold, this);
+        // this.setPosition(this.x + deltaX, this.y + deltaY);
+        this.parent._updateOnHandleMove(deltaX, deltaY, this);
     }
 
     hitTest(hitX, hitY, context) {
-        // QUESTION, should i set transform of parent here?
+        this.parent._setContextTransform(context);
         return context.isPointInPath(this.path, hitX, hitY);
     }
 
@@ -40,9 +40,10 @@ class Handle {
 
     _setPath() {
         const path = new Path2D();
+
+        // Round position to avoid sub-pixel drawing
         const x = Math.round(this.x);
         const y = Math.round(this.y);
-
 
         path.moveTo(x, y);
         path.arc(x, y, this.HANDLE_RADIUS, 0, Math.PI * 2);

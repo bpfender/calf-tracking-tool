@@ -18,6 +18,7 @@ class Scene {
     }
 
     handleMouseMove(mouseX, mouseY) {
+        // movementX event does weird things for some reason.
         const deltaX = mouseX - this.lastX;
         const deltaY = mouseY - this.lastY;
         this.lastX = mouseX;
@@ -27,7 +28,6 @@ class Scene {
             if (this.handle instanceof RotationHandle) {
                 this._calculateRotation(mouseX, mouseY);
             } else {
-                //this._calculateResize(deltaX, deltaY);
                 this.handle.moveHandle(deltaX, deltaY)
             }
         } else if (this.selected && this.mouseDown) {
@@ -68,8 +68,6 @@ class Scene {
     }
 
     _hitTestHandles(mouseX, mouseY) {
-        // FIXME don't like setting transform here
-        //this.context.setTransform(this.selected.transform);
         const handles = this.selected.handles;
 
         for (const handle of handles) {
@@ -78,12 +76,7 @@ class Scene {
                 return handle;
             }
         }
-        /*
-                for (const handle of handles.values()) {
-                    if (handle.hitTest(mouseX, mouseY, this.context)) {
-                        return handle;
-                    }
-                }*/
+
         return null;
     }
 
