@@ -20,13 +20,13 @@ class Handle {
         this._setPath();
     }
 
-    moveHandle(movementX, movementY) {
+    moveHandle(deltaX, deltaY) {
         const xold = this.x;
         const yold = this.y;
 
-        this.setPosition(xold + movementX, yold + movementY);
+        this.setPosition(xold + deltaX, yold + deltaY);
 
-        this.recalculateCallback(xold + movementX, yold + movementY, xold, yold, this);
+        this.recalculateCallback(xold + deltaX, yold + deltaY, xold, yold, this);
     }
 
     hitTest(hitX, hitY, context) {
