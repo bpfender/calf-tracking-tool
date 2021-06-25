@@ -1,12 +1,10 @@
 
-// x and y coordinates are defined relative to parent. Transforms
-// must be applied to context in parent
 class Handle {
-    constructor(x, y, parent) {
+    constructor(x, y, handleMoveCallback) {
         this.x = x;
         this.y = y;
 
-        this.parent = parent;
+        this.handleMoveCallback = handleMoveCallback;
 
         this.HANDLE_RADIUS = 10;
 
@@ -25,12 +23,19 @@ class Handle {
     }
 
     moveHandle(deltaX, deltaY) {
-        // this.setPosition(this.x + deltaX, this.y + deltaY);
-        this.parent._updateOnHandleMove(deltaX, deltaY, this);
+        const xold = this.x;
+        const yold = this.y;
+        const x = this.x + deltaX;
+        const y = this.y + deltaY;
+        console.log(deltaX, deltaY);
+
+        this.handleMoveCallback(xold, yold, x, y, this);
+
+        //this.parent._updateOnHandleMove(deltaX, deltaY, this);
     }
 
     hitTest(hitX, hitY, context) {
-        this.parent._setContextTransform(context);
+        //this.parent._setContextTransform(context);
         return context.isPointInPath(this.path, hitX, hitY);
     }
 
