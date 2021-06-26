@@ -18,7 +18,6 @@ function Annotation(props) {
 
     }, [canvasRef]);
 
-
     const handleMouseMove = (event) => {
         scene.handleMouseMove(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
     };

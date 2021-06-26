@@ -26,9 +26,11 @@ class Scene {
 
         if (this.handle) {
             if (this.handle instanceof RotationHandle) {
-                this._calculateRotation(mouseX, mouseY);
+                this.handle.moveHandle(
+                    mouseX - this.selected.x,
+                    this.selected.y - mouseY);
             } else {
-                this.handle.moveHandle(deltaX, deltaY)
+                this.handle.moveHandle(deltaX, deltaY);
             }
         } else if (this.selected && this.mouseDown) {
             this.selected.updatePosition(deltaX, deltaY);
@@ -61,6 +63,7 @@ class Scene {
     _hitTestBox(mouseX, mouseY) {
         for (const element of this.BBoxes) {
             if (element.hitTest(mouseX, mouseY, this.context)) {
+                console.log("BOX HIT");
                 return element;
             }
         }
@@ -68,7 +71,10 @@ class Scene {
     }
 
     _hitTestHandles(mouseX, mouseY) {
-        const handles = this.selected.handles;
+        const handles = [...this.selected.handles, this.selected.rotationHandle];
+
+        // FIXME don't like setting transform here
+        this.selected._setContextTransform(this.context);
 
         for (const handle of handles) {
             if (handle.hitTest(mouseX, mouseY, this.context)) {
@@ -76,50 +82,7 @@ class Scene {
                 return handle;
             }
         }
-
         return null;
-    }
-
-    _calculateRotation(mouseX, mouseY) {
-        const x = mouseX - this.selected.x;
-        const y = this.selected.y - mouseY;
-
-        let angle;
-
-        if (x === 0) {
-            angle = y >= 0 ? 0 : 180;
-        } else {
-            angle = 90 - Math.atan(y / x) * 180 / Math.PI;
-            angle = x > 0 ? angle : angle + 180;
-        }
-
-        // Make sure angle is set to whole number
-        this.selected.setRotation(Math.round(angle));
-    }
-
-    _calculateResize(deltaX, deltaY) {
-        const rotation = this.selected.rotation * Math.PI / 180;
-        const cos = Math.cos(rotation);
-        const sin = Math.sin(rotation);
-
-        const w = (deltaX * cos + deltaY * sin);
-        const h = (deltaX * sin - deltaY * cos);
-
-        if (this.handle === this.selected.handles.get('TL')) {
-            this.selected.updateWidth(-w);
-            this.selected.updateHeight(h);
-        } else if (this.handle === this.selected.handles.get('TR')) {
-            this.selected.updateWidth(w);
-            this.selected.updateHeight(h);
-        } else if (this.handle === this.selected.handles.get('BL')) {
-            this.selected.updateWidth(-w);
-            this.selected.updateHeight(-h);
-        } else if (this.handle === this.selected.handles.get('BR')) {
-            this.selected.updateWidth(w);
-            this.selected.updateHeight(-h);
-        }
-
-        this.selected.updatePosition(deltaX / 2, deltaY / 2);
     }
 
     _redraw() {

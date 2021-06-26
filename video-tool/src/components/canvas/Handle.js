@@ -1,10 +1,10 @@
 
 class Handle {
-    constructor(x, y, updateOnHandleMoveCallback) {
+    constructor(x, y, handleMoveCallback) {
         this.x = x;
         this.y = y;
 
-        this.updateOnHandleMoveCallback = updateOnHandleMoveCallback;
+        this.handleMoveCallback = handleMoveCallback;
 
         this.HANDLE_RADIUS = 10;
 
@@ -23,7 +23,7 @@ class Handle {
     }
 
     moveHandle(deltaX, deltaY) {
-        this.updateOnHandleMoveCallback(deltaX, deltaY, this);
+        this.handleMoveCallback(deltaX, deltaY, this);
     }
 
     hitTest(hitX, hitY, context) {
@@ -38,9 +38,9 @@ class Handle {
     _setPath() {
         const path = new Path2D();
 
-        // Round position to avoid sub-pixel drawing
-        const x = Math.round(this.x);
-        const y = Math.round(this.y);
+        // FIXME should this be rounded to avoid sub-pixel rendering?
+        const x = this.x;
+        const y = this.y;
 
         path.moveTo(x, y);
         path.arc(x, y, this.HANDLE_RADIUS, 0, Math.PI * 2);
