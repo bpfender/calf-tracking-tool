@@ -72,6 +72,7 @@ class BoundingBox {
         this._setContextTransform(context);
 
         context.stroke(this.path);
+
         context.fillStyle = 'red'
         this.handles[0].draw(context);
         context.fillStyle = 'blue'
@@ -80,8 +81,9 @@ class BoundingBox {
         this.handles[2].draw(context);
         context.fillStyle = 'yellow'
         this.handles[3].draw(context);
-
+        context.fillStyle = 'black';
         this.rotationHandle.draw(context);
+
     }
 
     _setPath() {
