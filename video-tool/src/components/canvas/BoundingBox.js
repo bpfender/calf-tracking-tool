@@ -20,20 +20,17 @@ class BoundingBox {
         this.hit = false;
 
         this._initHandles();
-        //      this._setTransformMatrix();
     }
 
     setPosition(x, y) {
         this.x = x;
         this.y = y;
         this._setHandles();
-        //  this._setTransformMatrix();
     }
 
     setRotation(rotation) {
         this.rotation = rotation;
         this._setHandles();
-        //   this._setTransformMatrix();
     }
 
     setWidth(w) {
@@ -63,21 +60,11 @@ class BoundingBox {
     }
 
     hitTest(hitX, hitY, context) {
-        //context.setTransform(this.transform);
         return context.isPointInPath(this.path, hitX, hitY);
     }
 
     draw(context) {
-        //   this._setContextTransform(context);
-        //console.log("BOX: x: ", this.x, "y: ", this.y, "h: ", this.height, "rot: ", this.rotation);
-        // Ensure paths are up to date
-        this._setPath();
-
-
-        context.fillStyle = 'purple';
-        //  context.fill(this.path);
         context.stroke(this.path);
-
         context.fillStyle = 'red'
         this.handles[0].draw(context);
         context.fillStyle = 'blue'
@@ -104,8 +91,9 @@ class BoundingBox {
         //const cos = Math.cos(-this._getRotationAsRad() % Math.PI);
         //const deltaW = deltaX * cos - deltaY * sin;
         //const deltaH = deltaX * sin + deltaY * cos;
+        //this._setTransformMatrix();
 
-        const rotation = -this._getRotationAsRad() % (Math.PI / 2);
+        const rotation = -this._getRotationAsRad() % (Math.PI);
         const sin = Math.sin(rotation);
         const cos = Math.cos(rotation);
 
@@ -115,8 +103,6 @@ class BoundingBox {
         // Update x,y coordinates of bounding box first
         this.x += deltaX / 2;
         this.y += deltaY / 2;
-
-        //this._setTransformMatrix();
 
         child.updatePosition(deltaX, deltaY);
         // Update position of handles depending on which one gets moved, relative to updated x,
@@ -167,8 +153,6 @@ class BoundingBox {
     _setHandle(handle, relX, relY) {
         const { x, y } = this._calculateXYAbsolute(relX, relY);
         handle.setPosition(x, y);
-
-        //handle.setPosition(relX, relY);
     }
 
     _initHandles() {
@@ -185,8 +169,6 @@ class BoundingBox {
     _initHandle(relX, relY) {
         const { x, y } = this._calculateXYAbsolute(relX, relY);
         return new Handle(x, y, this._updateOnHandleMove.bind(this));
-
-        //return new Handle(relX, relY, this);
     }
 
     _calculateXYAbsolute(relX, relY) {
@@ -212,21 +194,10 @@ class BoundingBox {
         };
     }
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix
-    _setTransformMatrix() {
-        const rotation = this._getRotationAsRad();
-        const cos = Math.cos(rotation);
-        const sin = Math.sin(rotation);
-        this.transform = new DOMMatrix([cos, sin, -sin, cos, this.x, this.y]);
-    }
-
     _getRotationAsRad() {
         return this.rotation * Math.PI / 180;
     }
 
-    _setContextTransform(context) {
-        context.setTransform(this.transform);
-    }
 }
 
 export default BoundingBox;

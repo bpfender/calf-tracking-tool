@@ -1,10 +1,10 @@
 
 class Handle {
-    constructor(x, y, handleMoveCallback) {
+    constructor(x, y, updateOnHandleMoveCallback) {
         this.x = x;
         this.y = y;
 
-        this.handleMoveCallback = handleMoveCallback;
+        this.updateOnHandleMoveCallback = updateOnHandleMoveCallback;
 
         this.HANDLE_RADIUS = 10;
 
@@ -23,9 +23,7 @@ class Handle {
     }
 
     moveHandle(deltaX, deltaY) {
-        this.handleMoveCallback(deltaX, deltaY, this);
-
-        //this.parent._updateOnHandleMove(deltaX, deltaY, this);
+        this.updateOnHandleMoveCallback(deltaX, deltaY, this);
     }
 
     hitTest(hitX, hitY, context) {

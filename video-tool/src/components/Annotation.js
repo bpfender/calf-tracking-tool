@@ -9,7 +9,7 @@ function Annotation(props) {
 
     const BBox = new BoundingBox(400, 300, 120, 120, 0, 'blue');
     const BBox2 = new BoundingBox(200, 100, 50, 70, 80);
-    const BBox3 = new BoundingBox(50, 70, 55, 75, 40);
+    const BBox3 = new BoundingBox(50, 70, 55, 75, 130);
     const BBoxes = [BBox, BBox2, BBox3];
 
     useEffect(() => {
