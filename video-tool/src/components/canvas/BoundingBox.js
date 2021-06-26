@@ -99,29 +99,22 @@ class BoundingBox {
         this.path = path;
     }
 
-    _updateOnHandleMove(xold, yold, x, y, child) {
+    _updateOnHandleMove(deltaX, deltaY, child) {
         //const sin = Math.sin(-this._getRotationAsRad() % Math.PI);
         //const cos = Math.cos(-this._getRotationAsRad() % Math.PI);
         //const deltaW = deltaX * cos - deltaY * sin;
         //const deltaH = deltaX * sin + deltaY * cos;
 
-        const deltaX = x - xold;
-        const deltaY = y - yold;
-
         const rotation = -this._getRotationAsRad() % (Math.PI / 2);
         const sin = Math.sin(rotation);
         const cos = Math.cos(rotation);
 
-        const deltaW = (x * cos - y * sin) - (xold * cos - yold * sin);
-        const deltaH = (x * sin + y * cos) - (xold * sin + yold * cos);
-
-        //const deltaW = (deltaX * cos + deltaY * sin);
-        //const deltaH = (deltaX * sin + deltaY * cos);
+        const deltaW = (deltaX * cos - deltaY * sin);
+        const deltaH = (deltaX * sin + deltaY * cos);
 
         // Update x,y coordinates of bounding box first
         this.x += deltaX / 2;
         this.y += deltaY / 2;
-        console.log(deltaW, deltaH);
 
         //this._setTransformMatrix();
 
@@ -131,27 +124,20 @@ class BoundingBox {
         if (child === this.handles[0]) {
             this.width -= deltaW
             this.height -= deltaH;
-            this._setHandles([1, 2, 3]);
+            this._setHandles([1, 3]);
         } else if (child === this.handles[1]) {
             this.width += deltaW
             this.height -= deltaH;
-            this._setHandles([0, 1, 2, 3]);
+            this._setHandles([0, 2]);
         } else if (child === this.handles[2]) {
             this.width += deltaW
             this.height += deltaH;
-            this._setHandles([0, 1, 2, 3]);
+            this._setHandles([1, 3]);
         } else if (child === this.handles[3]) {
             this.width -= deltaW
             this.height += deltaH;
-            this._setHandles([0, 1, 2, 3]);
+            this._setHandles([0, 2]);
         }
-
-        console.log(
-            "ROTATION:", this.rotation,
-            "X", Math.round(this.x),
-            "Y", Math.round(this.y),
-            "W", Math.round(this.width),
-            "H", Math.round(this.height));
     }
 
     // Either updates all handles for rotation or position change, or updates relevant handles

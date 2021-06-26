@@ -23,13 +23,7 @@ class Handle {
     }
 
     moveHandle(deltaX, deltaY) {
-        const xold = this.x;
-        const yold = this.y;
-        const x = this.x + deltaX;
-        const y = this.y + deltaY;
-        console.log(deltaX, deltaY);
-
-        this.handleMoveCallback(xold, yold, x, y, this);
+        this.handleMoveCallback(deltaX, deltaY, this);
 
         //this.parent._updateOnHandleMove(deltaX, deltaY, this);
     }
