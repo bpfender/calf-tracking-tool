@@ -24,6 +24,16 @@ class BoundingBox {
         this._initHandles();
     }
 
+    setBoundingBox(x, y, w, h, rotation) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.rotation = rotation;
+        this._setHandles();
+        this._setTransformMatrix();
+    }
+
     setPosition(x, y) {
         this.x = x;
         this.y = y;
