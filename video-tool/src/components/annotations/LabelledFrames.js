@@ -21,6 +21,9 @@ class LabelledFrames {
 
     getNextLabelledFrame(frame) {
         const i = this.getClosestIndex(frame);
+        if (i < 0) {
+            throw new Error("Needs to be dealt with");
+        }
 
         if (this.labelledFrame[i] === frame) {
             return this.labelledFrame[i + 1];
@@ -31,6 +34,9 @@ class LabelledFrames {
 
     getPrevLabelledFrame(frame) {
         const i = this.getClosestIndex(frame);
+        if (i < 0) {
+            throw new Error("Needs to be dealt with");
+        }
 
         return this.labelledFrame[i - 1];
     }

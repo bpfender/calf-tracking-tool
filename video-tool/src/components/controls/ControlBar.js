@@ -1,4 +1,5 @@
 import React from 'react';
+import { ButtonGroup } from '@blueprintjs/core';
 
 import PlayPause from './PlayPause';
 import { NextFrame, PrevFrame, NextNFrames, PrevNFrames, FramesToSkip, JumpToFrame } from './FrameNav';
@@ -9,14 +10,18 @@ function ControlBar(props) {
 
     return (
         <div>
-            <PrevNFrames video={video} playerState={playerState}></PrevNFrames>
-            <PrevFrame video={video}></PrevFrame>
-            <PlayPause video={video} playerState={playerState}></PlayPause>
-            <NextFrame video={video}></NextFrame>
-            <NextNFrames video={video} playerState={playerState}></NextNFrames>
+            <ButtonGroup>
+                <PrevNFrames video={video} playerState={playerState}></PrevNFrames>
+                <PrevFrame video={video}></PrevFrame>
+                <PlayPause video={video} playerState={playerState}></PlayPause>
+                <NextFrame video={video}></NextFrame>
+                <NextNFrames video={video} playerState={playerState}></NextNFrames>
+            </ButtonGroup>
+
             <FramesToSkip video={video}></FramesToSkip>
             <PlaybackRate video={video}></PlaybackRate>
             <JumpToFrame video={video}></JumpToFrame>
+
         </div>
     );
 }

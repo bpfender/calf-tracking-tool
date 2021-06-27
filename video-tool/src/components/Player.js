@@ -22,15 +22,16 @@ function Player() {
      });*/
 
     return (
-        <div>
+        <div class="bp3-dark">
             <Video
                 ref={useCallback(node => { setVideo(node) }, [])}
                 playerDispatch={playerDispatch}
             >
             </Video>
-            <Annotation></Annotation>
+
             <ControlBar video={video} playerState={playerState}></ControlBar>
             <Info videoState={playerState}></Info>
+            <Annotation></Annotation>
         </div >
     )
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button, HTMLSelect, NumericInput } from '@blueprintjs/core';
 
 // TODO rewrite below to use generic button component
 /*function FrameButton(props) {
@@ -13,7 +14,7 @@ export function NextFrame(props) {
     const { video } = props;
     const handleClick = () => { video.nextFrame() };
 
-    return <button onClick={handleClick}>NEXT FRAME</button>;
+    return <Button icon="step-forward" onClick={handleClick}></Button>;
 
 }
 
@@ -21,21 +22,21 @@ export function PrevFrame(props) {
     const { video } = props;
     const handleClick = () => { video.prevFrame() };
 
-    return <button onClick={handleClick}>PREV FRAME</button>;
+    return <Button icon="step-backward" onClick={handleClick}></Button>;
 }
 
 export function NextNFrames(props) {
     const { video, playerState } = props;
     const handleClick = () => { video.nextFrame(playerState.framesToSkip) };
 
-    return <button onClick={handleClick}>NEXT N FRAMES</button>;
+    return <Button onClick={handleClick}>NEXT N FRAMES</Button>;
 }
 
 export function PrevNFrames(props) {
     const { video, playerState } = props;
     const handleClick = () => { video.prevFrame(playerState.framesToSkip) };
 
-    return <button onClick={handleClick}>PREV N FRAMES</button>;
+    return <Button onClick={handleClick}>PREV N FRAMES</Button>;
 }
 
 export function FramesToSkip(props) {
@@ -46,13 +47,17 @@ export function FramesToSkip(props) {
     }
 
     return (
-        <div>
-            <button onClick={() => handleFramesClick(5)}>5</button>
-            <button onClick={() => handleFramesClick(10)}>10</button>
-            <button onClick={() => handleFramesClick(20)}>20</button>
-            <button onClick={() => handleFramesClick(50)}>50</button>
-            <button onClick={() => handleFramesClick(100)}>100</button>
-        </div>
+        <HTMLSelect onChange={(event) => {
+            handleFramesClick(parseInt(event.currentTarget.value))
+        }}>
+            <option value="5" selected>5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </HTMLSelect>
+
+
     )
 }
 

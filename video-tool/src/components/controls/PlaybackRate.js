@@ -1,4 +1,5 @@
 import React from 'react';
+import { HTMLSelect } from '@blueprintjs/core';
 
 export function PlaybackRate(props) {
     const { video } = props;
@@ -7,12 +8,14 @@ export function PlaybackRate(props) {
     };
 
     return (
-        <div>
-            <button onClick={() => handlePlaybackRateClick(1.0)}>1x</button>
-            <button onClick={() => handlePlaybackRateClick(2.0)}>2x</button>
-            <button onClick={() => handlePlaybackRateClick(4.0)}>4x</button>
-            <button onClick={() => handlePlaybackRateClick(8.0)}>8x</button>
-            <button onClick={() => handlePlaybackRateClick(16.0)}>16x</button>
-        </div>
+        <HTMLSelect onChange={(event) => {
+            handlePlaybackRateClick(parseInt(event.currentTarget.value))
+        }}>
+            <option value="1" selected>1x</option>
+            <option value="2">2x</option>
+            <option value="4">4x</option>
+            <option value="8">8x</option>
+            <option value="16">16x</option>
+        </HTMLSelect>
     )
 }
