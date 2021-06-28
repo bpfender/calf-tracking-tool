@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Slider } from '@blueprintjs/core';
 
 export function VideoSlider(props) {
     const { video, playerState } = props;
+    const [sliderTime, setSliderTime] = useState();
+
+    // Update slider time when playerState.mediaTime changes
+    useEffect(() => {
+        setSliderTime(playerState.mediaTime);
+    }, [playerState.mediaTime])
 
     const formatTime = (seconds) => {
         const date = new Date(seconds * 1000);
@@ -17,22 +23,19 @@ export function VideoSlider(props) {
     }
 
     const onChangeHandler = (time) => {
-        video.setCurrentTime(time);
+        setSliderTime(time);
     }
-
 
     const onReleaseHandler = (time) => {
         video.setCurrentTime(time);
     }
-
-
 
     return (
         <Slider
             onChange={onChangeHandler}
             onRelease={onReleaseHandler}
             labelRenderer={formatTime}
-            value={playerState.mediaTime}
+            value={sliderTime}
             min={0}
             max={3599}
             stepSize={.01}
