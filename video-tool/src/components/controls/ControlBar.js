@@ -5,6 +5,7 @@ import PlayPause from './PlayPause';
 import { NextFrame, PrevFrame, NextNFrames, PrevNFrames, FramesToSkip, JumpToFrame } from './FrameNav';
 import { PlaybackRate } from './PlaybackRate';
 import { VideoSlider } from './VideoSlider';
+import FrameInput from './FrameInput';
 
 function ControlBar(props) {
     const { video, playerState } = props;
@@ -24,7 +25,7 @@ function ControlBar(props) {
 
             <FramesToSkip video={video}></FramesToSkip>
             <PlaybackRate video={video}></PlaybackRate>
-            <JumpToFrame video={video}></JumpToFrame>
+            <FrameInput video={video} playerState={playerState}></FrameInput>
 
         </div>
     );
