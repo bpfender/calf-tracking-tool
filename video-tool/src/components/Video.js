@@ -200,7 +200,6 @@ class Video extends React.Component {
                         }}
                         width="800px"
                         src={video_src}
-                        controls={true}
 
                         onAbort={() => { }}
                         onCanPlay={() => { }}
