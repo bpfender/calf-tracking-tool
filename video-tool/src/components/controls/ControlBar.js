@@ -2,7 +2,7 @@ import React from 'react';
 import { ButtonGroup } from '@blueprintjs/core';
 
 import PlayPause from './PlayPause';
-import { NextFrame, PrevFrame, NextNFrames, PrevNFrames, FramesToSkip, JumpToFrame } from './FrameNav';
+import { NextFrame, PrevFrame, NextNFrames, PrevNFrames, FramesToSkip } from './FrameNav';
 import { PlaybackRate } from './PlaybackRate';
 import { VideoSlider } from './VideoSlider';
 import FrameInput from './FrameInput';
@@ -26,9 +26,10 @@ function ControlBar(props) {
             <FramesToSkip video={video}></FramesToSkip>
             <PlaybackRate video={video}></PlaybackRate>
             <FrameInput video={video} playerState={playerState}></FrameInput>
-
         </div>
+
     );
+
 }
 
 export default ControlBar;

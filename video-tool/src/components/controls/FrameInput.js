@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { NumericInput } from "@blueprintjs/core";
+import { NumericInput, Tag } from "@blueprintjs/core";
 
 export default function FrameInput(props) {
     const { video, playerState } = props;
     const [frame, setFrame] = useState(1);
     const [intent, setIntent] = useState("none");
+
 
     useEffect(() => {
         setFrame(playerState.currentFrame);
@@ -19,24 +20,31 @@ export default function FrameInput(props) {
         }
     }, [playerState.seeking])
 
-    const handleValueChange = (frame) => {
-        video.setCurrentFrame(frame);
+    let timeout = null;
+    const handleValueChange = (number) => {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        setFrame(number);
+        timeout = setTimeout(video.setCurrentFrame, 2000, number);
     }
 
-
     return (
-        <NumericInput
-            onValueChange={handleValueChange}
-            intent={intent}
-            value={frame}
-            leftIcon="duplicate"
-            buttonPosition="none"
-            minorStepSize={1}
-            min={0}
-
-        >
-
-        </NumericInput>
+        <div className="frame-selector">
+            <NumericInput
+                className="frame-input"
+                onValueChange={handleValueChange}
+                intent={intent}
+                value={frame}
+                leftIcon="duplicate"
+                buttonPosition="none"
+                selectAllOnFocus={true}
+                selectAllOnIncrement={true}
+                minorStepSize={1}
+                min={1}
+            ></NumericInput>
+            <Tag>XX</Tag>
+        </div>
     );
 
     /*return (
