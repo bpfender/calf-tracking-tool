@@ -35,11 +35,12 @@ export default function FrameSelector(props) {
     return (
         <div className="frame-selector">
             <InputGroup
+                className="frame-input"
                 onChange={changeHandler}
                 type="number"
                 leftIcon="duplicate"
                 value={currentFrame}
-                placeholder={1}
+                placeholder={frameCount}
                 min={1}
                 max={frameCount}
                 step={1}

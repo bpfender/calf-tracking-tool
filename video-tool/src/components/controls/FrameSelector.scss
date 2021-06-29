@@ -9,17 +9,26 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .frame-selector{
+  max-width: fit-content;
+  margin-left: 0.5em;
   height:$pt-input-height;
-  font-size:$pt-font-size-small;
   display: flex;
-  justify-content:flex-end;
   align-items:center;
+  max-width: fit-content;
+}
+
+/* TODO can the width be driven by actual frame count? */
+.frame-input{
+  max-width:9ch;
 }
 
 .frame-count{
-    margin-left:0.3ch;
+  flex-basis: fit-content;
+  font-size:$pt-font-size-small;
+  margin-left:0.3ch;
 }
 
 input{
-  text-align:right; 
+  text-align: right;
 }
+

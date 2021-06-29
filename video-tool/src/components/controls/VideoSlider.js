@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Tag, Slider } from '@blueprintjs/core';
 import "./VideoSlider.scss";
 
-export function VideoSlider(props) {
+export default function VideoSlider(props) {
     const { video, playerState } = props;
     const [sliderTime, setSliderTime] = useState();
 
