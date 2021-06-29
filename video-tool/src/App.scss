@@ -1,0 +1,28 @@
+@import "~normalize.css";
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.App {
+  height:100vh;
+  background-color: $pt-dark-app-background-color;
+}
+
+.App-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+.video-slider{
+  width:50%
+}
+
+#video-canvas{
+  display:none;
+} 
+
