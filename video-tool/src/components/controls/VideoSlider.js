@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Slider } from '@blueprintjs/core';
+import { Tag, Slider } from '@blueprintjs/core';
+import "./VideoSlider.scss";
 
 export function VideoSlider(props) {
     const { video, playerState } = props;
@@ -22,6 +23,9 @@ export function VideoSlider(props) {
             .join(':');
     }
 
+    // TODO this needs to be driven by actual video length
+    const totalTime = 3599;
+
     const onChangeHandler = (time) => {
         setSliderTime(time);
     }
@@ -31,17 +35,23 @@ export function VideoSlider(props) {
     }
 
     return (
-        <Slider
-            className="video-slider"
-            onChange={onChangeHandler}
-            onRelease={onReleaseHandler}
-            labelRenderer={formatTime}
-            value={sliderTime}
-            min={0}
-            max={3599}
-            stepSize={.01}
-            labelStepSize={3599}>
-        </Slider>
+        <div className="video-slider">
+            <Slider
+                className="slider"
+                onChange={onChangeHandler}
+                onRelease={onReleaseHandler}
+                labelRenderer={false}
+                value={sliderTime}
+                min={0}
+                max={totalTime}
+                stepSize={.01}
+            ></Slider>
+            <Tag
+                className="time-display"
+                icon="time"
+                minimal={true}
+            >{formatTime(sliderTime)} / {formatTime(totalTime)}</Tag>
+        </div >
     )
 }
 
