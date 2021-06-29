@@ -1,0 +1,27 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+/* Frame Selector Component */
+/* https://css-tricks.com/snippets/css/turn-off-number-input-spinners/ */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.frame-selector{
+  height:$pt-input-height;
+  font-size:$pt-font-size-small;
+  display:flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: right;
+}
+
+.frame-count{
+    margin-left: 0.3ch;
+}
+
+input{
+  text-align: right; 
+}
