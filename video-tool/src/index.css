@@ -12,12 +12,3 @@ code {
     monospace;
 }
 
-.video_elem {
-  display:flex;
-}
-
-#video-canvas{
-  display:none;
-}
-
-

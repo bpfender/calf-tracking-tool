@@ -5,6 +5,7 @@ import Video from './Video';
 import ControlBar from './controls/ControlBar';
 import Info from './Info';
 import Annotation from './Annotation.js';
+import { Sidebar } from './annotations/Sidebar';
 
 function Player() {
     // QUESTION not totally sure about my use of callback ref
@@ -22,7 +23,8 @@ function Player() {
      });*/
 
     return (
-        <div class="bp3-dark">
+        <div>
+            <Sidebar></Sidebar>
             <Video
                 ref={useCallback(node => { setVideo(node) }, [])}
                 playerDispatch={playerDispatch}

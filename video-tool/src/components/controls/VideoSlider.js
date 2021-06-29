@@ -32,6 +32,7 @@ export function VideoSlider(props) {
 
     return (
         <Slider
+            className="video-slider"
             onChange={onChangeHandler}
             onRelease={onReleaseHandler}
             labelRenderer={formatTime}
