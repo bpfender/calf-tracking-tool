@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
-import { Button, ButtonGroup, Divider, EditableText, Icon } from '@blueprintjs/core';
+import { H5, Button, ButtonGroup, Card, Divider, EditableText, Icon, Menu } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import "./RightSidebar.scss"
 
 
 export default function RightSidebar(props) {
+    const [idsList, setIdsList] = useState([]);
+
+    const handleAddClick = (event) => {
+        setIdsList(idsList.concat(<IDPanel></IDPanel>));
+    }
+
     return (
         <div className="right-sidebar">
-            <h1>Sidebar Right</h1>
-            <IDPanel></IDPanel>
-        </div>
+            <div className="right-panel">
+                <H5>Sidebar Right</H5>
+                <Button icon="add"
+                    onClick={handleAddClick}
+                ></Button>
+                {idsList}
+            </div>
+        </div >
     );
 }
 
@@ -22,6 +33,7 @@ function IDPanel(props) {
         <div className="id-panel">
             <Icon icon="dot"></Icon>
             <EditableText
+                placeholder="Click to edit..."
                 onConfirm={() => { }}
                 maxLength={16}
                 selectAllOnFocus={true}
@@ -48,11 +60,10 @@ function ColourPalettePopover(props) {
     const { colour } = props;
     return (
         <Popover2
-            content={<ColourPalette></ColourPalette>}
+            content={<ColourPalette />}
             interactionKind="click"
             placement="bottom"
         >
-
             <Button
                 icon={<Icon icon="tint" color={colour}></Icon>}
             ></Button>
@@ -70,7 +81,7 @@ function ColourPalette(props) {
         "#2EE6D6", "#62D96B", "#FFC940"]
 
     return (
-        <div class="colour-palette">
+        <Card class="colour-palette">
             {colours.map((colour) => {
                 return (
                     <Button
@@ -80,6 +91,6 @@ function ColourPalette(props) {
                     ></Button>
                 )
             })}
-        </div>
+        </Card>
     );
 }

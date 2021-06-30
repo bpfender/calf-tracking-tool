@@ -1,7 +1,14 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
 .right-sidebar{
-    padding: 5em;
+    padding: $pt-grid-size*2;
 }
 
+.right-panel{
+    background-color:$dark-gray5;
+    border-radius:$pt-border-radius;
+    padding: $pt-grid-size;
+}
 
 .id-panel{
     display: flex;
@@ -11,5 +18,5 @@
 .colour-palette{
     width: fit-content;
     display:grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }
