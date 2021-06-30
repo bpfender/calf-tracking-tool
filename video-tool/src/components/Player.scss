@@ -1,17 +1,18 @@
+/* TODO not clear how to set this height properly */
 .video-window-container{
-    position: relative;
-    margin: auto;
-    min-height: 600px;
-    z-index: 0;
+    position:relative;
+    height:600px;
+
 }
 
 .video-window{
     position:absolute;
-    top: 0;
-    left: 0;
-    height: fit-content;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
 }
 
 .annotation-canvas{
     z-index:10;
 }
+
