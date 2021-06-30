@@ -27,16 +27,17 @@ export default function FrameSelector(props) {
     // FIXME not sure this timeout is working properly
     // FIXME limit numerical input and validate input
     // TODO needs to be updated based on slider value
-    const changeHandler = (event) => {
+    const handleChange = (event) => {
         setTimeout(video.setCurrentFrame, 1000, parseInt(event.target.value));
     }
 
     // TODO possible to select all on click?
+    // TODO wrap in label to extend clickable area?
     return (
         <div className="frame-selector">
             <InputGroup
                 className="frame-input"
-                onChange={changeHandler}
+                onChange={handleChange}
                 type="number"
                 leftIcon="duplicate"
                 value={currentFrame}

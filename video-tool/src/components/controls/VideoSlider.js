@@ -26,11 +26,11 @@ export default function VideoSlider(props) {
     // TODO this needs to be driven by actual video length
     const totalTime = 3599;
 
-    const onChangeHandler = (time) => {
+    const handleChange = (time) => {
         setSliderTime(time);
     }
 
-    const onReleaseHandler = (time) => {
+    const handleRelease = (time) => {
         video.setCurrentTime(time);
     }
 
@@ -38,8 +38,8 @@ export default function VideoSlider(props) {
         <div className="video-slider">
             <Slider
                 className="slider"
-                onChange={onChangeHandler}
-                onRelease={onReleaseHandler}
+                onChange={handleChange}
+                onRelease={handleRelease}
                 labelRenderer={false}
                 value={sliderTime}
                 min={0}
@@ -50,7 +50,9 @@ export default function VideoSlider(props) {
                 className="time-display"
                 icon="time"
                 minimal={true}
-            >{formatTime(sliderTime)} / {formatTime(totalTime)}</Tag>
+            >
+                {formatTime(sliderTime)} / {formatTime(totalTime)}
+            </Tag>
         </div >
     )
 }
