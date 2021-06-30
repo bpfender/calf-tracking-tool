@@ -14,8 +14,6 @@ function Annotation(props) {
 
     useEffect(() => {
         sceneRef.current = new Scene(canvasRef.current.getContext('2d'), BBoxes);
-
-
     }, [canvasRef]);
 
     const handleMouseMove = (event) => {
@@ -32,11 +30,11 @@ function Annotation(props) {
 
     return (
         <canvas
+            className={props.className}
             ref={canvasRef}
             onMouseMove={handleMouseMove}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
-            id="annotation-canvas"
             width="800px"
             height="600px">
         </canvas>

@@ -72,6 +72,7 @@ class Video extends React.Component {
 
     /* ---- FRAME CALLBACKS ---- */
     //TODO this is a bit messy. Needs to be tidied
+    //TODO need to check for compatibility with callback
     handleFrameUpdate(now, metadata) {
         this.videoFrameCallbackMetadata = metadata;
 
@@ -192,50 +193,47 @@ class Video extends React.Component {
 
     render() {
         return (
-            <div className="video-window">
-                <div className="video-element">
-                    <video
-                        ref={element => {
-                            this.video = element;
-                        }}
-                        src={video_src}
+            <div className={this.props.className}>
+                <video
+                    className="video-element"
+                    ref={element => {
+                        this.video = element;
+                    }}
+                    src={video_src}
 
-                        onAbort={() => { }}
-                        onCanPlay={() => { }}
-                        onCanPlayThrough={() => { }}
-                        onDurationChange={() => { }}
-                        onEmptied={() => { }}
-                        onEnded={this.handleEnded}
-                        onError={this.handleError}
-                        onLoadedData={this.handleLoadedData}
-                        onLoadedMetadata={this.handleLoadedMetadata}
-                        onLoadStart={() => { }}
-                        onPause={this.handlePause}
-                        onPlay={this.handlePlay}
-                        onPlaying={() => { }}
-                        onProgress={() => { }}
-                        onRateChange={this.handleRateChange}
-                        onSeeked={this.handleSeeked}
-                        onSeeking={this.handleSeeking}
-                        onStalled={() => { }}
-                        onSuspend={() => { }}
-                        onTimeUpdate={() => { }}
-                        onWaiting={() => { }}
-                    >
-                        <p>ERROR: Video not supported</p>
-                    </video>
-                </div>
-                <div>
-                    <canvas
-                        id="video-canvas"
-                        ref={element => {
-                            this.canvas = element;
-                        }}
-                        width="800px"
-                        height="600px"
-                    >
-                    </canvas>
-                </div>
+                    onAbort={() => { }}
+                    onCanPlay={() => { }}
+                    onCanPlayThrough={() => { }}
+                    onDurationChange={() => { }}
+                    onEmptied={() => { }}
+                    onEnded={this.handleEnded}
+                    onError={this.handleError}
+                    onLoadedData={this.handleLoadedData}
+                    onLoadedMetadata={this.handleLoadedMetadata}
+                    onLoadStart={() => { }}
+                    onPause={this.handlePause}
+                    onPlay={this.handlePlay}
+                    onPlaying={() => { }}
+                    onProgress={() => { }}
+                    onRateChange={this.handleRateChange}
+                    onSeeked={this.handleSeeked}
+                    onSeeking={this.handleSeeking}
+                    onStalled={() => { }}
+                    onSuspend={() => { }}
+                    onTimeUpdate={() => { }}
+                    onWaiting={() => { }}
+                >
+                    <p>ERROR: Video not supported</p>
+                </video>
+                <canvas
+                    className="video-canvas"
+                    ref={element => {
+                        this.canvas = element;
+                    }}
+                    width="800px"
+                    height="600px"
+                >
+                </canvas>
             </div>
         )
     }
