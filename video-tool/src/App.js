@@ -1,10 +1,9 @@
-import './App.scss';
-
 import React from 'react';
 
 import Player from './components/Player';
 import RightSidebar from './components/RightSidebar';
 import LeftSidebar from './components/LeftSidebar';
+import './App.scss';
 
 
 // TODO check if React.Fragment is applicabe anywhere
