@@ -1,8 +1,8 @@
 import React from 'react';
 
-export function Sidebar(props) {
+export default function RightSidebar(props) {
     return (
-        <div className="side-bar-right">
+        <div className="right-sidebar">
             <h1>SIDEBAR</h1>
         </div>
     )

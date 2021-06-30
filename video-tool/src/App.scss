@@ -4,11 +4,23 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 
 .App {
+  display:grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows:auto 1fr auto;
+  grid-template-areas:"header header header"
+                      "left-sidebar main right-sidebar"
+                      "footer footer footer";
+
+
   height:100vh;
   background-color: $pt-dark-app-background-color;
+
 }
 
 .App-header {
+  grid-area:header;
+  height:50px;
+  background-color: $dark-gray1;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -16,7 +28,26 @@
   justify-content: center;
 }
 
-#video-canvas{
-  display:none;
-} 
+.main-content{
+  grid-area: main;
+  }
+
+.left-sidebar{
+  grid-area: left-sidebar;
+  background-color: $dark-gray4;
+}
+
+.right-sidebar{
+  grid-area:right-sidebar;
+  background-color: $dark-gray4;
+}
+
+.footer{
+  grid-area:footer;
+  background-color: $dark-gray1;
+  height:50px;
+
+}
+
+
 

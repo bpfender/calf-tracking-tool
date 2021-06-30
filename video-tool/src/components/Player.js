@@ -1,11 +1,10 @@
 import React, { useCallback, useReducer, useState } from 'react';
 import { defaultPlayerState, playerReducer } from './state/player-state.js';
 
-import Video from './Video';
+import Video from './video/Video';
 import ControlBar from './controls/ControlBar';
 import Info from './Info';
 import Annotation from './Annotation.js';
-import { Sidebar } from './annotations/Sidebar';
 
 function Player() {
     // QUESTION not totally sure about my use of callback ref
@@ -24,7 +23,6 @@ function Player() {
 
     return (
         <div>
-            <Sidebar></Sidebar>
             <Video
                 ref={useCallback(node => { setVideo(node) }, [])}
                 playerDispatch={playerDispatch}

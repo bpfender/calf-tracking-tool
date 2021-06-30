@@ -1,0 +1,10 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.video-window{
+  background-color: $dark-gray2;
+  padding:50px 100px;
+}
+
+#video-canvas{
+    display:none;
+  } 
