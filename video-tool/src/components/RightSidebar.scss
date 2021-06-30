@@ -1,0 +1,15 @@
+.right-sidebar{
+    padding: 5em;
+}
+
+
+.id-panel{
+    display: flex;
+    align-items: center;
+}
+
+.colour-palette{
+    width: fit-content;
+    display:grid;
+    grid-template-columns: auto auto auto auto;
+}

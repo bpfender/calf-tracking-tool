@@ -6,6 +6,8 @@ import Player from './components/Player';
 import RightSidebar from './components/RightSidebar';
 import LeftSidebar from './components/LeftSidebar';
 
+
+// TODO check if React.Fragment is applicabe anywhere
 function App(props) {
   return (
     <div className="App bp3-dark">
