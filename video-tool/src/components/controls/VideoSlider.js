@@ -23,11 +23,9 @@ export default function VideoSlider(props) {
             .join(':');
     }
 
-    // TODO this needs to be driven by actual video length
-    const totalTime = 3599;
-
     const handleChange = (time) => {
         setSliderTime(time);
+        console.log(time);
     }
 
     const handleRelease = (time) => {

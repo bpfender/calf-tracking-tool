@@ -262,9 +262,6 @@ class Video extends React.Component {
     }
 
     handleSeeking() {
-        const payload = {
-
-        };
         this.props.playerDispatch({ type: 'SEEKING' });
     }
 

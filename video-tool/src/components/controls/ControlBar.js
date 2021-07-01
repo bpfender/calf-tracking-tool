@@ -15,7 +15,10 @@ function ControlBar(props) {
     return (
         <div>
             <div className="slider-bar">
-                <VideoSlider video={video} playerState={playerState}></VideoSlider>
+                <VideoSlider
+                    video={video}
+                    playerState={playerState}
+                ></VideoSlider>
                 <FrameSelector video={video} playerState={playerState}></FrameSelector>
             </div >
 

@@ -8,9 +8,6 @@ export default function FrameSelector(props) {
     const [currentFrame, setCurrentFrame] = useState(1);
     const [intent, setIntent] = useState("none");
 
-    // TODO update total frames based on player state
-    const frameCount = 86305
-
     useEffect(() => {
         setCurrentFrame(playerState.currentFrame);
         setIntent("none");
@@ -20,7 +17,7 @@ export default function FrameSelector(props) {
         if (playerState.seeking) {
             setIntent("warning");
         } else {
-            setIntent("success")
+            setIntent("none")
         }
     }, [playerState.seeking])
 
@@ -41,7 +38,7 @@ export default function FrameSelector(props) {
                 type="number"
                 leftIcon="duplicate"
                 value={currentFrame}
-                placeholder={frameCount}
+                placeholder={playerState.totalFrames}
                 min={1}
                 max={playerState.totalFrames}
                 step={1}

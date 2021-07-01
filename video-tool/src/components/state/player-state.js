@@ -32,7 +32,8 @@ export const defaultPlayerState = {
 
 export function playerReducer(state = defaultPlayerState, action) {
     const payload = action.payload;
-    console.log(action.type, payload);
+    // console.log(action.type, payload);
+
     switch (action.type) {
         case 'FRAME_CALLBACK':
             return {
