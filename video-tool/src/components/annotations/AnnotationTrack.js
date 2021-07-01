@@ -1,29 +1,37 @@
 import LabelledFrames from "./LabelledFrames";
 
-class AnnotationTrack {
-    constructor(frameCount) {
-        this.annotationTrack = [];
+export default class AnnotationTrack {
+    constructor(name, colour, totalFrames) {
+        this.name = name;
+        this.colour = colour;
+        this.annotationTrack = new Array(totalFrames);
         this.labelledFrames = new LabelledFrames();
-        this.frameCount = frameCount;
+    }
+
+    set setName(name) {
+        this.name = name;
+    }
+
+    set setColour(colour) {
+        this.colour = colour;
     }
 
     setAnnotation(frame, annotation) {
         this.annotationTrack[this.getIndex(frame)] = annotation;
 
-        this.labelledFrames.addLabelledFrame(frame);
-
-        this.updateFrameTrack(frame);
+        // TODO not updating labelled frames currently
+        //this.labelledFrames.addLabelledFrame(frame);
+        //this.updateFrameTrack(frame);
     }
 
     getAnnotation(frame) {
-        if (frame > this.getAnnotationframeCount || frame <= 0) {
-            throw new Error("Invalid frame specified");
-        }
-
         return this.annotationTrack[this.getIndex(frame)];
     }
 
     getIndex(frame) {
+        if (frame > this.annotationTrack.length || frame <= 0) {
+            throw new Error("Invalid frame specified");
+        }
         return frame - 1;
     }
 
@@ -37,9 +45,6 @@ class AnnotationTrack {
         }
     }
 }
-
-export default AnnotationTrack;
-
 
 
 

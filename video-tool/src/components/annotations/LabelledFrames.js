@@ -1,4 +1,5 @@
-class LabelledFrames {
+// FIXME this is very janky at the moment
+export default class LabelledFrames {
     constructor() {
         this.labelledFrames = [];
     }
@@ -41,5 +42,3 @@ class LabelledFrames {
         return this.labelledFrame[i - 1];
     }
 }
-
-export default LabelledFrames;

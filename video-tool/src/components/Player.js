@@ -1,5 +1,5 @@
-import React, { useCallback, useReducer, useState } from 'react';
-import { defaultPlayerState, playerReducer } from './state/player-state.js';
+import React, { useCallback, useState } from 'react';
+
 
 import Video from './video/Video';
 import ControlBar from './controls/ControlBar';
@@ -8,11 +8,11 @@ import Annotation from './Annotation.js';
 import "./Player.scss";
 
 function Player(props) {
-    const { annotations } = props
+    const { annotations, playerState, playerDispatch } = props
 
+    // TODO useeffect to mount video?
     // QUESTION not totally sure about my use of callback ref.should ref be done with imperativeHandle?
     const [video, setVideo] = useState();
-    const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 
     // TODO this needs to be set dynamically
     const style = {

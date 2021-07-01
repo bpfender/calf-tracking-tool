@@ -5,12 +5,23 @@ import "./RightSidebar.scss"
 
 
 export default function RightSidebar(props) {
-    const { annotations } = props.annotations;
+    const { annotations, playerState } = props;
 
     const [idsList, setIdsList] = useState([]);
 
-    const handleAddClick = (event) => {
-        setIdsList(idsList.concat(<IDPanel></IDPanel>));
+    // TODO framecount is hardcoded at the moment
+    // QUESTION can i iterate colours with generator?
+    const handleAddClick = () => {
+        console.log(annotations);
+
+        const key = annotations.addTrack(
+            null,
+            "#48AFF0",
+            playerState.totalFrames,
+            playerState.currentFrame);
+
+        //FIXME not sure using uuid key for panel items is clever
+        setIdsList(idsList.concat(<IDPanel key={key}></IDPanel>));
     }
 
     return (
