@@ -155,6 +155,10 @@ class Video extends React.Component {
         return (n) * FRAME_DELTA;
     }
 
+    // FIXME naughty subtraction. Not 100% sure why
+    getTimeAsFrames(t) {
+        return Math.floor(t * FPS - 1);
+    }
 
     /* ---- VIDEO EVENTS ---- */
     // TODO not sure about how to handle abort currently
@@ -178,7 +182,8 @@ class Video extends React.Component {
 
     handleDurationChange() {
         const payload = {
-            duration: this.video.duration
+            duration: this.video.duration,
+            totalFrames: this.getTimeAsFrames(this.video.duration),
         };
         this.props.playerDispatch({ type: 'DURATION_CHANGE', payload: { ...payload } });
     }
@@ -293,7 +298,6 @@ class Video extends React.Component {
                         this.video = element;
                     }}
                     src={video_src}
-
                     onAbort={this.handleAbort}
                     onCanPlay={this.handleCanPlay}
                     onCanPlayThrough={this.handleCanPlayThrough}

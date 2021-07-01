@@ -25,6 +25,7 @@ export const defaultPlayerState = {
 
     // Extra states
     currentFrame: 0,
+    totalFrames: 0,
     framesToSkip: 5,
     timeToSkip: 1,
 };
@@ -58,7 +59,8 @@ export function playerReducer(state = defaultPlayerState, action) {
         case 'DURATION_CHANGE':
             return {
                 ...state,
-                duration: payload.duration
+                duration: payload.duration,
+                totalFrames: payload.totalFrames
             };
         case 'EMPTIED':
             return state;

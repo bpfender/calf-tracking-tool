@@ -43,7 +43,7 @@ export default function VideoSlider(props) {
                 labelRenderer={false}
                 value={sliderTime}
                 min={0}
-                max={totalTime}
+                max={playerState.duration}
                 stepSize={.01}
             ></Slider>
             <Tag
@@ -51,7 +51,7 @@ export default function VideoSlider(props) {
                 icon="time"
                 minimal={true}
             >
-                {formatTime(sliderTime)} / {formatTime(totalTime)}
+                {formatTime(sliderTime)} / {formatTime(playerState.duration)}
             </Tag>
         </div >
     )

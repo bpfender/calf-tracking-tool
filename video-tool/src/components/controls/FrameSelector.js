@@ -9,7 +9,7 @@ export default function FrameSelector(props) {
     const [intent, setIntent] = useState("none");
 
     // TODO update total frames based on player state
-    const frameCount = 86302
+    const frameCount = 86305
 
     useEffect(() => {
         setCurrentFrame(playerState.currentFrame);
@@ -43,13 +43,13 @@ export default function FrameSelector(props) {
                 value={currentFrame}
                 placeholder={frameCount}
                 min={1}
-                max={frameCount}
+                max={playerState.totalFrames}
                 step={1}
                 asyncControl={true}
                 intent={intent}
                 small={true}
             ></InputGroup>
-            <span className="frame-count">/ {frameCount}</span>
+            <span className="frame-count">/ {playerState.totalFrames}</span>
         </div >
     );
 }
