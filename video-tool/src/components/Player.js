@@ -7,8 +7,10 @@ import Info from './Info';
 import Annotation from './Annotation.js';
 import "./Player.scss";
 
-function Player() {
-    // QUESTION not totally sure about my use of callback ref
+function Player(props) {
+    const { annotations } = props
+
+    // QUESTION not totally sure about my use of callback ref.should ref be done with imperativeHandle?
     const [video, setVideo] = useState();
     const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 
@@ -17,9 +19,8 @@ function Player() {
         height: playerState.videoHeight + "px"
     };
 
-    // FIXME should ref be done with imperativeHandle?
     return (
-        <div>
+        <div className={props.className}>
             <div className="video-window-container"
                 style={style}>
                 <Video
@@ -28,7 +29,8 @@ function Player() {
                     playerDispatch={playerDispatch}>
                 </Video>
                 <Annotation
-                    className="video-window annotation-overlay">
+                    className="video-window annotation-overlay"
+                    annotations={annotations}>
                 </Annotation>
             </div>
 

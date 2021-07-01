@@ -1,14 +1,5 @@
 import AnnotationTrack from "./AnnotationTrack";
 
-function FrameAnnotation(x, y, width, height, rotation) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.rotation = rotation;
-    this.labelled = false;
-}
-
 class Annotations {
     constructor() {
         this.annotations = new Map();
@@ -49,5 +40,16 @@ class Annotations {
         track.setAnnotation(frame, annotation)
     }
 }
+
+
+function FrameAnnotation(x, y, width, height, rotation) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.rotation = rotation;
+    this.labelled = false;
+}
+
 
 export default Annotations;

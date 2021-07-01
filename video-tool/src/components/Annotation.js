@@ -3,6 +3,8 @@ import BoundingBox from './canvas/BoundingBox';
 import Scene from './canvas/Scene';
 
 function Annotation(props) {
+    const { annotations } = props;
+
     const canvasRef = React.useRef();
     const sceneRef = React.useRef();
     const scene = sceneRef.current;

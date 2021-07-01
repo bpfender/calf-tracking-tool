@@ -41,6 +41,8 @@ class Scene {
 
     handleMouseDown(mouseX, mouseY) {
         this.mouseDown = true;
+
+        //FIXME probably not needed again here
         this.lastX = mouseX;
         this.lastY = mouseY;
 

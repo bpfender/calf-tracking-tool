@@ -5,6 +5,8 @@ import "./RightSidebar.scss"
 
 
 export default function RightSidebar(props) {
+    const { annotations } = props.annotations;
+
     const [idsList, setIdsList] = useState([]);
 
     const handleAddClick = (event) => {
@@ -57,10 +59,10 @@ function IDPanel(props) {
 }
 
 function ColourPalettePopover(props) {
-    const { colour } = props;
+    const [colour, setColour] = useState(props.colour);
     return (
         <Popover2
-            content={<ColourPalette />}
+            content={<ColourPalette setColour={setColour} />}
             interactionKind="click"
             placement="bottom"
         >
@@ -72,8 +74,10 @@ function ColourPalettePopover(props) {
 }
 
 function ColourPalette(props) {
-    const [pick, setPick] = useState();
+    const { setColour } = props;
+
     // Colours from https://blueprintjs.com/docs/#core/colors
+    // FIXME probably define as static?
     const colours = [
         "#48AFF0", "#3DCC91", "#FFB366",
         "#FF7373", "#FF6E4A", "#FF66A1",
@@ -85,7 +89,7 @@ function ColourPalette(props) {
             {colours.map((colour) => {
                 return (
                     <Button
-                        onClick={() => { setPick(colour) }}
+                        onClick={() => { setColour(colour) }}
                         icon={<Icon icon="symbol-square" color={colour}></Icon>}
                         minimal={true}
                     ></Button>
