@@ -12,17 +12,24 @@ function Player() {
     const [video, setVideo] = useState();
     const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 
+    // TODO this needs to be set dynamically
+    const style = {
+        height: playerState.videoHeight + "px"
+    };
+
+    // FIXME should ref be done with imperativeHandle?
     return (
         <div>
-            <div className="video-window-container">
+            <div className="video-window-container"
+                style={style}>
                 <Video
                     className="video-window"
                     ref={useCallback(node => { setVideo(node) }, [])}
-                    playerDispatch={playerDispatch}
-                ></Video>
+                    playerDispatch={playerDispatch}>
+                </Video>
                 <Annotation
-                    className="video-window annotation-overlay"
-                ></Annotation>
+                    className="video-window annotation-overlay">
+                </Annotation>
             </div>
 
 

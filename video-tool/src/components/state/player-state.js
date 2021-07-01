@@ -25,31 +25,43 @@ export const defaultPlayerState = {
 
     // Extra states
     currentFrame: 0,
-    seekingTime: 0,
-    seekingFrame: 0,
     framesToSkip: 5,
     timeToSkip: 1,
 };
 
 export function playerReducer(state = defaultPlayerState, action) {
-
+    const payload = action.payload;
+    console.log(action.type, payload);
     switch (action.type) {
         case 'FRAME_CALLBACK':
             return {
                 ...state,
-                currentFrame: action.payload.currentFrame,
-                presentationTime: action.payload.metadata.presentationTime,
-                expectedDisplayTime: action.payload.metadata.expectedDisplayTime,
-                mediaTime: action.payload.metadata.mediaTime,
-                presentedFrames: action.payload.metadata.presentedFrames,
-                processingDuration: action.payload.metadata.processingDuration,
+                currentFrame: payload.currentFrame,
+                presentationTime: payload.presentationTime,
+                expectedDisplayTime: payload.expectedDisplayTime,
+                mediaTime: payload.mediaTime,
+                presentedFrames: payload.presentedFrames,
+                processingDuration: payload.processingDuration
             };
         case 'ABORT':
             return state;
         case 'CAN_PLAY':
+            return {
+                ...state,
+                readyState: payload.readyState
+            };
         case 'CAN_PLAY_THROUGH':
+            return {
+                ...state,
+                readyState: payload.readyState
+            };
         case 'DURATION_CHANGE':
+            return {
+                ...state,
+                duration: payload.duration
+            };
         case 'EMPTIED':
+            return state;
         case 'ENDED':
             return {
                 ...state,
@@ -58,19 +70,25 @@ export function playerReducer(state = defaultPlayerState, action) {
         case 'ERROR':
             return {
                 ...state,
-                error: action.payload.error,
+                error: payload.error,
             };
         case 'LOADED_DATA':
             return {
                 ...state,
-                readyState: action.payload.readyState,
+                readyState: payload.readyState,
             };
         case 'LOADED_METADATA':
             return {
                 ...state,
-                readyState: action.payload.readyState,
+                readyState: payload.readyState,
+                videoWidth: payload.videoWidth,
+                videoHeight: payload.videoHeight,
             };
         case 'LOAD_START':
+            return {
+                ...state,
+                readyState: payload.readyState
+            };
         case 'PAUSE':
             return {
                 ...state,
@@ -82,36 +100,54 @@ export function playerReducer(state = defaultPlayerState, action) {
                 paused: false,
             };
         case 'PLAYING':
+            return {
+                ...state,
+                paused: false,
+            };
         case 'PROGRESS':
+            return {
+                ...state
+            };
         case 'RATE_CHANGE':
             return {
                 ...state,
-                playbackRate: action.payload.playbackRate,
+                playbackRate: payload.playbackRate,
             };
         case 'SEEKED':
             return {
                 ...state,
                 seeking: false,
             };
-
         case 'SEEKING':
             return {
                 ...state,
                 seeking: true,
             };
         case 'STALLED':
+            return {
+                ...state
+            };
         case 'SUSPEND':
+            return {
+                ...state
+            };
         case 'TIME_UPDATE':
+            return {
+                ...state
+            };
         case 'WAITING':
+            return {
+                ...state
+            };
         case 'FRAMES_TO_SKIP':
             return {
                 ...state,
-                framesToSkip: action.payload.framesToSkip,
+                framesToSkip: payload.framesToSkip,
             };
         case 'TIME_TO_SKIP':
             return {
                 ...state,
-                timeToSkip: action.payload.timeToSkip,
+                timeToSkip: payload.timeToSkip,
             };
         default: {
             throw new Error(`Unknown action type: ${action.type}`);
