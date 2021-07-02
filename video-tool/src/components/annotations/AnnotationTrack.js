@@ -16,6 +16,10 @@ export default class AnnotationTrack {
         this.colour = colour;
     }
 
+    get getColour() {
+        return this.colour;
+    }
+
     setAnnotation(frame, annotation) {
         this.annotationTrack[this.getIndex(frame)] = annotation;
 

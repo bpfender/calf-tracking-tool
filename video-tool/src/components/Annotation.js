@@ -3,31 +3,34 @@ import BoundingBox from './canvas/BoundingBox';
 import Scene from './canvas/Scene';
 
 function Annotation(props) {
-    const { annotations } = props;
+    const { annotations, playerState } = props;
 
     const canvasRef = React.useRef();
     const sceneRef = React.useRef();
-    const scene = sceneRef.current;
+
 
     const BBox = new BoundingBox(400, 300, 120, 120, 0, 'blue');
     const BBox2 = new BoundingBox(200, 100, 50, 70, 80);
     const BBox3 = new BoundingBox(50, 70, 55, 75, 130);
-    const BBoxes = [BBox, BBox2, BBox3];
+    //const BBoxes = [BBox, BBox2, BBox3];
 
     useEffect(() => {
+        const BBoxes = annotations.getBoundingBoxes(playerState.currentFrame);
+        console.log(BBoxes);
         sceneRef.current = new Scene(canvasRef.current.getContext('2d'), BBoxes);
-    }, [canvasRef]);
+    }, [canvasRef, playerState.currentFrame]);
+
 
     const handleMouseMove = (event) => {
-        scene.handleMouseMove(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
+        sceneRef.current.handleMouseMove(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
     };
 
     const handleMouseDown = (event) => {
-        scene.handleMouseDown(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
+        sceneRef.current.handleMouseDown(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
     };
 
     const handleMouseUp = () => {
-        scene.handleMouseUp();
+        sceneRef.current.handleMouseUp();
     };
 
     return (

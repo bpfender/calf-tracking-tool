@@ -30,6 +30,7 @@ function Player(props) {
                 </Video>
                 <Annotation
                     className="video-window annotation-overlay"
+                    playerState={playerState}
                     annotations={annotations}>
                 </Annotation>
             </div>
