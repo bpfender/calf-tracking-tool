@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 import './App.scss';
 import { defaultPlayerState, playerReducer } from './components/state/player-state.js';
 import Player from './components/Player';
@@ -12,7 +12,12 @@ import Annotations from './components/annotations/Annotations';
 function App(props) {
   //FIXME totalframes set manually currently
   //FIXME frame count sometimes slightly off
-  const annotations = new Annotations(86302);
+  //FIXME whole tree updates all the time
+  //FIXME not quite clear why this is in useRef
+  const annotationsRef = useRef(new Annotations(86302));
+
+
+
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 
   return (
@@ -25,12 +30,12 @@ function App(props) {
         className="main-content"
         playerState={playerState}
         playerDispatch={playerDispatch}
-        annotations={annotations}>
+        annotations={annotationsRef.current}>
       </Player>
       <RightSidebar
         className="right-sidebar"
         playerState={playerState}
-        annotations={annotations}>
+        annotations={annotationsRef.current}>
       </RightSidebar>
       <footer className="footer">FOOTER</footer>
     </div >
