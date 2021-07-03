@@ -1,9 +1,9 @@
 import RotationHandle from "./RotationHandle";
 
 class Scene {
-    constructor(context, BBoxes) {
+    constructor(context) {
         this.context = context;
-        this.BBoxes = BBoxes;
+        this.BBoxes = [];
 
         this.selected = null;
         this.mouseover = null;
@@ -14,6 +14,11 @@ class Scene {
         this.lastX = null;
         this.lastY = null;
 
+        this._redraw();
+    }
+
+    addObjects(BBoxes) {
+        this.BBoxes = BBoxes;
         this._redraw();
     }
 

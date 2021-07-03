@@ -3,6 +3,7 @@ import BoundingBox from '../canvas/BoundingBox';
 import AnnotationTrack from "./AnnotationTrack";
 import FrameAnnotation from './FrameAnnotation';
 
+// QUESTION not sure about functionality
 // TODO some sort of autonaming convention
 // TODO some kind of auto changing colour
 export default class Annotations {
@@ -11,7 +12,7 @@ export default class Annotations {
         this.totalFrames = totalFrames;
     }
 
-    addTrack(name = null, colour, totalFrames, currentFrame) {
+    addTrack(name = "", colour, totalFrames, currentFrame) {
         const key = uuidv4();
         const track = new AnnotationTrack(name, colour, totalFrames);
         track.setAnnotation(currentFrame, new FrameAnnotation());
@@ -50,6 +51,7 @@ export default class Annotations {
     getAllFrameAnnotations(frame) {
         const annotationList = [];
         this.annotations.forEach(track => {
+            //FIXME this is super dirty at the moment
             if (track.getAnnotation(frame) !== undefined) {
                 annotationList.push(track.getAnnotation(frame));
             }

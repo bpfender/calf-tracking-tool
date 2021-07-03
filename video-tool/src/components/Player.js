@@ -11,6 +11,7 @@ function Player(props) {
     const { annotations, playerState, playerDispatch } = props
 
     // TODO useeffect to mount video?
+    // FIXME ref forwarding for video ref?
     // QUESTION not totally sure about my use of callback ref.should ref be done with imperativeHandle?
     const [video, setVideo] = useState();
 

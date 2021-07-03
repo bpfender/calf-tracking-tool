@@ -15,11 +15,14 @@ function Annotation(props) {
     //const BBoxes = [BBox, BBox2, BBox3];
 
     useEffect(() => {
-        const BBoxes = annotations.getBoundingBoxes(playerState.currentFrame);
-        console.log(BBoxes);
-        sceneRef.current = new Scene(canvasRef.current.getContext('2d'), BBoxes);
-    }, [canvasRef, playerState.currentFrame]);
+        sceneRef.current = new Scene(canvasRef.current.getContext('2d'))
+    }, [canvasRef]);
 
+
+    useEffect(() => {
+        const BBoxes = annotations.getBoundingBoxes(playerState.currentFrame);
+        sceneRef.current.addObjects(BBoxes);
+    }, [playerState.currentFrame]);
 
     const handleMouseMove = (event) => {
         sceneRef.current.handleMouseMove(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
