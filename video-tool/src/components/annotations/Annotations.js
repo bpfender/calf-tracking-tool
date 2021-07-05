@@ -11,9 +11,9 @@ export default class Annotations {
         this.totalFrames = totalFrames;
     }
 
-    addTrack(name = "", colour, totalFrames) {
+    addTrack(colour, totalFrames) {
         const key = uuidv4();
-        const track = new AnnotationTrack(name, colour, totalFrames);
+        const track = new AnnotationTrack("", colour, totalFrames);
         this.annotations.set(key, track);
         return key;
     }

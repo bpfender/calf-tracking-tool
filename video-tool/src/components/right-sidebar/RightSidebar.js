@@ -5,7 +5,7 @@ import "./RightSidebar.scss"
 
 
 export default function RightSidebar(props) {
-    const { annotations, playerState } = props;
+    const { annotations, annotationDispatch, playerState } = props;
 
     const [idsList, setIdsList] = useState([]);
 
@@ -14,11 +14,11 @@ export default function RightSidebar(props) {
     const handleAddClick = () => {
         console.log(annotations);
 
+        // annotationDispatch({ type: "ADD_TRACK", payload: { colour: "#48AFF0", totalFrames: playerState.totalFrames } });
+
         const key = annotations.addTrack(
-            null,
             "#48AFF0",
-            playerState.totalFrames,
-            playerState.currentFrame);
+            playerState.totalFrames);
 
         //FIXME not sure using uuid key for panel items is clever
         setIdsList(idsList.concat(<IDPanel key={key}></IDPanel>));

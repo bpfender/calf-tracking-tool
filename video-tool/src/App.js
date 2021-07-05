@@ -15,9 +15,9 @@ function App(props) {
   //FIXME frame count sometimes slightly off
   //FIXME whole tree updates all the time
   //FIXME not quite clear why this is in useRef
-  const annotationsRef = useRef(new Annotations(86302));
+  //const annotationsRef = useRef(new Annotations(86302));
 
-  const [annotation, annotationDispatch] = useReducer(annotationReducer);
+  const [annotations, annotationDispatch] = useReducer(annotationReducer, new Annotations(86302));
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 
   return (
@@ -30,12 +30,13 @@ function App(props) {
         className="main-content"
         playerState={playerState}
         playerDispatch={playerDispatch}
-        annotations={annotationsRef.current}>
+        annotations={annotations}>
       </Player>
       <RightSidebar
         className="right-sidebar"
         playerState={playerState}
-        annotations={annotationsRef.current}>
+        annotations={annotations}
+        annotationDispatch={annotationDispatch}>
       </RightSidebar>
       <footer className="footer">FOOTER</footer>
     </div >
