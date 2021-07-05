@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import BoundingBox from '../canvas/BoundingBox';
 import AnnotationTrack from "./AnnotationTrack";
-import FrameAnnotation from './FrameAnnotation';
 
 // QUESTION not sure about functionality
 // TODO some sort of autonaming convention
@@ -12,10 +11,9 @@ export default class Annotations {
         this.totalFrames = totalFrames;
     }
 
-    addTrack(name = "", colour, totalFrames, currentFrame) {
+    addTrack(name = "", colour, totalFrames) {
         const key = uuidv4();
         const track = new AnnotationTrack(name, colour, totalFrames);
-        track.setAnnotation(currentFrame, new FrameAnnotation());
         this.annotations.set(key, track);
         return key;
     }

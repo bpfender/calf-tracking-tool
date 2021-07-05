@@ -1,6 +1,7 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useReducer, useRef } from 'react';
 import './App.scss';
 import { defaultPlayerState, playerReducer } from './components/state/player-state.js';
+import { annotationReducer } from './components/state/annotation-state';
 import Player from './components/Player';
 import RightSidebar from './components/right-sidebar/RightSidebar';
 import LeftSidebar from './components/left-sidebar/LeftSidebar';
@@ -16,8 +17,7 @@ function App(props) {
   //FIXME not quite clear why this is in useRef
   const annotationsRef = useRef(new Annotations(86302));
 
-
-
+  const [annotation, annotationDispatch] = useReducer(annotationReducer);
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 
   return (

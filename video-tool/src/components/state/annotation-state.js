@@ -2,21 +2,34 @@ export const defaultAnnotationState = {
 
 }
 
-let annotations = {
+export function annotationReducer(state, action) {
+    const payload = action.payload;
 
-};
+    switch (action.type) {
+        case 'ADD_TRACK':
 
-let calfAnnotation = {
-    id: 0,
-    colour: null,
-    frames: [frameAnnotation],
-};
 
-let frameAnnotation = {
-    frame: 0,
-    rotation: 0,
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-};
+            return {
+
+            };
+        case 'DELETE_TRACK':
+            return {
+
+            };
+        case 'SET_TRACK_NAME':
+            return {
+
+            };
+        case 'SET_TRACK_COLOUR':
+            return {
+
+            };
+        case 'ADD_FRAME_ANNOTATION':
+            return {
+
+            };
+        default: {
+            throw new Error(`Unknown action type: ${action.type}`);
+        }
+    }
+}
