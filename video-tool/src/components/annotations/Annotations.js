@@ -11,17 +11,14 @@ export default class Annotations {
         this.totalFrames = totalFrames;
     }
 
-    addTrack(colour, totalFrames) {
-        const key = uuidv4();
-        const track = new AnnotationTrack("", colour, totalFrames);
-        this.annotations.set(key, track);
-        return key;
+
+    addTrack(key) {
+        const track = new AnnotationTrack(this.totalFrames);
+        this.annotations = this.annotations.set(key, track);
     }
 
     deleteTrack(key) {
-        if (!this.annotations.delete(key)) {
-            throw new Error("Id" + key + "does not exist");
-        }
+        return this.annotation.delete(key);
     }
 
     getTrack(key) {
@@ -39,6 +36,7 @@ export default class Annotations {
     setTrackName(key, name) {
         const track = this.getTrack(key);
         track.setName(name);
+        return this;
     }
 
     setTrackColour(key, colour) {

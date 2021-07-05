@@ -8,8 +8,8 @@ export function annotationReducer(state, action) {
     console.log("REDUCER", newState);
     switch (action.type) {
         case 'ADD_TRACK': {
-            const { colour, totalFrames } = payload;
-            newState.addTrack(colour, totalFrames);
+            const { key } = payload;
+            newState.addTrack(key);
             return newState;
         }
         case 'DELETE_TRACK': {
@@ -19,13 +19,11 @@ export function annotationReducer(state, action) {
         }
         case 'SET_TRACK_NAME': {
             const { key, name } = payload;
-            newState.setTrackName(key, name);
-            return newState;
+            return newState.setTrackName(key, name);
         }
         case 'SET_TRACK_COLOUR': {
             const { key, colour } = payload;
-            newState.setTrackColour(key, colour);
-            return newState;
+            return newState.setTrackColour(key, colour);
         }
         case 'EDIT_FRAME_ANNOTATION': {
             const { key, frame, annotation } = payload;

@@ -2,14 +2,14 @@ import LabelledFrames from "./LabelledFrames";
 import FrameAnnotation from "./FrameAnnotation";
 
 export default class AnnotationTrack {
-    constructor(name, colour, totalFrames) {
-        this.name = name;
-        this.colour = colour;
+    constructor(totalFrames) {
+        this.name = "";
+        this.colour = "#48AFF0";
         this.annotationTrack = new Array(totalFrames).fill(new FrameAnnotation());
         this.labelledFrames = new LabelledFrames();
     }
 
-    set setName(name) {
+    setName(name) {
         this.name = name;
     }
 

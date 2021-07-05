@@ -19,6 +19,7 @@ function App(props) {
 
   const [annotations, annotationDispatch] = useReducer(annotationReducer, new Annotations(86302));
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
+  console.log("APP");
 
   return (
     <div className="App bp3-dark">

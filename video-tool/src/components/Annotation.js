@@ -22,7 +22,7 @@ function Annotation(props) {
     useEffect(() => {
         const BBoxes = annotations.getBoundingBoxes(playerState.currentFrame);
         sceneRef.current.addObjects(BBoxes);
-    }, [playerState.currentFrame]);
+    }, [playerState.currentFrame, annotations]);
 
     const handleMouseMove = (event) => {
         sceneRef.current.handleMouseMove(event.nativeEvent.offsetX, event.nativeEvent.offsetY);

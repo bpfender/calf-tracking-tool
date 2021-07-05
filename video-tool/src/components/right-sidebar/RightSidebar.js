@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { H5, Button, ButtonGroup, Card, Divider, EditableText, Icon, Menu } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import "./RightSidebar.scss"
-
+import { v4 as uuidv4 } from 'uuid';
 
 export default function RightSidebar(props) {
+    const [state, setState] = useState(0);
     const { annotations, annotationDispatch, playerState } = props;
 
     const [idsList, setIdsList] = useState([]);
@@ -12,16 +13,21 @@ export default function RightSidebar(props) {
     // TODO framecount is hardcoded at the moment
     // QUESTION can i iterate colours with generator?
     const handleAddClick = () => {
-        console.log(annotations);
+        const key = uuidv4();
 
-        // annotationDispatch({ type: "ADD_TRACK", payload: { colour: "#48AFF0", totalFrames: playerState.totalFrames } });
-
-        const key = annotations.addTrack(
-            "#48AFF0",
-            playerState.totalFrames);
+        annotationDispatch({ type: "ADD_TRACK", payload: { key: key } });
 
         //FIXME not sure using uuid key for panel items is clever
-        setIdsList(idsList.concat(<IDPanel key={key}></IDPanel>));
+        setIdsList(idsList.concat(<IDPanel
+            annotationDispatch={annotationDispatch}
+            removeListComponent={() => removeListComponent()}
+            key={key}
+            id={key}
+        ></IDPanel>));
+    }
+
+    const removeListComponent = () => {
+
     }
 
     return (
@@ -38,8 +44,18 @@ export default function RightSidebar(props) {
 }
 
 function IDPanel(props) {
+    const { annotationDispatch, id } = props;
     const [colour, setColour] = useState("#48AFF0")
     const [visible, setVisible] = useState(true);
+
+
+    const handleTextConfirm = (text) => {
+        annotationDispatch({ type: 'SET_TRACK_NAME', payload: { key: id, name: text } });
+    }
+
+    const handleTrashClick = () => {
+        annotationDispatch({ type: 'DELETE_TRACK', payload: { key: id } });
+    }
 
     // FIXME divider not showing up at the moment
     return (
@@ -47,7 +63,7 @@ function IDPanel(props) {
             <Icon icon="dot"></Icon>
             <EditableText
                 placeholder="Click to edit..."
-                onConfirm={() => { }}
+                onConfirm={handleTextConfirm}
                 maxLength={16}
                 selectAllOnFocus={true}
             ></EditableText>
@@ -61,6 +77,7 @@ function IDPanel(props) {
                     icon="eye-open"
                 ></Button>
                 <Button
+                    onClick={handleTrashClick}
                     icon="trash"
                 ></Button>
             </ButtonGroup >
