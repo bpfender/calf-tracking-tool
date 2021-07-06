@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import BoundingBox from '../canvas/BoundingBox';
 import AnnotationTrack from "./AnnotationTrack";
 
@@ -11,14 +10,13 @@ export default class Annotations {
         this.totalFrames = totalFrames;
     }
 
-
     addTrack(key) {
         const track = new AnnotationTrack(this.totalFrames);
         this.annotations = this.annotations.set(key, track);
     }
 
     deleteTrack(key) {
-        return this.annotation.delete(key);
+        this.annotations.delete(key);
     }
 
     getTrack(key) {

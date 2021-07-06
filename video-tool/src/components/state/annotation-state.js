@@ -5,7 +5,7 @@ export const defaultAnnotationState = {
 export function annotationReducer(state, action) {
     const payload = action.payload;
     const newState = state;
-    console.log("REDUCER", newState);
+    //console.log("REDUCER", newState);
     switch (action.type) {
         case 'ADD_TRACK': {
             const { key } = payload;
