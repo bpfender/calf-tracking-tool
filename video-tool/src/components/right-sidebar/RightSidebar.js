@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
-import { H5, Button, MenuItem } from '@blueprintjs/core';
+import { H5, Button } from '@blueprintjs/core';
 import { v4 as uuidv4 } from 'uuid';
 import "./RightSidebar.scss"
 import IdPanel from './IdPanel';
 
 
 export default function RightSidebar(props) {
-    const [state, setState] = useState(0);
+    const [idsList, setIdsList] = useState([]);
     const { annotations, annotationDispatch, playerState } = props;
 
-    const [idsList, setIdsList] = useState([]);
-    console.log(idsList);
 
-    // TODO framecount is hardcoded at the moment
     // QUESTION can i iterate colours with generator?
     const handleAddClick = () => {
         const key = uuidv4();

@@ -1,5 +1,21 @@
-export const defaultAnnotationState = {
+export function defaultAnnotationState(totalFrames) {
+    this.annotations = new Map();
+    this.totalFrames = totalFrames;
+};
 
+export function annotationTrack(totalFrames) {
+    this.name = null;
+    this.colour = "#48AFF0";
+    this.annotationTrack = new Array(totalFrames).fill(new frameAnnotation())
+}
+
+function frameAnnotation() {
+    this.x = 300;
+    this.y = 400;
+    this.w = 50;
+    this.h = 50;
+    this.rotation = 45;
+    this.labelled = false;
 }
 
 export function annotationReducer(state, action) {
@@ -9,6 +25,7 @@ export function annotationReducer(state, action) {
     switch (action.type) {
         case 'ADD_TRACK': {
             const { key } = payload;
+            console.log({ ...state });
             newState.addTrack(key);
             return newState;
         }

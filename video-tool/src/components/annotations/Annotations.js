@@ -1,9 +1,68 @@
 import BoundingBox from '../canvas/BoundingBox';
+import { annotationTrack } from '../state/annotation-state';
 import AnnotationTrack from "./AnnotationTrack";
 
 // QUESTION not sure about functionality
 // TODO some sort of autonaming convention
 // TODO some kind of auto changing colour
+//---- ANNOTATION -----
+export const addTrack = (state, key, totalFrames) => {
+    const newState = { ...state };
+    const track = new annotationTrack(totalFrames);
+    newState.set(key, track);
+    return newState;
+}
+
+export const deleteTrack = (state, key) => {
+    const newState = { ...state };
+    newState.delete(key);
+    return newState;
+}
+
+export const getTrack = (state, key) => {
+    const track = state.get(key);
+    // FIXME more functional appraoch?
+    if (track === undefined) {
+        throw new Error("Id" + key + "does not exist");
+    }
+    return track;
+}
+
+
+// ----- TRACK -------
+export const setName = (track, name) => {
+    const newTrack = { ...track };
+    newTrack.name = name;
+    return newTrack;
+}
+
+export const setColour = (track, colour) => {
+    const newTrack = { ...track };
+    newTrack.colour = colour;
+    return newTrack;
+}
+
+
+// ---- FRAME ----
+export const setAnnotation = (frame, x, y, w, h, rot) => {
+    const newFrame = { ...frame };
+    newFrame.x = x;
+    newFrame.y = y;
+    newFrame.w = w;
+    newFrame.h = h;
+    newFrame.rotation = rot;
+}
+
+export const setLabelled = (frame, bool) => {
+    const newFrame = { ...frame };
+    newFrame.labelled = bool;
+}
+
+
+
+
+
+
 export default class Annotations {
     constructor(totalFrames) {
         this.annotations = new Map();
