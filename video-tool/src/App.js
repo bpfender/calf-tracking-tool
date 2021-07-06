@@ -1,11 +1,10 @@
-import React, { useReducer, useRef } from 'react';
+import React, { useReducer } from 'react';
 import './App.scss';
 import { defaultPlayerState, playerReducer } from './components/state/player-state.js';
-import { annotationReducer } from './components/state/annotation-state';
+import { annotationReducer, defaultAnnotationState } from './components/state/annotation-state';
 import Player from './components/Player';
 import RightSidebar from './components/right-sidebar/RightSidebar';
 import LeftSidebar from './components/left-sidebar/LeftSidebar';
-import Annotations from './components/annotations/Annotations';
 
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
@@ -16,10 +15,16 @@ function App(props) {
   //FIXME whole tree updates all the time
   //FIXME not quite clear why this is in useRef
   //const annotationsRef = useRef(new Annotations(86302));
+  const init = (totalFrames) => {
+    return new defaultAnnotationState(totalFrames);
+  }
 
-  const [annotations, annotationDispatch] = useReducer(annotationReducer, new Annotations(86302));
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
+  // FIXME framecount hardcoded at the moment
+  const [annotations, annotationDispatch] = useReducer(annotationReducer, 86302, init);
   console.log("APP");
+
+
 
   return (
     <div className="App bp3-dark">

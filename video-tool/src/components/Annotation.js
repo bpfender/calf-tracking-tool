@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { getBoundingBoxes } from './annotations/Annotations';
 import BoundingBox from './canvas/BoundingBox';
 import Scene from './canvas/Scene';
 
@@ -20,7 +21,7 @@ function Annotation(props) {
 
 
     useEffect(() => {
-        const BBoxes = annotations.getBoundingBoxes(playerState.currentFrame);
+        const BBoxes = getBoundingBoxes(annotations, playerState.currentFrame);
         sceneRef.current.addObjects(BBoxes);
     }, [playerState.currentFrame, annotations]);
 

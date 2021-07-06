@@ -1,26 +1,26 @@
 import BoundingBox from '../canvas/BoundingBox';
 import { annotationTrack } from '../state/annotation-state';
-import AnnotationTrack from "./AnnotationTrack";
+
 
 // QUESTION not sure about functionality
 // TODO some sort of autonaming convention
 // TODO some kind of auto changing colour
 //---- ANNOTATION -----
-export const addTrack = (state, key, totalFrames) => {
+export const addTrack = (state, key) => {
     const newState = { ...state };
-    const track = new annotationTrack(totalFrames);
-    newState.set(key, track);
+    const track = new annotationTrack(newState.totalFrames);
+    newState.annotations.set(key, track);
     return newState;
 }
 
 export const deleteTrack = (state, key) => {
     const newState = { ...state };
-    newState.delete(key);
+    newState.annotations.delete(key);
     return newState;
 }
 
 export const getTrack = (state, key) => {
-    const track = state.get(key);
+    const track = state.annotations.get(key);
     // FIXME more functional appraoch?
     if (track === undefined) {
         throw new Error("Id" + key + "does not exist");
@@ -28,6 +28,39 @@ export const getTrack = (state, key) => {
     return track;
 }
 
+export const editTrack = (state, key, edit, editValue) => {
+    const newState = { ...state };
+    const track = getTrack(newState, key);
+    const newTrack = edit(track, editValue);
+    newState.annotations.set(key, newTrack);
+    return newState;
+}
+
+export const getBoundingBoxes = (state, frame) => {
+    const annotationsList = getAllFrameAnnotations(state, frame);
+    const bboxes = [];
+    annotationsList.forEach(track => {
+        const bbox = new BoundingBox(
+            track.x,
+            track.y,
+            track.w,
+            track.h,
+            track.rotation,
+        )
+        bboxes.push(bbox);
+    });
+    return bboxes;
+}
+
+export const getAllFrameAnnotations = (state, frame) => {
+    const annotationsList = [];
+
+    state.annotations.forEach(track => {
+        const frameAnnotation = getFrameAnnotation(track, frame);
+        annotationsList.push(frameAnnotation);
+    })
+    return annotationsList;
+}
 
 // ----- TRACK -------
 export const setName = (track, name) => {
@@ -42,103 +75,20 @@ export const setColour = (track, colour) => {
     return newTrack;
 }
 
+export const getFrameAnnotation = (track, frame) => {
+    return track.annotationTrack[frame];
+}
+
 
 // ---- FRAME ----
-export const setAnnotation = (frame, x, y, w, h, rot) => {
-    const newFrame = { ...frame };
-    newFrame.x = x;
-    newFrame.y = y;
-    newFrame.w = w;
-    newFrame.h = h;
-    newFrame.rotation = rot;
+export const setAnnotation = (state, key, frame, annotation) => {
+    const newState = { ...state };
+    const track = getTrack(newState, key);
+    track.annotationTrack[frame] = annotation;
+
 }
 
 export const setLabelled = (frame, bool) => {
     const newFrame = { ...frame };
     newFrame.labelled = bool;
-}
-
-
-
-
-
-
-export default class Annotations {
-    constructor(totalFrames) {
-        this.annotations = new Map();
-        this.totalFrames = totalFrames;
-    }
-
-    addTrack(key) {
-        const track = new AnnotationTrack(this.totalFrames);
-        this.annotations = this.annotations.set(key, track);
-    }
-
-    deleteTrack(key) {
-        this.annotations.delete(key);
-    }
-
-    getTrack(key) {
-        const track = this.annotations.get(key);
-        if (track === undefined) {
-            throw new Error("Id" + key + "does not exist");
-        }
-        return track;
-    }
-
-    getTrackKeys() {
-        return [...this.annotations.keys()];
-    }
-
-    setTrackName(key, name) {
-        const track = this.getTrack(key);
-        track.setName(name);
-        return this;
-    }
-
-    setTrackColour(key, colour) {
-        const track = this.getTrack(key);
-        track.setColour(colour);
-    }
-
-    getAllFrameAnnotations(frame) {
-        const annotationList = [];
-        this.annotations.forEach(track => {
-            //FIXME this is super dirty at the moment
-            if (track.getAnnotation(frame) !== undefined) {
-                annotationList.push(track.getAnnotation(frame));
-            }
-        })
-        console.log("Annotation List", annotationList);
-        return annotationList;
-    }
-
-    addFrameAnnotation(key, frame, annotation) {
-        const track = this.getTrack(key);
-        track.setAnnotation(frame, annotation);
-    }
-
-    getBoundingBoxes(frame) {
-        const annotations = this.getAllFrameAnnotations(frame);
-        console.log("Get BB Frame" + frame, annotations);
-        const keys = this.getTrackKeys();
-        const bboxes = [];
-
-        annotations.forEach((element, index) => {
-            const bbox = new BoundingBox(
-                element.x,
-                element.y,
-                element.width,
-                element.height,
-                element.rotation,
-            );
-            bboxes.push(bbox);
-        });
-
-        return bboxes;
-    }
-
-
-
-
 }

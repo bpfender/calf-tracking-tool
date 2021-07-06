@@ -1,3 +1,5 @@
+import { addTrack, deleteTrack, editTrack, setAnnotation, setColour, setLabelled, setName } from "../annotations/Annotations";
+
 export function defaultAnnotationState(totalFrames) {
     this.annotations = new Map();
     this.totalFrames = totalFrames;
@@ -20,32 +22,28 @@ function frameAnnotation() {
 
 export function annotationReducer(state, action) {
     const payload = action.payload;
-    const newState = state;
+    console.log(state);
     //console.log("REDUCER", newState);
     switch (action.type) {
         case 'ADD_TRACK': {
             const { key } = payload;
-            console.log({ ...state });
-            newState.addTrack(key);
-            return newState;
+            return addTrack(state, key);
         }
         case 'DELETE_TRACK': {
             const { key } = payload;
-            newState.deleteTrack(key);
-            return newState;
+            return deleteTrack(state, key);
         }
         case 'SET_TRACK_NAME': {
             const { key, name } = payload;
-            return newState.setTrackName(key, name);
+            return editTrack(state, key, setName, name);
         }
         case 'SET_TRACK_COLOUR': {
             const { key, colour } = payload;
-            return newState.setTrackColour(key, colour);
+            return editTrack(state, key, setColour, colour);
         }
         case 'EDIT_FRAME_ANNOTATION': {
             const { key, frame, annotation } = payload;
-            newState.addFrameAnnotation(key, frame, annotation);
-            return newState;
+            return setAnnotation(state, key, frame, annotation);
         }
         default: {
             throw new Error(`Unknown action type: ${action.type}`);

@@ -4,11 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 import "./RightSidebar.scss"
 import IdPanel from './IdPanel';
 
-
 export default function RightSidebar(props) {
     const [idsList, setIdsList] = useState([]);
     const { annotations, annotationDispatch, playerState } = props;
-
 
     // QUESTION can i iterate colours with generator?
     const handleAddClick = () => {
