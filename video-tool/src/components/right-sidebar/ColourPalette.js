@@ -4,10 +4,11 @@ import { Popover2 } from "@blueprintjs/popover2";
 
 
 export default function ColourPalettePopover(props) {
-    const [colour, setColour] = useState(props.colour);
+    const { colour, handleColourClick } = props;
+
     return (
         <Popover2
-            content={<ColourPalette setColour={setColour} />}
+            content={<ColourPalette handleColourClick={handleColourClick} />}
             interactionKind="click"
             placement="bottom"
         >
@@ -19,8 +20,6 @@ export default function ColourPalettePopover(props) {
 }
 
 function ColourPalette(props) {
-    const { setColour } = props;
-
     // Colours from https://blueprintjs.com/docs/#core/colors
     // FIXME probably define as static?
     const colours = [
@@ -34,7 +33,7 @@ function ColourPalette(props) {
             {colours.map((colour) => {
                 return (
                     <Button
-                        onClick={() => { setColour(colour) }}
+                        onClick={() => { props.handleColourClick(colour) }}
                         icon={<Icon icon="symbol-square" color={colour}></Icon>}
                         minimal={true}
                     ></Button>

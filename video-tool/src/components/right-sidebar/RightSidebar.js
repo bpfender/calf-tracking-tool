@@ -3,10 +3,11 @@ import { H5, Button } from '@blueprintjs/core';
 import { v4 as uuidv4 } from 'uuid';
 import "./RightSidebar.scss"
 import IdPanel from './IdPanel';
+import { getTrack } from '../annotations/Annotations';
 
 export default function RightSidebar(props) {
     const [idsList, setIdsList] = useState([]);
-    const { annotations, annotationDispatch, playerState } = props;
+    const { annotations, annotationDispatch } = props;
 
     // QUESTION can i iterate colours with generator?
     const handleAddClick = () => {
@@ -19,6 +20,7 @@ export default function RightSidebar(props) {
         setIdsList(idsList.filter(key => key !== filterKey));
     }
 
+    // FIXME not sure about getTrack calls
     return (
         <div className="right-sidebar">
             <div className="right-panel">
@@ -31,6 +33,8 @@ export default function RightSidebar(props) {
                         key={key}
                         id={key}
                         annotationDispatch={annotationDispatch}
+                        visible={getTrack(annotations, key).visible}
+                        colour={getTrack(annotations, key).colour}
                         removeListComponent={() => { removeListComponent(key) }}
                     ></IdPanel>
                 ))}

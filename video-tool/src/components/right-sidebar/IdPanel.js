@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, ButtonGroup, Divider, EditableText, Icon } from '@blueprintjs/core';
 import ColourPalettePopover from "./ColourPalette";
 
 
 export default function IdPanel(props) {
-    const { annotationDispatch, id } = props;
-    const [colour, setColour] = useState("#48AFF0")
-    const [visible, setVisible] = useState(true);
-
+    const { annotationDispatch, removeListComponent, id, colour, visible } = props;
 
     const handleTextConfirm = (text) => {
         annotationDispatch({ type: 'SET_TRACK_NAME', payload: { key: id, name: text } });
@@ -15,7 +12,21 @@ export default function IdPanel(props) {
 
     const handleTrashClick = () => {
         annotationDispatch({ type: 'DELETE_TRACK', payload: { key: id } });
-        props.removeListComponent();
+        removeListComponent();
+    }
+
+    const handleColourClick = (colour) => {
+        annotationDispatch({
+            type: 'SET_TRACK_COLOUR',
+            payload: { key: id, colour: colour }
+        })
+    }
+
+    const handleVisibleToggle = () => {
+        annotationDispatch({
+            type: 'TOGGLE_VISIBLE',
+            payload: { key: id }
+        });
     }
 
     // FIXME divider not showing up at the moment
@@ -31,9 +42,12 @@ export default function IdPanel(props) {
             <Divider></Divider>
             <ButtonGroup
                 minimal={true}>
-                <ColourPalettePopover colour={colour}></ColourPalettePopover>
+                <ColourPalettePopover
+                    colour={colour}
+                    handleColourClick={handleColourClick}>
+                </ColourPalettePopover>
                 <Button
-                    onClick={() => { setVisible(visible ? false : true) }}
+                    onClick={handleVisibleToggle}
                     intent={visible ? "primary" : "none"}
                     icon="eye-open"
                 ></Button>

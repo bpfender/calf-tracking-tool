@@ -5,6 +5,7 @@ export const annotationFactory = (totalFrames) => {
     return {
         tracks: Immutable.Map(),
         totalFrames: totalFrames,
+        selected: null,
     };
 }
 
@@ -37,6 +38,11 @@ export const setTotalFrames = (annotations, totalFrames) => {
     return Immutable.setIn(annotations, ['totalFrames'], totalFrames);
 }
 
+export const setSelected = (annotations, key) => {
+    const track = getTrack(annotations, key);
+    return Immutable.setIn(annotations, ['selected'], track);
+}
+
 export const addTrack = (annotations, key) => {
     const track = annotationTrackFactory(annotations.totalFrames);
     const newMap = annotations.tracks.set(key, track);
@@ -67,7 +73,10 @@ export const setTrackName = (annotations, key, name) => {
     const track = getTrack(annotations, key);
     const newTrack = setName(track, name);
     return editTrack(annotations, key, newTrack);
+}
 
+export const getTrackColour = (annotations, key) => {
+    return getTrack(annotations, key).colour;
 }
 
 export const editTrack = (annotations, key, newTrack) => {
@@ -89,7 +98,7 @@ export const toggleVisible = (track) => {
 
 export const getBoundingBoxes = (state, frame) => {
     console.log(state);
-    const annotationsList = getAllFrameAnnotations(state, frame);
+    const annotationsList = getFrameLabels(state, frame);
     console.log(annotationsList);
     const bboxes = annotationsList.map(track => {
         console.log("TRACK", track)
@@ -105,10 +114,19 @@ export const getBoundingBoxes = (state, frame) => {
     return bboxes;
 }
 
-export const getAllFrameAnnotations = (annotations, frame) => {
-    const annotationsList = [...annotations.tracks.values()].map(track => {
-        return getLabel(track, frame);
-    })
+// FIXME probably have to add identifier
+export const getFrameLabels = (annotations, frame) => {
+    const annotationsList = [...annotations.tracks.entries()]
+        .filter(([key, track]) => track.visible)
+        .map(([key, track]) => {
+            return {
+                ...getLabel(track, frame),
+                colour: track.colour,
+                selected: track === annotations.selected,
+                key: key,
+            };
+        })
+    console.log(annotationsList);
     return annotationsList;
 }
 
@@ -120,13 +138,13 @@ export const getLabel = (track, frame) => {
 
 
 // ---- FRAME ----
-export const setAnnotation = (state, key, frame, annotation) => {
-    const oldTrack = getTrack(state, key)
-    const newTrack = oldTrack.set(frame, annotation);
-    const annotationTrackObj = state.annotations.get(key);
-    const newAnnotationTrackObj = Immutable.setIn(annotationTrackObj, ['annotationTrack'], newTrack);
-    const map = state.annotation.setIn([toString(key)], newAnnotationTrackObj);
-    return Immutable.setIn(state, ['annotations'], map);
+export const setLabel = (annotations, key, frame, label) => {
+    const oldTrack = getTrack(annotations, key)
+    const newTrack = oldTrack.set(frame, label);
+    const annotationTrackObj = annotations.track.get(key);
+    const newAnnotationTrackObj = Immutable.setIn(annotationTrackObj, ['track'], newTrack);
+    const map = annotations.track.set(key, newAnnotationTrackObj);
+    return Immutable.setIn(annotations, ['track'], map);
 }
 
 export const setLabelled = (frame, bool) => {

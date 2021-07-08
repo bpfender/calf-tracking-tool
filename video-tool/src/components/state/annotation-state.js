@@ -1,4 +1,4 @@
-import { addTrack, deleteTrack, setAnnotation, setTotalFrames, setTrackColour, setTrackName } from "../annotations/Annotations";
+import { addTrack, deleteTrack, editTrack, getTrack, setLabel, setSelected, setTotalFrames, setTrackColour, setTrackName, toggleVisible } from "../annotations/Annotations";
 
 export function annotationReducer(state, action) {
     const payload = action.payload;
@@ -21,9 +21,17 @@ export function annotationReducer(state, action) {
             const { key, colour } = payload;
             return setTrackColour(state, key, colour);
         }
-        case 'EDIT_FRAME_ANNOTATION': {
+        case 'EDIT_FRAME_LABEL': {
             const { key, frame, annotation } = payload;
-            return setAnnotation(state, key, frame, annotation);
+            return setLabel(state, key, frame, annotation);
+        }
+        case 'TOGGLE_VISIBLE': {
+            const { key } = payload;
+            return editTrack(state, key, toggleVisible(getTrack(state, key)));
+        }
+        case 'SET_SELECTED': {
+            const { key } = payload;
+            return setSelected(state, key);
         }
         case 'SET_TOTAL_FRAME_COUNT': {
             const { totalFrames } = payload;
