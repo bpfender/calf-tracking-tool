@@ -114,6 +114,7 @@ export const getBoundingBoxes = (state, frame) => {
 }
 
 // FIXME probably have to add identifier
+// FIXME selected code is a bit odd
 export const getFrameLabels = (annotations, frame) => {
     const annotationsList = [...annotations.tracks.entries()]
         .filter(([key, track]) => track.visible)

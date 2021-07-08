@@ -40,7 +40,7 @@ class Scene {
         } else if (this.selected && this.mouseDown) {
             this.selected.updatePosition(deltaX, deltaY);
         }
-
+        console.log(this.selected);
         this._redraw();
     }
 
@@ -94,6 +94,7 @@ class Scene {
     }
 
     _redraw() {
+        console.log("REDRAW");
         this._clear();
         this.BBoxes.forEach(element => {
             element.draw(this.context);

@@ -12,6 +12,7 @@ function Annotation(props) {
     }, [canvasRef]);
 
     useEffect(() => {
+
         const BBoxes = getBoundingBoxes(annotations, playerState.currentFrame);
         sceneRef.current.updateBoundingBoxes(BBoxes);
     }, [playerState.currentFrame, annotations]);
@@ -26,19 +27,23 @@ function Annotation(props) {
     };
 
     const handleMouseUp = () => {
+        // FIXME not happy about this as return value
         const bbox = sceneRef.current.handleMouseUp();
+
         const label = {
-            x: bbox.x,
-            y: bbox.y,
-            w: bbox.width,
-            h: bbox.height,
-            rotation: bbox.rotation,
+            x: Math.round(bbox.x),
+            y: Math.round(bbox.y),
+            w: Math.round(bbox.width),
+            h: Math.round(bbox.height),
+            rotation: Math.round(bbox.rotation),
             labelled: true
-        }
+        };
+
         annotationDispatch({
             type: 'SET_FRAME_LABEL',
             payload: { key: bbox.key, frame: playerState.currentFrame, label: label }
         });
+
     };
 
     return (

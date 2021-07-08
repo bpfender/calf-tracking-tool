@@ -87,7 +87,7 @@ class BoundingBox {
         context.strokeStyle = this.colour;
         context.lineWidth = 2;
         context.stroke(this.path);
-        context.globalAlpha = 0.3;
+        context.globalAlpha = 0.2;
         context.fill(this.path);
         context.globalAlpha = 1;
 
