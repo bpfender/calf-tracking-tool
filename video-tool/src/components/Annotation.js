@@ -9,26 +9,25 @@ function Annotation(props) {
     const canvasRef = React.useRef();
     const sceneRef = React.useRef();
 
-
-    const BBox = new BoundingBox(400, 300, 120, 120, 0, 'blue');
-    const BBox2 = new BoundingBox(200, 100, 50, 70, 80);
-    const BBox3 = new BoundingBox(50, 70, 55, 75, 130);
+    //const BBox = new BoundingBox(400, 300, 120, 120, 0, 'blue');
+    // const BBox2 = new BoundingBox(200, 100, 50, 70, 80);
+    //const BBox3 = new BoundingBox(50, 70, 55, 75, 130);
     //const BBoxes = [BBox, BBox2, BBox3];
 
     useEffect(() => {
         sceneRef.current = new Scene(canvasRef.current.getContext('2d'))
     }, [canvasRef]);
 
-
     useEffect(() => {
         const BBoxes = getBoundingBoxes(annotations, playerState.currentFrame);
-        sceneRef.current.addObjects(BBoxes);
+        sceneRef.current.updateBoundingBoxes(BBoxes);
     }, [playerState.currentFrame, annotations]);
 
     const handleMouseMove = (event) => {
         sceneRef.current.handleMouseMove(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
     };
 
+    // FIXME mouse click should pause playback really
     const handleMouseDown = (event) => {
         sceneRef.current.handleMouseDown(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
     };

@@ -1,71 +1,90 @@
 import Immutable from "immutable";
 import BoundingBox from '../canvas/BoundingBox';
 
-//FIXME rename to capitals
-export function defaultAnnotationState(totalFrames) {
-    this.annotations = Immutable.Map();
-    this.totalFrames = totalFrames;
-};
-
-export const defaultAnnotation = {
-    annotations: Immutable.Map(),
-    totalFrames: 86302,
+export const annotationFactory = (totalFrames) => {
+    return {
+        tracks: Immutable.Map(),
+        totalFrames: totalFrames,
+    };
 }
 
-export function annotationTrack(totalFrames) {
-    this.name = null;
-    this.colour = "#48AFF0";
-    this.annotationTrack = Immutable.List(Array(totalFrames).fill(new frameAnnotation()));
+function annotationTrackFactory(totalFrames, colour = "#48AFF0") {
+    return {
+        name: null,
+        colour: colour,
+        visible: true,
+        frames: Immutable.List(Array(totalFrames).fill(frameLabelFactory())),
+    };
 }
 
-function frameAnnotation() {
-    this.x = 300;
-    this.y = 400;
-    this.w = 50;
-    this.h = 50;
-    this.rotation = 45;
-    this.labelled = false;
+function frameLabelFactory() {
+    return {
+        x: 400,
+        y: 300,
+        w: 50,
+        h: 50,
+        rotation: 45,
+        labelled: false,
+    };
 }
 
 // QUESTION not sure about functionality
-// TODO some sort of autonaming convention
-// TODO some kind of auto changing colour
+// TODO some sort of autonaming convention iterator
+// TODO some kind of auto changing colour iterator
 //---- ANNOTATION -----
 //FIXME what to do if frame count changes with annotationTracks
-export const setTotalFrames = (state, totalFrames) => {
-    return Immutable.setIn(state, ['totalFrames'], totalFrames);
+export const setTotalFrames = (annotations, totalFrames) => {
+    return Immutable.setIn(annotations, ['totalFrames'], totalFrames);
 }
 
-export const addTrack = (state, key) => {
-    const track = new annotationTrack(state.totalFrames);
-    const map = state.annotations.set(key, track);
-    return Immutable.setIn(state, ['annotations'], map);
+export const addTrack = (annotations, key) => {
+    const track = annotationTrackFactory(annotations.totalFrames);
+    const newMap = annotations.tracks.set(key, track);
+    return Immutable.setIn(annotations, ['tracks'], newMap);
 }
 
-export const deleteTrack = (state, key) => {
-    const map = state.annotations.delete(key);
-    return Immutable.setIn(state, ['annotations'], map);
+export const deleteTrack = (annotations, key) => {
+    const newMap = annotations.tracks.delete(key);
+    return Immutable.setIn(annotations, ['tracks'], newMap);
 }
 
 // FIXME more functional appraoch to value checking?
-export const getTrack = (state, key) => {
-    const track = state.annotations.get(key);
+export const getTrack = (annotations, key) => {
+    const track = annotations.tracks.get(key);
     if (track === undefined) {
         throw new Error("Id" + key + "does not exist");
     }
     return track;
 }
 
-export const setTrackColour = (state, key, colour) => {
-    const track = Immutable.setIn(getTrack(state, key), ['colour'], colour);
-    const map = state.annotations.setIn([toString(key)], track);
-    return Immutable.setIn(state, ['annotations'], map);
+export const setTrackColour = (annotations, key, colour) => {
+    const track = getTrack(annotations, key);
+    const newTrack = setColour(track, colour);
+    return editTrack(annotations, key, newTrack);
 }
 
-export const setTrackName = (state, key, name) => {
-    const track = Immutable.setIn(getTrack(state, key), ['name'], name);
-    const map = state.annotations.setIn([toString(key)], track);
-    return Immutable.setIn(state, ['annotations'], map);
+export const setTrackName = (annotations, key, name) => {
+    const track = getTrack(annotations, key);
+    const newTrack = setName(track, name);
+    return editTrack(annotations, key, newTrack);
+
+}
+
+export const editTrack = (annotations, key, newTrack) => {
+    const newMap = annotations.tracks.set(key, newTrack);
+    return Immutable.setIn(annotations, ['tracks'], newMap);
+}
+
+export const setColour = (track, colour) => {
+    return Immutable.setIn(track, ['colour'], colour);
+}
+
+export const setName = (track, name) => {
+    return Immutable.setIn(track, ['name'], name);
+}
+
+export const toggleVisible = (track) => {
+    return Immutable.setIn(track, ['visible'], !track.visible);
 }
 
 export const getBoundingBoxes = (state, frame) => {
@@ -86,16 +105,17 @@ export const getBoundingBoxes = (state, frame) => {
     return bboxes;
 }
 
-export const getAllFrameAnnotations = (state, frame) => {
-    const annotationsList = [...state.annotations.values()].map(track => {
-        return getFrameAnnotation(track, frame);
+export const getAllFrameAnnotations = (annotations, frame) => {
+    const annotationsList = [...annotations.tracks.values()].map(track => {
+        return getLabel(track, frame);
     })
     return annotationsList;
 }
 
 // ----- TRACK -------
-export const getFrameAnnotation = (track, frame) => {
-    return track.annotationTrack.get(frame, track);
+export const getLabel = (track, frame) => {
+    const index = frame - 1;
+    return track.frames.get(index, track);
 }
 
 

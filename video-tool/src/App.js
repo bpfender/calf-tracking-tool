@@ -1,7 +1,7 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import './App.scss';
 import { defaultPlayerState, playerReducer } from './components/state/player-state.js';
-import { defaultAnnotation, defaultAnnotationState } from './components/annotations/Annotations';
+import { annotationFactory } from './components/annotations/Annotations';
 import { annotationReducer } from './components/state/annotation-state';
 import Player from './components/Player';
 import RightSidebar from './components/right-sidebar/RightSidebar';
@@ -16,16 +16,17 @@ function App(props) {
   //FIXME whole tree updates all the time
   //FIXME not quite clear why this is in useRef
   //const annotationsRef = useRef(new Annotations(86302));
-  const init = (totalFrames) => {
-    return defaultAnnotation;
-  }
-
-  const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
-  // FIXME framecount hardcoded at the moment
-  const [annotations, annotationDispatch] = useReducer(annotationReducer, 86302, init);
   console.log("APP");
+  const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
+  const [annotations, annotationDispatch] = useReducer(annotationReducer, annotationFactory(null));
 
-
+  // FIXME how to make sure annotations are persistent
+  useEffect(() => {
+    annotationDispatch({
+      type: 'SET_TOTAL_FRAME_COUNT',
+      payload: { totalFrames: playerState.totalFrames }
+    });
+  }, [playerState.totalFrames]);
 
   return (
     <div className="App bp3-dark">

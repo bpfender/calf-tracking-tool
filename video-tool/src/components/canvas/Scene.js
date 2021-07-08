@@ -17,7 +17,7 @@ class Scene {
         this._redraw();
     }
 
-    addObjects(BBoxes) {
+    updateBoundingBoxes(BBoxes) {
         this.BBoxes = BBoxes;
         this._redraw();
     }
