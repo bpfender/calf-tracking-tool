@@ -21,9 +21,9 @@ export function annotationReducer(state, action) {
             const { key, colour } = payload;
             return setTrackColour(state, key, colour);
         }
-        case 'EDIT_FRAME_LABEL': {
-            const { key, frame, annotation } = payload;
-            return setLabel(state, key, frame, annotation);
+        case 'SET_FRAME_LABEL': {
+            const { key, frame, label } = payload;
+            return setLabel(state, key, frame, label);
         }
         case 'TOGGLE_VISIBLE': {
             const { key } = payload;

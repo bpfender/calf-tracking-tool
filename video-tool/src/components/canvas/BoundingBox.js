@@ -5,7 +5,9 @@ import RotationHandle from "./RotationHandle";
 // relative definitions. Consider for future work
 
 class BoundingBox {
-    constructor(x, y, w, h, rotation) {
+    constructor(key, colour, x, y, w, h, rotation) {
+        this.key = key;
+        this.colour = colour;
         this.x = x;
         this.y = y;
         this.rotation = rotation;
@@ -81,17 +83,23 @@ class BoundingBox {
     draw(context) {
         this._setContextTransform(context);
 
+        context.fillStyle = this.colour;
+        context.strokeStyle = this.colour;
+        context.lineWidth = 2;
         context.stroke(this.path);
+        context.globalAlpha = 0.3;
+        context.fill(this.path);
+        context.globalAlpha = 1;
 
-        context.fillStyle = 'red'
+        //context.fillStyle = 'red'
         this.handles[0].draw(context);
-        context.fillStyle = 'blue'
+        //context.fillStyle = 'blue'
         this.handles[1].draw(context);
-        context.fillStyle = 'green'
+        //context.fillStyle = 'green'
         this.handles[2].draw(context);
-        context.fillStyle = 'yellow'
+        //context.fillStyle = 'yellow'
         this.handles[3].draw(context);
-        context.fillStyle = 'black';
+        //    context.fillStyle = 'black';
         this.rotationHandle.draw(context);
 
     }

@@ -2,7 +2,6 @@ import React from 'react';
 import { Button, ButtonGroup, Divider, EditableText, Icon } from '@blueprintjs/core';
 import ColourPalettePopover from "./ColourPalette";
 
-
 export default function IdPanel(props) {
     const { annotationDispatch, removeListComponent, id, colour, visible } = props;
 

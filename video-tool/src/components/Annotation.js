@@ -1,18 +1,11 @@
 import React, { useEffect } from 'react';
 import { getBoundingBoxes } from './annotations/Annotations';
-import BoundingBox from './canvas/BoundingBox';
 import Scene from './canvas/Scene';
 
 function Annotation(props) {
-    const { annotations, playerState } = props;
-
+    const { annotations, annotationDispatch, playerState } = props;
     const canvasRef = React.useRef();
     const sceneRef = React.useRef();
-
-    //const BBox = new BoundingBox(400, 300, 120, 120, 0, 'blue');
-    // const BBox2 = new BoundingBox(200, 100, 50, 70, 80);
-    //const BBox3 = new BoundingBox(50, 70, 55, 75, 130);
-    //const BBoxes = [BBox, BBox2, BBox3];
 
     useEffect(() => {
         sceneRef.current = new Scene(canvasRef.current.getContext('2d'))
@@ -33,7 +26,19 @@ function Annotation(props) {
     };
 
     const handleMouseUp = () => {
-        sceneRef.current.handleMouseUp();
+        const bbox = sceneRef.current.handleMouseUp();
+        const label = {
+            x: bbox.x,
+            y: bbox.y,
+            w: bbox.width,
+            h: bbox.height,
+            rotation: bbox.rotation,
+            labelled: true
+        }
+        annotationDispatch({
+            type: 'SET_FRAME_LABEL',
+            payload: { key: bbox.key, frame: playerState.currentFrame, label: label }
+        });
     };
 
     return (

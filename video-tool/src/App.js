@@ -38,7 +38,8 @@ function App(props) {
         className="main-content"
         playerState={playerState}
         playerDispatch={playerDispatch}
-        annotations={annotations}>
+        annotations={annotations}
+        annotationDispatch={annotationDispatch}>
       </Player>
       <RightSidebar
         className="right-sidebar"

@@ -65,6 +65,7 @@ class Scene {
     handleMouseUp() {
         this.mouseDown = false;
         this.handle = null;
+        return this.selected;
     }
 
     _hitTestBox(mouseX, mouseY) {

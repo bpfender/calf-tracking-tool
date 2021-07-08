@@ -8,7 +8,7 @@ import Annotation from './Annotation.js';
 import "./Player.scss";
 
 function Player(props) {
-    const { annotations, playerState, playerDispatch } = props
+    const { annotations, annotationDispatch, playerState, playerDispatch } = props
 
     // TODO useeffect to mount video?
     // FIXME ref forwarding for video ref?
@@ -32,7 +32,8 @@ function Player(props) {
                 <Annotation
                     className="video-window annotation-overlay"
                     playerState={playerState}
-                    annotations={annotations}>
+                    annotations={annotations}
+                    annotationDispatch={annotationDispatch}>
                 </Annotation>
             </div>
 

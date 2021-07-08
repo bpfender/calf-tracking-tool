@@ -97,12 +97,11 @@ export const toggleVisible = (track) => {
 }
 
 export const getBoundingBoxes = (state, frame) => {
-    console.log(state);
     const annotationsList = getFrameLabels(state, frame);
-    console.log(annotationsList);
     const bboxes = annotationsList.map(track => {
-        console.log("TRACK", track)
         return new BoundingBox(
+            track.key,
+            track.colour,
             track.x,
             track.y,
             track.w,
@@ -139,12 +138,14 @@ export const getLabel = (track, frame) => {
 
 // ---- FRAME ----
 export const setLabel = (annotations, key, frame, label) => {
+    const index = frame - 1;
+    console.log("LABEL", label);
     const oldTrack = getTrack(annotations, key)
-    const newTrack = oldTrack.set(frame, label);
-    const annotationTrackObj = annotations.track.get(key);
-    const newAnnotationTrackObj = Immutable.setIn(annotationTrackObj, ['track'], newTrack);
-    const map = annotations.track.set(key, newAnnotationTrackObj);
-    return Immutable.setIn(annotations, ['track'], map);
+    const newTrack = oldTrack.frames.set(index, label);
+    const annotationTrackObj = annotations.tracks.get(key);
+    const newAnnotationTrackObj = Immutable.setIn(annotationTrackObj, ['frames'], newTrack);
+    const map = annotations.tracks.set(key, newAnnotationTrackObj);
+    return Immutable.setIn(annotations, ['tracks'], map);
 }
 
 export const setLabelled = (frame, bool) => {

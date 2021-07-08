@@ -6,7 +6,7 @@ class Handle {
 
         this.handleMoveCallback = handleMoveCallback;
 
-        this.HANDLE_RADIUS = 10;
+        this.HANDLE_RADIUS = 7;
 
         this.path = null;
         this._setPath();
