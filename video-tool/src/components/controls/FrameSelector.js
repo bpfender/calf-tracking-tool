@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { InputGroup } from "@blueprintjs/core";
 import "./FrameSelector.scss";
 
-
+// FIXME useref() for timeout
 export default function FrameSelector(props) {
     const { video, playerState } = props;
     const [currentFrame, setCurrentFrame] = useState(1);

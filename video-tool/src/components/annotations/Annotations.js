@@ -9,7 +9,7 @@ export const annotationFactory = (totalFrames) => {
     };
 }
 
-function annotationTrackFactory(totalFrames, colour = "#48AFF0") {
+export function annotationTrackFactory(totalFrames, colour = "#48AFF0") {
     return {
         name: null,
         colour: colour,
@@ -39,8 +39,7 @@ export const setTotalFrames = (annotations, totalFrames) => {
 }
 
 export const setSelected = (annotations, key) => {
-    const track = getTrack(annotations, key);
-    return Immutable.setIn(annotations, ['selected'], track);
+    return Immutable.setIn(annotations, ['selected'], key);
 }
 
 export const addTrack = (annotations, key) => {
@@ -96,12 +95,14 @@ export const toggleVisible = (track) => {
     return Immutable.setIn(track, ['visible'], !track.visible);
 }
 
+//FIXME seems a bit unwieldy
 export const getBoundingBoxes = (state, frame) => {
     const annotationsList = getFrameLabels(state, frame);
     const bboxes = annotationsList.map(track => {
         return new BoundingBox(
             track.key,
             track.colour,
+            track.selected,
             track.x,
             track.y,
             track.w,
@@ -113,7 +114,6 @@ export const getBoundingBoxes = (state, frame) => {
     return bboxes;
 }
 
-// FIXME probably have to add identifier
 // FIXME selected code is a bit odd
 export const getFrameLabels = (annotations, frame) => {
     const annotationsList = [...annotations.tracks.entries()]
@@ -122,7 +122,7 @@ export const getFrameLabels = (annotations, frame) => {
             return {
                 ...getLabel(track, frame),
                 colour: track.colour,
-                selected: track === annotations.selected,
+                selected: key === annotations.selected,
                 key: key,
             };
         })
@@ -138,6 +138,7 @@ export const getLabel = (track, frame) => {
 
 
 // ---- FRAME ----
+// FIXME this is horrible
 export const setLabel = (annotations, key, frame, label) => {
     const index = frame - 1;
     console.log("LABEL", label);

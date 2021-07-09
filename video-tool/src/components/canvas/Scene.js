@@ -10,15 +10,17 @@ class Scene {
         this.handle = null;
 
         this.mouseDown = false;
+        this.updateFlag = false;
 
         this.lastX = null;
         this.lastY = null;
-
-        this._redraw();
     }
 
     updateBoundingBoxes(BBoxes) {
         this.BBoxes = BBoxes;
+        // FIXME not super sleek
+        this.selected = this.BBoxes.find(elem => elem.selected === true);
+
         this._redraw();
     }
 
@@ -29,6 +31,7 @@ class Scene {
         this.lastX = mouseX;
         this.lastY = mouseY;
 
+        console.log(this.selected === this.BBoxes[2]);
         if (this.handle) {
             if (this.handle instanceof RotationHandle) {
                 this.handle.moveHandle(
@@ -37,10 +40,12 @@ class Scene {
             } else {
                 this.handle.moveHandle(deltaX, deltaY);
             }
+            this.updateFlag = true;
         } else if (this.selected && this.mouseDown) {
             this.selected.updatePosition(deltaX, deltaY);
+            this.updateFlag = true;
         }
-        console.log(this.selected);
+
         this._redraw();
     }
 
@@ -59,13 +64,30 @@ class Scene {
             this.selected = this._hitTestBox(mouseX, mouseY);
         }
         // TODO this redraw is superfluous sometimes
-        this._redraw();
+        //this._redraw();
+        return this.selected ? this.selected.key : null;
     }
 
     handleMouseUp() {
         this.mouseDown = false;
         this.handle = null;
-        return this.selected;
+
+        if (this.updateFlag) {
+            this.updateFlag = false;
+            return {
+                label: {
+                    x: Math.round(this.selected.x),
+                    y: Math.round(this.selected.y),
+                    w: Math.round(this.selected.width),
+                    h: Math.round(this.selected.height),
+                    rotation: Math.round(this.selected.rotation),
+                    labelled: true
+                },
+                key: this.selected.key
+            }
+        }
+
+        return null;
     }
 
     _hitTestBox(mouseX, mouseY) {

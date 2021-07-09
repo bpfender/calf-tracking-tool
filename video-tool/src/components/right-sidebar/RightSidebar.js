@@ -12,15 +12,22 @@ export default function RightSidebar(props) {
     // QUESTION can i iterate colours with generator?
     const handleAddClick = () => {
         const key = uuidv4();
-        annotationDispatch({ type: "ADD_TRACK", payload: { key: key } });
+        annotationDispatch({
+            type: "ADD_TRACK",
+            payload: { key: key }
+        });
         setIdsList(idsList.concat(key));
     }
 
     const removeListComponent = (filterKey) => {
+        annotationDispatch({
+            type: 'DELETE_TRACK',
+            payload: { key: filterKey }
+        });
         setIdsList(idsList.filter(key => key !== filterKey));
     }
 
-    // FIXME not sure about getTrack calls
+    // FIXME not sure about getTrack calls way to optimise?
     return (
         <div className="right-sidebar">
             <div className="right-panel">
@@ -33,12 +40,12 @@ export default function RightSidebar(props) {
                         key={key}
                         id={key}
                         annotationDispatch={annotationDispatch}
+                        selectedId={annotations.selected}
                         visible={getTrack(annotations, key).visible}
                         colour={getTrack(annotations, key).colour}
                         removeListComponent={() => { removeListComponent(key) }}
                     ></IdPanel>
                 ))}
-
             </div>
         </div >
     );

@@ -31,7 +31,7 @@ function Player(props) {
                 </Video>
                 <Annotation
                     className="video-window annotation-overlay"
-                    playerState={playerState}
+                    currentFrame={playerState.currentFrame}
                     annotations={annotations}
                     annotationDispatch={annotationDispatch}>
                 </Annotation>

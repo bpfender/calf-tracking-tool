@@ -2,16 +2,22 @@ import React from 'react';
 import { Button, ButtonGroup, Divider, EditableText, Icon } from '@blueprintjs/core';
 import ColourPalettePopover from "./ColourPalette";
 
+// FIXME possible to move annotation state here?
 export default function IdPanel(props) {
-    const { annotationDispatch, removeListComponent, id, colour, visible } = props;
+    const { annotationDispatch, id, colour, visible, selectedId } = props;
 
-    const handleTextConfirm = (text) => {
-        annotationDispatch({ type: 'SET_TRACK_NAME', payload: { key: id, name: text } });
+    const handleSelectClick = () => {
+        annotationDispatch({
+            type: "SET_SELECTED",
+            payload: { key: id }
+        })
     }
 
-    const handleTrashClick = () => {
-        annotationDispatch({ type: 'DELETE_TRACK', payload: { key: id } });
-        removeListComponent();
+    const handleTextConfirm = (text) => {
+        annotationDispatch({
+            type: 'SET_TRACK_NAME',
+            payload: { key: id, name: text }
+        });
     }
 
     const handleColourClick = (colour) => {
@@ -31,7 +37,11 @@ export default function IdPanel(props) {
     // FIXME divider not showing up at the moment
     return (
         <div className="id-panel">
-            <Icon icon="dot"></Icon>
+            <Icon
+                icon="dot"
+                intent={selectedId === id ? "primary" : "none"}
+                onClick={handleSelectClick}
+            ></Icon>
             <EditableText
                 placeholder="Click to edit..."
                 onConfirm={handleTextConfirm}
@@ -51,7 +61,7 @@ export default function IdPanel(props) {
                     icon="eye-open"
                 ></Button>
                 <Button
-                    onClick={handleTrashClick}
+                    onClick={props.removeListComponent}
                     icon="trash"
                 ></Button>
             </ButtonGroup >
