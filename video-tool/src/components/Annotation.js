@@ -12,7 +12,6 @@ function Annotation(props) {
     }, [canvasRef, annotationDispatch]);
 
     useEffect(() => {
-        console.log("EFFECT");
         const BBoxes = getBoundingBoxes(annotations, currentFrame);
         sceneRef.current.updateBoundingBoxes(BBoxes);
     }, [currentFrame, annotations]);

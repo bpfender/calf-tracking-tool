@@ -16,7 +16,6 @@ function App(props) {
   //FIXME whole tree updates all the time
   //FIXME not quite clear why this is in useRef
   //const annotationsRef = useRef(new Annotations(86302));
-  console.log("APP");
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
   const [annotations, annotationDispatch] = useReducer(annotationReducer, annotationFactory(null));
 

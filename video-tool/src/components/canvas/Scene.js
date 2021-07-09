@@ -1,5 +1,6 @@
 import RotationHandle from "./RotationHandle";
 
+// FIXME mouseover order isn't quite right yet
 class Scene {
     constructor(context) {
         this.context = context;
@@ -31,7 +32,6 @@ class Scene {
         this.lastX = mouseX;
         this.lastY = mouseY;
 
-        console.log(this.selected === this.BBoxes[2]);
         if (this.handle) {
             if (this.handle instanceof RotationHandle) {
                 this.handle.moveHandle(
@@ -93,7 +93,6 @@ class Scene {
     _hitTestBox(mouseX, mouseY) {
         for (const element of this.BBoxes) {
             if (element.hitTest(mouseX, mouseY, this.context)) {
-                console.log("BOX HIT");
                 return element;
             }
         }
@@ -108,7 +107,6 @@ class Scene {
 
         for (const handle of handles) {
             if (handle.hitTest(mouseX, mouseY, this.context)) {
-                console.log("HANDLE HIT");
                 return handle;
             }
         }
@@ -116,7 +114,6 @@ class Scene {
     }
 
     _redraw() {
-        console.log("REDRAW");
         this._clear();
         this.BBoxes.forEach(element => {
             element.draw(this.context);

@@ -25,7 +25,6 @@ export default function VideoSlider(props) {
 
     const handleChange = (time) => {
         setSliderTime(time);
-        console.log(time);
     }
 
     const handleRelease = (time) => {

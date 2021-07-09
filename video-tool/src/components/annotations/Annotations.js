@@ -1,4 +1,4 @@
-import Immutable from "immutable";
+import Immutable, { getIn } from "immutable";
 import BoundingBox from '../canvas/BoundingBox';
 
 export const annotationFactory = (totalFrames) => {
@@ -14,6 +14,7 @@ export function annotationTrackFactory(totalFrames, colour = "#48AFF0") {
         name: null,
         colour: colour,
         visible: true,
+        labelledFrames: Immutable.List(),
         frames: Immutable.List(Array(totalFrames).fill(frameLabelFactory())),
     };
 }
@@ -110,7 +111,7 @@ export const getBoundingBoxes = (state, frame) => {
             track.rotation,
         )
     });
-    console.log(bboxes);
+
     return bboxes;
 }
 
@@ -126,7 +127,7 @@ export const getFrameLabels = (annotations, frame) => {
                 key: key,
             };
         })
-    console.log(annotationsList);
+
     return annotationsList;
 }
 
@@ -141,16 +142,63 @@ export const getLabel = (track, frame) => {
 // FIXME this is horrible
 export const setLabel = (annotations, key, frame, label) => {
     const index = frame - 1;
-    console.log("LABEL", label);
     const oldTrack = getTrack(annotations, key)
     const newTrack = oldTrack.frames.set(index, label);
     const annotationTrackObj = annotations.tracks.get(key);
     const newAnnotationTrackObj = Immutable.setIn(annotationTrackObj, ['frames'], newTrack);
+
+    newAnnotationTrackObj.labelledFrames = addLabelledFrame(newAnnotationTrackObj.labelledFrames, frame);
+
+
+    console.log([...newAnnotationTrackObj.labelledFrames.values()]);
+    //console.log(getPrevLabelledFrame(newAnnotationTrackObj), getNextLabelledFrame(newAnnotationTrackObj.labelledFrames))
+
     const map = annotations.tracks.set(key, newAnnotationTrackObj);
     return Immutable.setIn(annotations, ['tracks'], map);
 }
 
-export const setLabelled = (frame, bool) => {
-    const newFrame = { ...frame };
-    newFrame.labelled = bool;
+// --- LABELLED FRAMES --- 
+const addLabelledFrame = (labelledFrames, frame) => {
+    const i = getInsertionIndex(labelledFrames, frame);
+    if (labelledFrames.get(i) === frame) {
+        return labelledFrames;
+    }
+    return labelledFrames.insert(i, frame);
+}
+
+const getInsertionIndex = (labelledFrames, frame) => {
+    if (labelledFrames.size === 0) {
+        return 0;
+    }
+
+    const index = labelledFrames.findIndex(elem => elem >= frame)
+    return index >= 0 ? index : labelledFrames.size;
+}
+
+const getNextLabelledFrame = (labelledFrames, frame) => {
+    const i = getInsertionIndex(labelledFrames, frame);
+
+    if (i === labelledFrames.size) {
+        return -1;
+    }
+
+    if (labelledFrames.get(i) === frame) {
+        if (i === labelledFrames.size - 1) {
+            return -1;
+        }
+        return labelledFrames.get(i + 1);
+    } else {
+        return labelledFrames.get(i);
+    }
+}
+
+const getPrevLabelledFrame = (labelledFrames, frame) => {
+    const i = getInsertionIndex(labelledFrames, frame);
+
+    if (i === 0) {
+        return -1;
+    }
+
+    return labelledFrames.get(i - 1);
+
 }

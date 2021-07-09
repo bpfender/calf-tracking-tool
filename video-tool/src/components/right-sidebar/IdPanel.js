@@ -44,6 +44,7 @@ export default function IdPanel(props) {
             ></Icon>
             <EditableText
                 placeholder="Click to edit..."
+                onEdit={handleSelectClick}
                 onConfirm={handleTextConfirm}
                 maxLength={16}
                 selectAllOnFocus={true}
