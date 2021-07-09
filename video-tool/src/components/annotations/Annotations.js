@@ -151,7 +151,9 @@ export const setLabel = (annotations, key, frame, label) => {
 
 
     console.log([...newAnnotationTrackObj.labelledFrames.values()]);
-    //console.log(getPrevLabelledFrame(newAnnotationTrackObj), getNextLabelledFrame(newAnnotationTrackObj.labelledFrames))
+    console.log(
+        getPrevLabelledFrame(newAnnotationTrackObj.labelledFrames, frame),
+        getNextLabelledFrame(newAnnotationTrackObj.labelledFrames, frame))
 
     const map = annotations.tracks.set(key, newAnnotationTrackObj);
     return Immutable.setIn(annotations, ['tracks'], map);
@@ -200,5 +202,10 @@ const getPrevLabelledFrame = (labelledFrames, frame) => {
     }
 
     return labelledFrames.get(i - 1);
+}
 
+const updateFrameTrack = (track, frame, prevFrame, nextFrame) => {
+    const label = getLabel(track, frame);
+    const nextLabel = getLabel(track, nextFrame);
+    const prevLabel = getLabel(track, prevFrame);
 }
