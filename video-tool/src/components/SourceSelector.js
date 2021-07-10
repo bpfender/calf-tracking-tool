@@ -1,23 +1,23 @@
-import React from 'react';
+import { FileInput } from '@blueprintjs/core';
+import React, { useState } from 'react';
 
-class SourceSelector extends React.Component {
-    constructor(props) {
-        super(props);
+//FIXME "accept" for input form, reset form
+export default function SourceSelector(props) {
+    const [file, setFile] = useState();
 
-        this.handleSourceChange = this.handleSourceChange.bind(this);
+    const handleInputChange = (inputFile) => {
+
+        setFile(inputFile);
+        console.log(inputFile);
     }
 
-    handleSourceChange(event) {
-        console.log(event);
-    }
 
-    render() {
-        return (
-            <div>
-                <input onChange={this.handleSourceChange} type="file"></input>
-            </div>
-        )
-    }
+    return (
+        <FileInput
+            onInputChange={e => { handleInputChange(e.target.files[0]) }}
+            text={file ? file.name : "Choose file..."}
+            hasSelection={file}
+        ></FileInput>
+    );
+
 }
-
-export default SourceSelector;

@@ -19,13 +19,17 @@ export function calculateFPS(now) {
     }
 };
 
+
+// FIXME definitely use presented frames
 export function calcFPS2(metadata) {
     if (typeof calcFPS2.count === 'undefined' ||
-        calcFPS2.count > 10) {
+        calcFPS2.count > 50) {
         calcFPS2.count = 0;
         calcFPS2.time = metadata.mediaTime;
+        calcFPS2.frames = metadata.presentedFrames;
     }
 
     const fps = calcFPS2.count++ / (metadata.mediaTime - calcFPS2.time);
-    console.log(fps);
+    const fpsPresented = (metadata.presentedFrames - calcFPS2.frames) / (metadata.mediaTime - calcFPS2.time);
+    console.log(fps, fpsPresented);
 }

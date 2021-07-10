@@ -6,6 +6,7 @@ import { annotationReducer } from './components/state/annotation-state';
 import Player from './components/Player';
 import RightSidebar from './components/right-sidebar/RightSidebar';
 import LeftSidebar from './components/left-sidebar/LeftSidebar';
+import SourceSelector from './components/SourceSelector';
 
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
@@ -29,7 +30,9 @@ function App(props) {
 
   return (
     <div className="App bp3-dark">
-      <header className="App-header">VIDEO ANNOTATION TOOL</header>
+      <header className="App-header">
+        <SourceSelector></SourceSelector>
+      </header>
       <LeftSidebar
         className="left-sidebar">
       </LeftSidebar>

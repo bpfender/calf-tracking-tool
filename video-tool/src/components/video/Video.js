@@ -2,7 +2,6 @@ import React from 'react';
 import "./Video.scss";
 
 import video_src from '../../resources/Amfeed 2 3 16-1 23976fps timecode.mp4';
-import { calcFPS2, calculateFPS } from '../utils';
 
 let FPS = 23.976;
 let FRAME_DELTA = 1 / FPS;
@@ -83,7 +82,7 @@ class Video extends React.Component {
             currentFrame: this.getCurrentFrame()
         };
         this.props.playerDispatch({ type: 'FRAME_CALLBACK', payload: { ...payload } });
-
+        //calcFPS2(metadata);
         this.drawFrameToCanvas();
         this.video.requestVideoFrameCallback(this.handleVideoFrameCallback);
     }

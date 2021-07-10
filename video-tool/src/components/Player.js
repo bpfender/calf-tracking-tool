@@ -44,7 +44,7 @@ function Player(props) {
             <Info videoState={playerState}></Info>
 
         </div >
-    )
+    );
 }
 
 export default Player;
