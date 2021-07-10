@@ -19,6 +19,7 @@ export function annotationTrackFactory(totalFrames, colour = "#48AFF0") {
     };
 }
 
+// FIXME labelled probably not required
 function frameLabelFactory() {
     return {
         x: 400,
@@ -149,13 +150,16 @@ export const setLabel = (annotations, key, frame, label) => {
 
     newAnnotationTrackObj.labelledFrames = addLabelledFrame(newAnnotationTrackObj.labelledFrames, frame);
 
-
+    const nextFrame = getNextLabelledFrame(newAnnotationTrackObj.labelledFrames, frame);
+    const prevFrame = getPrevLabelledFrame(newAnnotationTrackObj.labelledFrames, frame);
     console.log([...newAnnotationTrackObj.labelledFrames.values()]);
-    console.log(
-        getPrevLabelledFrame(newAnnotationTrackObj.labelledFrames, frame),
-        getNextLabelledFrame(newAnnotationTrackObj.labelledFrames, frame))
+    console.log(prevFrame, nextFrame);
 
-    const map = annotations.tracks.set(key, newAnnotationTrackObj);
+    const interpolatedTrack = updateFrameTrack(newAnnotationTrackObj, frame, prevFrame, nextFrame);
+    console.log("INTER", [...interpolatedTrack]);
+    const interpolatedObj = Immutable.setIn(newAnnotationTrackObj, ['frames'], interpolatedTrack);
+
+    const map = annotations.tracks.set(key, interpolatedObj);
     return Immutable.setIn(annotations, ['tracks'], map);
 }
 
@@ -205,7 +209,50 @@ const getPrevLabelledFrame = (labelledFrames, frame) => {
 }
 
 const updateFrameTrack = (track, frame, prevFrame, nextFrame) => {
-    const label = getLabel(track, frame);
-    const nextLabel = getLabel(track, nextFrame);
-    const prevLabel = getLabel(track, prevFrame);
+    const prevIndex = prevFrame < 0 ? 0 : prevFrame - 1;
+    const nextIndex = nextFrame < 0 ? track.frames.size - 1 : nextFrame - 1;
+    const index = frame - 1;
+
+    const prevInterpolated = interpolateLabels(track, prevIndex, index);
+    const nextInterpolated = interpolateLabels(track, index, nextIndex);
+    console.log("TRACK", [...prevInterpolated.values()]);
+    console.log("TRACK", [...nextInterpolated.values()]);
+    console.log("SPLICE", prevIndex, index, nextIndex);
+
+    return track.frames
+        .splice(prevIndex, index - prevIndex, ...prevInterpolated.toArray())
+        .splice(index, nextIndex - index, ...nextInterpolated.toArray());
 }
+
+const interpolateLabels = (track, startIndex, endIndex) => {
+    console.log("INTERP", startIndex, endIndex);
+    console.log(track);
+    const startLabel = getLabel(track, startIndex + 1);
+    const endLabel = getLabel(track, endIndex + 1);
+    const deltaFrames = endIndex - startIndex;
+
+    console.log("LABELS", startLabel, endLabel);
+    const diff = {
+        x: (endLabel.x - startLabel.x) / deltaFrames,
+        y: (endLabel.y - startLabel.y) / deltaFrames,
+        w: (endLabel.w - startLabel.w) / deltaFrames,
+        h: (endLabel.h - startLabel.h) / deltaFrames,
+        rotation: (endLabel.rotation - startLabel.rotation) / deltaFrames,
+    };
+    console.log("DIFF", diff);
+    // FIXME probably remove labelled tag
+    return track.frames
+        .slice(startIndex, endIndex)
+        .map((elem, index) => {
+            return {
+                x: startLabel.x + diff.x * index,
+                y: startLabel.y + diff.y * index,
+                w: startLabel.w + diff.w * index,
+                h: startLabel.h + diff.h * index,
+                rotation: startLabel.rotation + diff.rotation * index,
+                labelled: elem.labelled,
+            }
+        });
+}
+
+
