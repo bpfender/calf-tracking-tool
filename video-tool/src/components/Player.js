@@ -33,7 +33,9 @@ function Player(props) {
                     className="video-window annotation-overlay"
                     currentFrame={playerState.currentFrame}
                     annotations={annotations}
-                    annotationDispatch={annotationDispatch}>
+                    annotationDispatch={annotationDispatch}
+                    pauseVideo={() => { video.pause() }}>
+
                 </Annotation>
             </div>
 

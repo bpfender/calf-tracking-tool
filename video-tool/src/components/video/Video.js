@@ -2,6 +2,7 @@ import React from 'react';
 import "./Video.scss";
 
 import video_src from '../../resources/Amfeed 2 3 16-1 23976fps timecode.mp4';
+import { calcFPS2, calculateFPS } from '../utils';
 
 let FPS = 23.976;
 let FRAME_DELTA = 1 / FPS;
@@ -73,6 +74,7 @@ class Video extends React.Component {
     //TODO this is a bit messy. Needs to be tidied
     //TODO need to check for compatibility with callback
     handleVideoFrameCallback(now, metadata) {
+
         // TODO does this need to be set seperately? 
         this.videoFrameCallbackMetadata = metadata;
         // FIXME passing more data than needed at the moment

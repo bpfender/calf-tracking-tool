@@ -208,6 +208,7 @@ const getPrevLabelledFrame = (labelledFrames, frame) => {
     return labelledFrames.get(i - 1);
 }
 
+// FIXME some strange handling front and rear
 const updateFrameTrack = (track, frame, prevFrame, nextFrame) => {
     const prevIndex = prevFrame < 0 ? 0 : prevFrame - 1;
     const nextIndex = nextFrame < 0 ? track.frames.size - 1 : nextFrame - 1;
@@ -215,6 +216,7 @@ const updateFrameTrack = (track, frame, prevFrame, nextFrame) => {
 
     const prevInterpolated = interpolateLabels(track, prevIndex, index);
     const nextInterpolated = interpolateLabels(track, index, nextIndex);
+
     console.log("TRACK", [...prevInterpolated.values()]);
     console.log("TRACK", [...nextInterpolated.values()]);
     console.log("SPLICE", prevIndex, index, nextIndex);
@@ -245,11 +247,11 @@ const interpolateLabels = (track, startIndex, endIndex) => {
         .slice(startIndex, endIndex)
         .map((elem, index) => {
             return {
-                x: startLabel.x + diff.x * index,
-                y: startLabel.y + diff.y * index,
-                w: startLabel.w + diff.w * index,
-                h: startLabel.h + diff.h * index,
-                rotation: startLabel.rotation + diff.rotation * index,
+                x: Math.round(startLabel.x + diff.x * index),
+                y: Math.round(startLabel.y + diff.y * index),
+                w: Math.round(startLabel.w + diff.w * index),
+                h: Math.round(startLabel.h + diff.h * index),
+                rotation: Math.round(startLabel.rotation + diff.rotation * index),
                 labelled: elem.labelled,
             }
         });

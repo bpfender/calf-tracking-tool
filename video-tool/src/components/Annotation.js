@@ -22,6 +22,7 @@ function Annotation(props) {
 
     // FIXME mouse click should pause playback really
     const handleMouseDown = (event) => {
+        props.pauseVideo();
         const selectID = sceneRef.current.handleMouseDown(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
 
         annotationDispatch({
