@@ -152,6 +152,11 @@ export function playerReducer(state = defaultPlayerState, action) {
                 ...state,
                 timeToSkip: payload.timeToSkip,
             };
+        case 'SRC_CHANGE':
+            return {
+                ...state,
+                src: payload.src,
+            };
         default: {
             throw new Error(`Unknown action type: ${action.type}`);
         }

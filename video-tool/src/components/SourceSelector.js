@@ -17,6 +17,7 @@ export default function SourceSelector(props) {
 
         const url = URL.createObjectURL(inputFile);
         console.log(url);
+        playerDispatch({ type: 'SRC_CHANGE', payload: { src: url } });
     }
 
 

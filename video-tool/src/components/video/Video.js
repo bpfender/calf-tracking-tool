@@ -70,6 +70,13 @@ class Video extends React.Component {
         this.video.requestVideoFrameCallback(this.handleVideoFrameCallback); // Setup frame callback
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.src !== this.props.src) {
+            this.video.src = this.props.src;
+            this.video.load();
+        }
+    }
+
     /* ---- FRAME CALLBACKS ---- */
     //TODO this is a bit messy. Needs to be tidied
     //TODO need to check for compatibility with callback
