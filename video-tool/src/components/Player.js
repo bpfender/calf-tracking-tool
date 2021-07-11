@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 
 import Video from './video/Video';
@@ -11,22 +11,21 @@ function Player(props) {
     const { annotations, annotationDispatch, playerState, playerDispatch } = props
 
     // TODO useeffect to mount video?
-    // FIXME ref forwarding for video ref?
-    // QUESTION not totally sure about my use of callback ref.should ref be done with imperativeHandle?
-    const [video, setVideo] = useState();
+    const videoRef = useRef(null);
 
     // TODO this needs to be set dynamically
     const style = {
         height: playerState.videoHeight + "px"
     };
 
+    //FIXME usecallback change to ref
     return (
         <div className={props.className}>
             <div className="video-window-container"
                 style={style}>
                 <Video
                     className="video-window"
-                    ref={useCallback(node => { setVideo(node) }, [])}
+                    ref={videoRef}
                     playerDispatch={playerDispatch}>
                 </Video>
                 <Annotation
@@ -34,13 +33,13 @@ function Player(props) {
                     currentFrame={playerState.currentFrame}
                     annotations={annotations}
                     annotationDispatch={annotationDispatch}
-                    pauseVideo={() => { video.pause() }}>
+                    pauseVideo={() => { videoRef.current.pause() }}>
 
                 </Annotation>
             </div>
 
 
-            <ControlBar video={video} playerState={playerState}></ControlBar>
+            <ControlBar video={videoRef.current} playerState={playerState}></ControlBar>
             <Info videoState={playerState}></Info>
 
         </div >

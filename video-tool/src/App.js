@@ -31,7 +31,9 @@ function App(props) {
   return (
     <div className="App bp3-dark">
       <header className="App-header">
-        <SourceSelector></SourceSelector>
+        <SourceSelector
+          playerDispatch={playerDispatch}>
+        </SourceSelector>
       </header>
       <LeftSidebar
         className="left-sidebar">

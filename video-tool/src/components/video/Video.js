@@ -22,6 +22,7 @@ class Video extends React.Component {
         // Video control
         this.play = this.play.bind(this);
         this.pause = this.pause.bind(this);
+        this.load = this.load.bind(this);
         this.nextFrame = this.nextFrame.bind(this);
         this.prevFrame = this.prevFrame.bind(this);
         this.seekTime = this.seekTime.bind(this);
@@ -98,6 +99,10 @@ class Video extends React.Component {
 
     pause() {
         this.video.pause();
+    }
+
+    load() {
+        this.video.load();
     }
 
     nextFrame(n = 1) {
