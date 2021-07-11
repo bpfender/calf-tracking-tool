@@ -32,6 +32,7 @@ function App(props) {
     <div className="App bp3-dark">
       <header className="App-header">
         <SourceSelector
+          fps={playerState.framerate}
           playerDispatch={playerDispatch}>
         </SourceSelector>
       </header>

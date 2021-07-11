@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 //FIXME "accept" for input form, reset form
 export default function SourceSelector(props) {
-    const { playerDispatch } = props;
+    const { fps, playerDispatch } = props;
 
     const [file, setFile] = useState();
 
@@ -22,11 +22,14 @@ export default function SourceSelector(props) {
 
 
     return (
-        <FileInput
-            onInputChange={e => { handleInputChange(e.target.files[0]) }}
-            text={file ? file.name : "Choose file..."}
-            hasSelection={file}
-        ></FileInput>
+        <div>
+            <FileInput
+                onInputChange={e => { handleInputChange(e.target.files[0]) }}
+                text={file ? file.name : "Choose file..."}
+                hasSelection={file}
+            ></FileInput>
+            <p>{fps === 0 ? "Detecting framerate..." : fps}</p>
+        </div>
     );
 
 }

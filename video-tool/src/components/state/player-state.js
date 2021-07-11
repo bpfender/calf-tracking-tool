@@ -24,6 +24,7 @@ export const defaultPlayerState = {
     videoHeight: 0,
 
     // Extra states
+    framerate: 0,
     currentFrame: 0,
     totalFrames: 0,
     framesToSkip: 5,
@@ -155,8 +156,14 @@ export function playerReducer(state = defaultPlayerState, action) {
         case 'SRC_CHANGE':
             return {
                 ...state,
+                framerate: 0,
                 src: payload.src,
             };
+        case 'SET_FRAMERATE':
+            return {
+                ...state,
+                framerate: payload.framerate,
+            }
         default: {
             throw new Error(`Unknown action type: ${action.type}`);
         }

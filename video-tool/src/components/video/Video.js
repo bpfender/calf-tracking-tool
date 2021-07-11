@@ -16,6 +16,7 @@ class Video extends React.Component {
         this.videoFrameCallbackMetadata = null;
 
         // Frame callbacks
+        this.framerateCallback = this.framerateCallback.bind(this);
         this.handleVideoFrameCallback = this.handleVideoFrameCallback.bind(this);
         this.drawFrameToCanvas = this.drawFrameToCanvas.bind(this);
 
@@ -67,20 +68,44 @@ class Video extends React.Component {
         this.seekTime(FRAME_DELTA / 2); // Initialise current time to avoid null ref. TODO, not sure this is actually required
         this.ctx = this.canvas.getContext('2d'); // Setup canvas context
 
-        this.video.requestVideoFrameCallback(this.handleVideoFrameCallback); // Setup frame callback
+        //this.video.requestVideoFrameCallback(this.handleVideoFrameCallback); // Setup frame callback
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.src !== this.props.src) {
             this.video.src = this.props.src;
             this.video.load();
+            console.log("HELLO");
+            this.video.requestVideoFrameCallback((now, metadata) => {
+                this.framerateCallback(metadata)
+            })
+            this.play();
+
+        }
+    }
+
+    framerateCallback(metadata, prev = [0, 0, 0]) {
+        const frames = metadata.presentedFrames;
+        const time = metadata.mediaTime;
+        const [prevTime, prevFrames, prevFps] = prev;
+
+        const fps = Math.round((frames - prevFrames) / (time - prevTime) * 1000);
+        console.log(fps, prevFps, frames, prevFrames, time, prevTime);
+
+        if (fps === prevFps) {
+            this.video.pause();
+            this.props.playerDispatch({ type: 'SET_FRAMERATE', payload: { framerate: fps / 1000 } })
+        } else {
+            this.video.requestVideoFrameCallback((now, metadata) => {
+                this.framerateCallback(metadata, [time, frames, fps])
+            })
         }
     }
 
     /* ---- FRAME CALLBACKS ---- */
-    //TODO this is a bit messy. Needs to be tidied
     //TODO need to check for compatibility with callback
     handleVideoFrameCallback(now, metadata) {
+        //TODO this is a bit messy. Needs to be tidied
 
         // TODO does this need to be set seperately? 
         this.videoFrameCallbackMetadata = metadata;
