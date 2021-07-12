@@ -6,6 +6,7 @@ import video_src from '../../resources/Amfeed 2 3 16-1 23976fps timecode.mp4';
 let FPS = 23.976;
 let FRAME_DELTA = 1 / FPS;
 
+// TODO needs to be rewritten functionally really
 class Video extends React.Component {
     constructor(props) {
         super(props);
@@ -16,7 +17,7 @@ class Video extends React.Component {
         this.videoFrameCallbackMetadata = null;
 
         // Frame callbacks
-        this.framerateCallback = this.framerateCallback.bind(this);
+        this.framerateCalcCallback = this.framerateCalcCallback.bind(this);
         this.handleVideoFrameCallback = this.handleVideoFrameCallback.bind(this);
         this.drawFrameToCanvas = this.drawFrameToCanvas.bind(this);
 
@@ -28,7 +29,7 @@ class Video extends React.Component {
         this.prevFrame = this.prevFrame.bind(this);
         this.seekTime = this.seekTime.bind(this);
         this.seekFrame = this.seekFrame.bind(this);
-        this.rewind = this.seekFrame.bind(this);
+        this.rewind = this.rewind.bind(this);
         this.changePlaybackRate = this.changePlaybackRate.bind(this);
         this.changeFramesToSkip = this.changeFramesToSkip.bind(this);
 
@@ -67,24 +68,20 @@ class Video extends React.Component {
     componentDidMount() {
         this.seekTime(FRAME_DELTA / 2); // Initialise current time to avoid null ref. TODO, not sure this is actually required
         this.ctx = this.canvas.getContext('2d'); // Setup canvas context
-
-        //this.video.requestVideoFrameCallback(this.handleVideoFrameCallback); // Setup frame callback
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.src !== this.props.src) {
             this.video.src = this.props.src;
             this.video.load();
-            console.log("HELLO");
             this.video.requestVideoFrameCallback((now, metadata) => {
-                this.framerateCallback(metadata)
+                this.framerateCalcCallback(metadata)
             })
             this.play();
-
         }
     }
 
-    framerateCallback(metadata, prev = [0, 0, 0]) {
+    framerateCalcCallback(metadata, prev = [0, 0, 0]) {
         const frames = metadata.presentedFrames;
         const time = metadata.mediaTime;
         const [prevTime, prevFrames, prevFps] = prev;
@@ -94,28 +91,35 @@ class Video extends React.Component {
 
         if (fps === prevFps) {
             this.video.pause();
-            this.props.playerDispatch({ type: 'SET_FRAMERATE', payload: { framerate: fps / 1000 } })
+
+            this.props.playerDispatch({
+                type: 'SET_FRAMERATE',
+                payload: { framerate: fps / 1000 }
+            });
+
+            this.rewind();
+            this.video.requestVideoFrameCallback(this.handleVideoFrameCallback);
         } else {
             this.video.requestVideoFrameCallback((now, metadata) => {
-                this.framerateCallback(metadata, [time, frames, fps])
+                this.framerateCalcCallback(metadata, [time, frames, fps])
             })
         }
     }
 
     /* ---- FRAME CALLBACKS ---- */
     //TODO need to check for compatibility with callback
+    // FIXME metadata passing more data than needed at the moment
     handleVideoFrameCallback(now, metadata) {
-        //TODO this is a bit messy. Needs to be tidied
-
-        // TODO does this need to be set seperately? 
         this.videoFrameCallbackMetadata = metadata;
-        // FIXME passing more data than needed at the moment
-        const payload = {
-            ...metadata,
-            currentFrame: this.getCurrentFrame()
-        };
-        this.props.playerDispatch({ type: 'FRAME_CALLBACK', payload: { ...payload } });
-        //calcFPS2(metadata);
+
+        this.props.playerDispatch({
+            type: 'FRAME_CALLBACK',
+            payload: {
+                ...metadata,
+                currentFrame: this.getCurrentFrame()
+            }
+        });
+
         this.drawFrameToCanvas();
         this.video.requestVideoFrameCallback(this.handleVideoFrameCallback);
     }
@@ -126,7 +130,7 @@ class Video extends React.Component {
 
     /* ---- VIDEO CONTROLS ---- */
     play() {
-        this.video.play().catch(console.log("Playback failed")); //FIXME proper promise handling
+        this.video.play(); //FIXME proper promise handling
     }
 
     pause() {
@@ -154,7 +158,7 @@ class Video extends React.Component {
     }
 
     rewind() {
-        this.setCurrentTime(0);
+        this.setCurrentTime(0.0);
     }
 
     changePlaybackRate(rate) {
@@ -162,12 +166,18 @@ class Video extends React.Component {
     }
 
     changeFramesToSkip(n) {
-        this.props.playerDispatch({ type: 'FRAMES_TO_SKIP', payload: { framesToSkip: n } })
+        this.props.playerDispatch({
+            type: 'FRAMES_TO_SKIP',
+            payload: { framesToSkip: n }
+        });
     }
 
     // TODO is this needed?
     changeTimeToSkip(t) {
-        this.props.playerDispatch({ type: 'TIME_TO_SKIP', payload: { timeToSkip: t } });
+        this.props.playerDispatch({
+            type: 'TIME_TO_SKIP',
+            payload: { timeToSkip: t }
+        });
     }
 
     /* ---- VIDEO UTILS ---- */
@@ -205,25 +215,27 @@ class Video extends React.Component {
     }
 
     handleCanPlay() {
-        const payload = {
-            readyState: this.video.readyState
-        };
-        this.props.playerDispatch({ type: 'CAN_PLAY', payload: { ...payload } });
+        this.props.playerDispatch({
+            type: 'CAN_PLAY',
+            payload: { readyState: this.video.readyState }
+        });
     }
 
     handleCanPlayThrough() {
-        const payload = {
-            readyState: this.video.readyState
-        };
-        this.props.playerDispatch({ type: 'CAN_PLAY_THROUGH', payload: { ...payload } });
+        this.props.playerDispatch({
+            type: 'CAN_PLAY_THROUGH',
+            payload: { readyState: this.video.readyState }
+        });
     }
 
     handleDurationChange() {
-        const payload = {
-            duration: this.video.duration,
-            totalFrames: this.getTimeAsFrames(this.video.duration),
-        };
-        this.props.playerDispatch({ type: 'DURATION_CHANGE', payload: { ...payload } });
+        this.props.playerDispatch({
+            type: 'DURATION_CHANGE',
+            payload: {
+                duration: this.video.duration,
+                totalFrames: this.getTimeAsFrames(this.video.duration)
+            }
+        });
     }
 
     // TODO not really sure what to do with this event
@@ -238,36 +250,35 @@ class Video extends React.Component {
 
     // TODO how to handle error gracefully. How to reset error flag
     handleError() {
-        const payload = {
-            error: this.video.error
-        };
-
-        this.props.playerDispatch({ type: 'ERROR', payload: { ...payload } });
+        this.props.playerDispatch({
+            type: 'ERROR',
+            payload: { error: this.video.error }
+        });
     }
 
     handleLoadedData() {
-        const payload = {
-            readyState: this.video.readyState,
-        };
-
-        this.props.playerDispatch({ type: 'LOADED_DATA', payload: { ...payload } });
+        this.props.playerDispatch({
+            type: 'LOADED_DATA',
+            payload: { readyState: this.video.readyState }
+        });
     }
 
     handleLoadedMetadata() {
-        const payload = {
-            readyState: this.video.readyState,
-            videoWidth: this.video.videoWidth,
-            videoHeight: this.video.videoHeight
-        };
-
-        this.props.playerDispatch({ type: 'LOADED_METADATA', payload: { ...payload } });
+        this.props.playerDispatch({
+            type: 'LOADED_METADATA',
+            payload: {
+                readyState: this.video.readyState,
+                videoWidth: this.video.videoWidth,
+                videoHeight: this.video.videoHeight
+            }
+        });
     }
 
     handleLoadStart() {
-        const payload = {
-            readyState: this.video.readyState
-        };
-        this.props.playerDispatch({ type: 'LOAD_START', payload: { ...payload } });
+        this.props.playerDispatch({
+            type: 'LOAD_START',
+            payload: { readyState: this.video.readyState }
+        });
     }
 
     handlePause() {
@@ -288,11 +299,10 @@ class Video extends React.Component {
     }
 
     handleRateChange() {
-        const payload = {
-            playbackRate: this.video.playbackRate
-        };
-
-        this.props.playerDispatch({ type: 'RATE_CHANGE', payload: { ...payload } })
+        this.props.playerDispatch({
+            type: 'RATE_CHANGE',
+            payload: { playbackRate: this.video.playbackRate }
+        })
     }
 
     handleSeeked() {
@@ -353,8 +363,7 @@ class Video extends React.Component {
                     onStalled={this.handleStalled}
                     onSuspend={this.handleSuspend}
                     onTimeUpdate={this.handleTimeUpdate}
-                    onWaiting={this.handleWaiting}
-                >
+                    onWaiting={this.handleWaiting}>
                     <p>ERROR: Video not supported</p>
                 </video>
                 <canvas
@@ -363,8 +372,7 @@ class Video extends React.Component {
                         this.canvas = element;
                     }}
                     width="800px"
-                    height="600px"
-                >
+                    height="600px">
                 </canvas>
             </div>
         )
