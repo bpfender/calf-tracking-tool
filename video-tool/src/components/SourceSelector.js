@@ -28,7 +28,7 @@ export default function SourceSelector(props) {
                 text={file ? file.name : "Choose file..."}
                 hasSelection={file}
             ></FileInput>
-            <p>{fps === 0 ? "Detecting framerate..." : fps}</p>
+            <p>{fps === 0 ? "Detecting framerate..." : `${fps} fps`}</p>
         </div>
     );
 

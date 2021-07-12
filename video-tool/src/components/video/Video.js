@@ -68,6 +68,7 @@ class Video extends React.Component {
     componentDidMount() {
         this.seekTime(FRAME_DELTA / 2); // Initialise current time to avoid null ref. TODO, not sure this is actually required
         this.ctx = this.canvas.getContext('2d'); // Setup canvas context
+        this.video.requestVideoFrameCallback(this.handleVideoFrameCallback);
     }
 
     componentDidUpdate(prevProps) {
@@ -79,6 +80,11 @@ class Video extends React.Component {
             })
             this.play();
         }
+
+        /*  if (prevProps.fps !== this.props.fps) {
+              FPS = this.props.fps;
+              FRAME_DELTA = 1 / FPS;
+          }*/
     }
 
     framerateCalcCallback(metadata, prev = [0, 0, 0]) {

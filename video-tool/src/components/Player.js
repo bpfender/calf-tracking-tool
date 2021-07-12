@@ -27,7 +27,8 @@ function Player(props) {
                     className="video-window"
                     ref={videoRef}
                     playerDispatch={playerDispatch}
-                    src={playerState.src}>
+                    src={playerState.src}
+                    fps={playerState.framerate}>
                 </Video>
                 <Annotation
                     className="video-window annotation-overlay"
