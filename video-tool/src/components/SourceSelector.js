@@ -31,5 +31,4 @@ export default function SourceSelector(props) {
             <p>{fps === 0 ? "Detecting framerate..." : `${fps} fps`}</p>
         </div>
     );
-
 }

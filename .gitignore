@@ -4,4 +4,5 @@
 *.m4v
 
 *.eslintcache
+.vscode
 

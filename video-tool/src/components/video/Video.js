@@ -80,11 +80,6 @@ class Video extends React.Component {
             })
             this.play();
         }
-
-        /*  if (prevProps.fps !== this.props.fps) {
-              FPS = this.props.fps;
-              FRAME_DELTA = 1 / FPS;
-          }*/
     }
 
     framerateCalcCallback(metadata, prev = [0, 0, 0]) {
