@@ -1,8 +1,0 @@
-# Ignore video files
-*.avi
-*.mp4
-*.m4v
-
-*.eslintcache
-.vscode
-

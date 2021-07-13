@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { getBoundingBoxes } from './annotations/Annotations';
 import Scene from './canvas/Scene';
 
-
 // FIXME canvas resizing and scaling
 function Annotation(props) {
     const { annotations, annotationDispatch, currentFrame } = props;
