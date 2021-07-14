@@ -1,1 +1,7 @@
 .vscode/
+
+# Ignore video files
+*.avi
+*.mp4
+*.m4v
+*.webm
