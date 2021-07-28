@@ -18,6 +18,10 @@ cap = cv.VideoCapture("./test.webm")
 
 prev_hash = None
 count = 0
+distance_threshold = 6
+max_gap = 0
+min_gap = 100
+frame_Id = None
 
 while cap.isOpened():
     ret, frame = cap.read()
@@ -29,22 +33,34 @@ while cap.isOpened():
     curr_hash = cv.img_hash.pHash(frame)
 
     if prev_hash is not None:
-        if (hamming_distance(prev_hash, curr_hash) > 6):
+        if (hamming_distance(prev_hash, curr_hash) > distance_threshold):
             count += 1
-            print([cap.get(cv.CAP_PROP_POS_FRAMES), count])
+            prev_frame_Id = frame_Id
+            frame_Id = cap.get(cv.CAP_PROP_POS_FRAMES)
+
+            print([frame_Id, count])
             prev_hash = curr_hash
 
             cv.imshow('frame', frame)
             if cv.waitKey(50) == ord('q'):
                 break
 
+            frame_diff = frame_Id - prev_frame_Id
+            if frame_diff > max_gap:
+                max_gap = frame_diff
+            elif frame_diff < min_gap:
+                min_gap = frame_diff
+
         else:
             frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
     else:
         prev_hash = curr_hash
+
         frame_Id = cap.get(cv.CAP_PROP_POS_FRAMES)
         print(frame_Id)
+
+print(max_gap, min_gap)
 
 cap.release()
 cv.destroyAllWindows()
