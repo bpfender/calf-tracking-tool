@@ -1,25 +1,45 @@
-import Immutable, { getIn } from "immutable";
+// TODO frame serach could probably be reimplemented as BSTs
+import Immutable from "immutable";
 import BoundingBox from '../canvas/BoundingBox';
+
+function* colourGenerator() {
+    // FIXME this is duplicated for colour palette
+    const colours = [
+        "#48AFF0", "#3DCC91", "#FFB366",
+        "#FF7373", "#FF6E4A", "#FF66A1",
+        "#C274C2", "#AD99FF", "#669EFF",
+        "#2EE6D6", "#62D96B", "#FFC940"]
+
+    let i = 0;
+
+    while (true) {
+        yield colours[i]
+        i = (i + 1) % colours.length;
+    }
+}
+
+const gen = colourGenerator();
 
 export const annotationFactory = (totalFrames) => {
     return {
         tracks: Immutable.Map(),
         totalFrames: totalFrames,
+        reviewedFrames: Immutable.List(),
         selected: null,
     };
 }
 
-export function annotationTrackFactory(totalFrames, colour = "#48AFF0") {
+export function annotationTrackFactory(totalFrames) {
     return {
         name: null,
-        colour: colour,
+        colour: gen.next().value,
         visible: true,
-        labelledFrames: Immutable.List(),
+        labelledFrames: Immutable.List(), //FIXME interpolation shouldn't override prediction
+        predictedFrames: Immutable.List(), //FIXME not handled at all currently
         frames: Immutable.List(Array(totalFrames).fill(frameLabelFactory())),
     };
 }
 
-// FIXME labelled probably not required
 function frameLabelFactory() {
     return {
         x: 400,
@@ -27,7 +47,6 @@ function frameLabelFactory() {
         w: 50,
         h: 50,
         rotation: 45,
-        labelled: false,
     };
 }
 
@@ -42,6 +61,10 @@ export const setTotalFrames = (annotations, totalFrames) => {
 
 export const setSelected = (annotations, key) => {
     return Immutable.setIn(annotations, ['selected'], key);
+}
+
+export const setReviewed = (annotations, bool) => {
+    return Immutable.setIn(annotations, ['reviewedFrames'], bool);
 }
 
 export const addTrack = (annotations, key) => {
@@ -257,4 +280,25 @@ const interpolateLabels = (track, startIndex, endIndex) => {
         });
 }
 
+export const generateJSON = (annotations) => {
+    const output = {
+        tracks: annotations.tracks.toJS(),
+        totalFrames: annotations.totalFrames,
+        reviewedFrames: annotations.reviewedFrames.toJS(),
+        selected: annotations.selected
+    };
+
+    return output;
+}
+
+
+export const readJSON = (annotations) => {
+    const output = {
+        tracks: Immutable.fromJS(annotations.tracks),
+        totalFrames: annotations.totalFrames,
+        reviewedFrames: Immutable.fromJS(annotations.reviewedFrames),
+        selected: annotations.selected,
+    }
+
+}
 

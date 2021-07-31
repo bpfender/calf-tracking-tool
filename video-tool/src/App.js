@@ -32,7 +32,7 @@ export default function App(props) {
   }, [playerState.totalFrames]);
 
 
-  storeAnnotationData(annotations);
+  storeAnnotationData(annotations); //FIXME this is slowing things down massively at the moment
 
 
   return (
@@ -40,7 +40,8 @@ export default function App(props) {
       <header className="App-header">
         <SourceSelector
           fps={playerState.framerate}
-          playerDispatch={playerDispatch}>
+          playerDispatch={playerDispatch}
+          annotations={annotations}>
         </SourceSelector>
       </header>
       <LeftSidebar

@@ -2,6 +2,7 @@ import { addTrack, deleteTrack, editTrack, getTrack, setLabel, setSelected, setT
 
 export function annotationReducer(state, action) {
     const payload = action.payload;
+    console.log(state);
     switch (action.type) {
         case 'ADD_TRACK': {
             const { key } = payload;
