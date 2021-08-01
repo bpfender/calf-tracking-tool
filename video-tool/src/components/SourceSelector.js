@@ -1,7 +1,9 @@
 import { Button, FileInput } from '@blueprintjs/core';
+import Immutable from 'immutable';
 import React, { useState } from 'react';
-import { generateJSON } from './annotations/Annotations';
-import { getLastVideoFile, storeCurrentVideoFile } from './storage/idb';
+import { generateJSON, readJSON } from './annotations/Annotations';
+import { exportYOLOv5 } from './storage/export-annotations';
+import { getAnnotationData, getLastVideoFile, storeAnnotationData, storeCurrentVideoFile } from './storage/local-storage';
 
 
 //FIXME "accept" for input form, reset form
@@ -29,8 +31,23 @@ export default function SourceSelector(props) {
     return (
         <div>
             <Button
-                onClick={() => { console.log(generateJSON(annotations)) }}>
+                onClick={() => { exportYOLOv5(annotations) }}
+            >ANNOTATION</Button>
+            <Button
+                onClick={() => {
+                    storeAnnotationData(generateJSON(annotations));
+                    //console.log(JSON.stringify(generateJSON(annotations)));
+                }}>
                 Export
+            </Button>
+            <Button
+                onClick={() => {
+                    getAnnotationData().then(async (val) => {
+                        console.log(readJSON(val));
+                        console.log(readJSON(val).hashCode() === annotations);
+                    })
+                }}>
+                Import
             </Button>
             <Button
                 onClick={filePicker}

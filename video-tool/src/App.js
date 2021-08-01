@@ -7,7 +7,7 @@ import Player from './components/Player';
 import RightSidebar from './components/right-sidebar/RightSidebar';
 import LeftSidebar from './components/left-sidebar/LeftSidebar';
 import SourceSelector from './components/SourceSelector';
-import { storeAnnotationData } from './components/storage/idb';
+import { storeAnnotationData } from './components/storage/local-storage';
 
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
@@ -30,10 +30,6 @@ export default function App(props) {
       payload: { totalFrames: playerState.totalFrames }
     });
   }, [playerState.totalFrames]);
-
-
-  storeAnnotationData(annotations); //FIXME this is slowing things down massively at the moment
-
 
   return (
     <div className="App bp3-dark">

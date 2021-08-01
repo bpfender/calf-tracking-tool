@@ -287,18 +287,25 @@ export const generateJSON = (annotations) => {
         reviewedFrames: annotations.reviewedFrames.toJS(),
         selected: annotations.selected
     };
-
+    console.log(output);
     return output;
 }
 
 
 export const readJSON = (annotations) => {
     const output = {
-        tracks: Immutable.fromJS(annotations.tracks),
+        tracks: Immutable.fromJS(annotations.tracks, reviver),
         totalFrames: annotations.totalFrames,
         reviewedFrames: Immutable.fromJS(annotations.reviewedFrames),
         selected: annotations.selected,
     }
 
+    return output;
 }
 
+function reviver(key, value, path) {
+    if (key === "") {
+        return value.toMap();
+    }
+    return Immutable.isKeyed(value) ? value.toObject() : value.toList()
+}
