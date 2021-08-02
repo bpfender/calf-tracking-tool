@@ -1,3 +1,4 @@
+import { getLabel } from "../annotations/TrackFactory";
 
 
 export function exportVATVideo(annotations) {
@@ -11,10 +12,10 @@ export function exportYOLOv5(annotations) {
     const fileArray = [];
     const annotationClass = "0";
 
-    for (let i = 0; i < size; i++) {
+    for (let frame = 1; frame <= size; frame++) {
         let s = "";
-        for (const elem of annotations.tracks.values()) {
-            const label = elem.frames.get(i);
+        for (const track of annotations.tracks.values()) {
+            const label = getLabel(track, frame);
             const rotation = label.rotation;
             const x = label.x;
             const y = label.y;

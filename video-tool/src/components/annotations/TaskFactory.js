@@ -76,7 +76,7 @@ export const generateJSON = (task) => {
     const output = {
         tracks: task.tracks.toJS(),
         totalFrames: task.totalFrames,
-        reviewedFrames: task.reviewedFrames.toJS(),
+        reviewed: task.reviewed.toJS(),
         selected: task.selected
     };
     console.log(output);
@@ -88,7 +88,7 @@ export const readJSON = (task) => {
     const output = {
         tracks: fromJS(task.tracks, reviver),
         totalFrames: task.totalFrames,
-        reviewedFrames: fromJS(task.reviewedFrames),
+        reviewed: fromJS(task.reviewed),
         selected: task.selected,
     }
 
