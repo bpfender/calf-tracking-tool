@@ -42,7 +42,7 @@ export default function VideoSlider(props) {
                 min={0}
                 max={playerState.duration}
                 stepSize={.01}
-            ></Slider>
+            />
             <Tag
                 className="time-display"
                 icon="time"

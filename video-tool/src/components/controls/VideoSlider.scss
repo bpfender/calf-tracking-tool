@@ -1,13 +1,16 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 
 .video-slider{
-    margin-left: 0.5em;
+    margin-left: $pt-grid-size;
     display: flex;
     align-items: center;
-    flex-grow:1;
+    flex:3;
+}
+
+.slider{
+    flex:1;
 }
 
 .time-display{
-    margin-left: 1em;
-    flex-shrink: 0;
+    margin-left: $pt-grid-size;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ButtonGroup } from '@blueprintjs/core';
+import { ButtonGroup, Divider } from '@blueprintjs/core';
 import "./ControlBar.scss";
 
 import PlayPause from './PlayPause';
@@ -13,26 +13,23 @@ function ControlBar(props) {
 
     // FIXME worth rewriting so playerState doesn't have to be passed at all?
     return (
-        <div>
-            <div className="slider-bar">
-                <VideoSlider
-                    video={video}
-                    playerState={playerState}
-                ></VideoSlider>
-                <FrameSelector video={video} playerState={playerState}></FrameSelector>
-            </div >
-
-            <ButtonGroup className="button-bar">
-                <PrevNFrames video={video} playerState={playerState}></PrevNFrames>
-                <PrevFrame video={video}></PrevFrame>
-                <PlayPause video={video} playerState={playerState}></PlayPause>
-                <NextFrame video={video}></NextFrame>
-                <NextNFrames video={video} playerState={playerState}></NextNFrames>
+        <div className="control-bar">
+            <ButtonGroup minimal={true}>
+                <PlaybackSettings video={video}></PlaybackSettings>
+                <Divider />
+                <PrevNFrames video={video} playerState={playerState} />
+                <PrevFrame video={video} />
+                <PlayPause video={video} playerState={playerState} />
+                <NextFrame video={video} />
+                <NextNFrames video={video} playerState={playerState} />
             </ButtonGroup>
-
-            <PlaybackSettings video={video}></PlaybackSettings>
+            <VideoSlider
+                video={video}
+                playerState={playerState} />
+            <FrameSelector
+                video={video}
+                playerState={playerState} />
         </div >
-
     );
 
 }
