@@ -5,11 +5,11 @@ import "./FrameSelector.scss";
 // FIXME useref() for timeout
 export default function FrameSelector(props) {
     const { video, playerState } = props;
-    const [currentFrame, setCurrentFrame] = useState(1);
+    const [inputFrame, setInputFrame] = useState(1);
     const [intent, setIntent] = useState("none");
 
     useEffect(() => {
-        setCurrentFrame(playerState.currentFrame);
+        setInputFrame(playerState.currentFrame);
         setIntent("none");
     }, [playerState.currentFrame]);
 
@@ -21,11 +21,24 @@ export default function FrameSelector(props) {
         }
     }, [playerState.seeking])
 
+    useEffect(() => {
+        video.setCurrentFrame(inputFrame);
+    }, [inputFrame, video])
+
     // FIXME not sure this timeout is working properly
-    // FIXME limit numerical input and validate input
+
     // TODO needs to be updated based on slider value
     const handleChange = (event) => {
-        setTimeout(video.setCurrentFrame, 1000, parseInt(event.target.value));
+        if (event.target.value === "") {
+            setInputFrame(1);
+        } else {
+            const value = parseInt(event.target.value);
+            if (value > playerState.totalFrames) {
+                setInputFrame(playerState.totalFrames);
+            } else {
+                setInputFrame(value);
+            }
+        }
     }
 
     // TODO possible to select all on click?
@@ -34,15 +47,15 @@ export default function FrameSelector(props) {
         <div className="frame-selector">
             <InputGroup
                 className="frame-input"
+                onClick={event => { event.target.select() }}
                 onChange={handleChange}
                 type="number"
                 leftIcon="duplicate"
-                value={currentFrame}
+                value={inputFrame}
                 placeholder={playerState.totalFrames}
                 min={1}
                 max={playerState.totalFrames}
                 step={1}
-                asyncControl={true}
                 intent={intent}
                 small={true}
             ></InputGroup>
