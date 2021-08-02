@@ -46,7 +46,7 @@
 .footer{
   grid-area:footer;
   background-color: $dark-gray1;
-  height:50px;
+  height:$pt-grid-size*2;
 }
 
 
