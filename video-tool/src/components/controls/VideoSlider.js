@@ -3,13 +3,8 @@ import { Tag, Slider, Icon } from '@blueprintjs/core';
 import "./VideoSlider.scss";
 
 export default function VideoSlider(props) {
-    const { video, playerState } = props;
-    const [sliderTime, setSliderTime] = useState();
-
-    // Update slider time when playerState.mediaTime changes
-    useEffect(() => {
-        setSliderTime(playerState.mediaTime);
-    }, [playerState.mediaTime])
+    const { video, playerState, sliderTime, setSelectedFrame } = props;
+    const [slider2Time, setSliderTime] = useState();
 
     const formatTime = (seconds) => {
         const date = new Date(seconds * 1000);
@@ -24,7 +19,7 @@ export default function VideoSlider(props) {
     }
 
     const handleChange = (time) => {
-        setSliderTime(time);
+        setSelectedFrame(video.getTimeAsFrames(time));
     }
 
     const handleRelease = (time) => {

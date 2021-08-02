@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ButtonGroup, Divider } from '@blueprintjs/core';
 import "./ControlBar.scss";
 
@@ -10,7 +10,11 @@ import PlaybackSettings from './PlaybackSettings';
 
 function ControlBar(props) {
     const { video, playerState } = props;
-    const [selectedFrame, setSelectedFrame] = useState();
+    const [selectedFrame, setSelectedFrame] = useState(1);
+
+    useEffect(() => {
+        setSelectedFrame(playerState.currentFrame);
+    }, [playerState.currentFrame]);
 
     // FIXME worth rewriting so playerState doesn't have to be passed at all?
     return (
@@ -26,10 +30,14 @@ function ControlBar(props) {
             </ButtonGroup>
             <VideoSlider
                 video={video}
-                playerState={playerState} />
+                playerState={playerState}
+                sliderTime={video ? video.getFramesAsTime(selectedFrame) : 0}
+                setSelectedFrame={setSelectedFrame} />
             <FrameSelector
                 video={video}
-                playerState={playerState} />
+                playerState={playerState}
+                selectedFrame={selectedFrame}
+                setSelectedFrame={setSelectedFrame} />
         </div >
     );
 

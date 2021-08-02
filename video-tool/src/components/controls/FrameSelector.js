@@ -4,15 +4,9 @@ import "./FrameSelector.scss";
 
 // FIXME useref() for timeout
 export default function FrameSelector(props) {
-    const { video, playerState } = props;
-
-    const [inputFrame, setInputFrame] = useState(1);
+    const { video, playerState, selectedFrame, setSelectedFrame } = props;
     const [intent, setIntent] = useState("none");
     const timeoutRef = useRef(null);
-
-    useEffect(() => {
-        setInputFrame(playerState.currentFrame);
-    }, [playerState.currentFrame]);
 
     useEffect(() => {
         if (playerState.seeking) {
@@ -22,29 +16,26 @@ export default function FrameSelector(props) {
         }
     }, [playerState.seeking])
 
-    // FIXME not sure this timeout is working properly
-
     // TODO needs to be updated based on slider value
     const handleChange = (event) => {
         clearTimeout(timeoutRef.current);
 
         let frame = null;
         if (event.target.value === "") {
-            setInputFrame(1);
+            setSelectedFrame(1);
             frame = 1;
         } else {
             const value = parseInt(event.target.value);
             if (value > playerState.totalFrames) {
-                setInputFrame(playerState.totalFrames);
+                setSelectedFrame(playerState.totalFrames);
                 frame = playerState.totalFrames;
             } else {
-                setInputFrame(value);
+                setSelectedFrame(value);
                 frame = value;
             }
         }
         const timeout = setTimeout(video.setCurrentFrame, 700, frame);
         timeoutRef.current = timeout;
-
     }
 
     // TODO possible to select all on click?
@@ -57,7 +48,7 @@ export default function FrameSelector(props) {
                 onChange={handleChange}
                 type="number"
                 leftIcon="duplicate"
-                value={inputFrame}
+                value={selectedFrame}
                 min={1}
                 max={playerState.totalFrames}
                 step={1}
