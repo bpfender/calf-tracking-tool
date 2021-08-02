@@ -29,7 +29,7 @@ export default function RightSidebar(props) {
 
     // FIXME not sure about getTrack calls way to optimise?
     return (
-        <div className="right-sidebar">
+        <div className={props.className}>
             <div className="right-panel">
                 <H5>Sidebar Right</H5>
                 <Button icon="add"

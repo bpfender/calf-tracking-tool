@@ -6,7 +6,7 @@ import { annotationReducer } from './components/state/annotation-state';
 import Player from './components/Player';
 import RightSidebar from './components/right-sidebar/RightSidebar';
 import LeftSidebar from './components/left-sidebar/LeftSidebar';
-import SourceSelector from './components/SourceSelector';
+import { Header } from './components/header/Header';
 
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
@@ -20,8 +20,6 @@ export default function App(props) {
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
   const [annotations, annotationDispatch] = useReducer(annotationReducer, TaskFactory(null));
 
-
-
   // FIXME how to make sure annotations are persistent
   useEffect(() => {
     annotationDispatch({
@@ -32,13 +30,12 @@ export default function App(props) {
 
   return (
     <div className="App bp3-dark">
-      <header className="App-header">
-        <SourceSelector
-          fps={playerState.framerate}
-          playerDispatch={playerDispatch}
-          annotations={annotations}>
-        </SourceSelector>
-      </header>
+      <Header
+        className="App-header"
+        fps={playerState.framerate}
+        playerDispatch={playerDispatch}
+        annotations={annotations}>
+      </Header>
       <LeftSidebar
         className="left-sidebar">
       </LeftSidebar>
