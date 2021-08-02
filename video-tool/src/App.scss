@@ -24,9 +24,9 @@
   background-color: $dark-gray1;
   text-align: center;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
 .main-content{
@@ -47,7 +47,6 @@
   grid-area:footer;
   background-color: $dark-gray1;
   height:50px;
-
 }
 
 

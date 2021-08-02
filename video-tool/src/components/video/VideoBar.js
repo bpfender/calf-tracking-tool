@@ -14,8 +14,8 @@ export function VideoBar(props) {
     }
 
     return (
-        <div className="video-bar">
-            <p>Video name</p>
+        <div className="video-bar bp3-text-small">
+            <p>VIDEO NAME</p>
             <div className="video-bar-key-info">
                 {spinner(!videoWidth || !videoHeight)}
             </div>
