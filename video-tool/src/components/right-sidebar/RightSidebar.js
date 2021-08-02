@@ -3,7 +3,7 @@ import { H5, Button } from '@blueprintjs/core';
 import { v4 as uuidv4 } from 'uuid';
 import "./RightSidebar.scss"
 import IdPanel from './IdPanel';
-import { getTrack } from '../annotations/Annotations';
+import { getTrack } from '../annotations/TaskFactory';
 
 export default function RightSidebar(props) {
     const [idsList, setIdsList] = useState([]);

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { getBoundingBoxes } from './annotations/Annotations';
+import { getBoundingBoxes } from './annotations/TaskFactory';
 import Scene from './canvas/Scene';
 
 // FIXME canvas resizing and scaling
@@ -13,6 +13,7 @@ function Annotation(props) {
     }, [canvasRef, annotationDispatch]);
 
     useEffect(() => {
+        console.log(annotations)
         const BBoxes = getBoundingBoxes(annotations, currentFrame);
         sceneRef.current.updateBoundingBoxes(BBoxes);
     }, [currentFrame, annotations]);
