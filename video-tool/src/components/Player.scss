@@ -1,7 +1,32 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
 /* TODO not clear how to set this height properly */
+.video-content{
+    background-color:gray;
+    padding:0;
+    margin: 1em;
+}
+
+.video-bar{
+    background-color: darkgray;
+    padding: 0 $pt-grid-size;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.video-bar p{
+    margin: 0;
+}
+
+
+.video-container{
+    padding: 1em;
+}
+
 .video-window-container{
+    width:100%;
     position:relative;
-    margin:1em;
 }
 
 .video-window{
@@ -11,7 +36,7 @@
     transform: translate(-50%,-50%);
 }
 
-.annotation-canvas{
+.annotation-overlay{
     z-index:10;
 }
 
