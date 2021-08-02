@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ButtonGroup, Divider } from '@blueprintjs/core';
 import "./ControlBar.scss";
 
@@ -10,6 +10,7 @@ import PlaybackSettings from './PlaybackSettings';
 
 function ControlBar(props) {
     const { video, playerState } = props;
+    const [selectedFrame, setSelectedFrame] = useState();
 
     // FIXME worth rewriting so playerState doesn't have to be passed at all?
     return (

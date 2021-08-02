@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { InputGroup } from "@blueprintjs/core";
 import "./FrameSelector.scss";
 
 // FIXME useref() for timeout
 export default function FrameSelector(props) {
     const { video, playerState } = props;
+
     const [inputFrame, setInputFrame] = useState(1);
     const [intent, setIntent] = useState("none");
+    const timeoutRef = useRef(null);
 
     useEffect(() => {
         setInputFrame(playerState.currentFrame);
-        setIntent("none");
     }, [playerState.currentFrame]);
 
     useEffect(() => {
@@ -21,24 +22,29 @@ export default function FrameSelector(props) {
         }
     }, [playerState.seeking])
 
-    useEffect(() => {
-        video.setCurrentFrame(inputFrame);
-    }, [inputFrame, video])
-
     // FIXME not sure this timeout is working properly
 
     // TODO needs to be updated based on slider value
     const handleChange = (event) => {
+        clearTimeout(timeoutRef.current);
+
+        let frame = null;
         if (event.target.value === "") {
             setInputFrame(1);
+            frame = 1;
         } else {
             const value = parseInt(event.target.value);
             if (value > playerState.totalFrames) {
                 setInputFrame(playerState.totalFrames);
+                frame = playerState.totalFrames;
             } else {
                 setInputFrame(value);
+                frame = value;
             }
         }
+        const timeout = setTimeout(video.setCurrentFrame, 700, frame);
+        timeoutRef.current = timeout;
+
     }
 
     // TODO possible to select all on click?
@@ -52,11 +58,11 @@ export default function FrameSelector(props) {
                 type="number"
                 leftIcon="duplicate"
                 value={inputFrame}
-                placeholder={playerState.totalFrames}
                 min={1}
                 max={playerState.totalFrames}
                 step={1}
                 intent={intent}
+                async={true}
                 small={true}
             ></InputGroup>
             <span className="frame-count">/ {playerState.totalFrames}</span>
