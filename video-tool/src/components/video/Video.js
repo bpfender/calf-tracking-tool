@@ -141,8 +141,7 @@ class Video extends React.Component {
         // FIXME empirical value of 0.1us for vsync value
         // https://web.dev/requestvideoframecallback-rvfc/
         if (this.props.vsync < 0.1) {
-            console.log("VSYNC correction");
-            this.setCurrentTime(this.props.mediaTime);
+            this.setCurrentTime(this.getMediaTime());
         }
     }
 
@@ -197,6 +196,8 @@ class Video extends React.Component {
         return this.videoFrameCallbackMetadata.mediaTime;
     }
 
+    // Frame time is defined as halfway through frame, to allow next/prev navigation. Media time
+    // appear to be beginning of frame
     getFrameTime() {
         return this.getMediaTime() + FRAME_DELTA / 2;
     }
@@ -206,21 +207,19 @@ class Video extends React.Component {
     }
 
     getCurrentFrame() {
-        //FIXME potentially shouldn't be round(). considering FRAME_DELTA!
-        return (Math.ceil(this.getMediaTime() * FPS + 1)); // adding starting frame offset
+        return (Math.round(this.getMediaTime() * FPS + 1)); // adding starting frame offset
     }
 
     setCurrentFrame(n) {
-        this.setCurrentTime(this.getFramesAsTime(n) - FRAME_DELTA / 2); //TODO why am i minusing here?
+        this.setCurrentTime(this.getFramesAsTime(n) - FRAME_DELTA / 2);
     }
 
     getFramesAsTime(n) {
         return (n) * FRAME_DELTA;
     }
 
-    // FIXME naughty subtraction. Not 100% sure why
     getTimeAsFrames(t) {
-        return Math.floor(t * FPS - 1);
+        return Math.floor(t * FPS + 1);
     }
 
     /* ---- VIDEO EVENTS ---- */
