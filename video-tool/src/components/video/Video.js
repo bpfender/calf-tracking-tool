@@ -6,7 +6,7 @@ import video_src from '../../resources/Amfeed 2 3 16-1 23976fps timecode.mp4';
 let FPS = 23.976;
 let FRAME_DELTA = 1 / FPS;
 
-// FIXME offset for frame count
+// FIXME video slider time select sometimes off by frame (is this just incorrect seeking)?
 // TODO needs to be rewritten functionally really
 class Video extends React.Component {
     constructor(props) {
@@ -219,6 +219,7 @@ class Video extends React.Component {
     }
 
     getTimeAsFrames(t) {
+        console.log(t);
         return Math.floor(t * FPS + 1);
     }
 

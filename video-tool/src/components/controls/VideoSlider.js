@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Tag, Slider, Icon } from '@blueprintjs/core';
+import React from 'react';
+import { Tag, Slider } from '@blueprintjs/core';
 import "./VideoSlider.scss";
 
 export default function VideoSlider(props) {
-    const { video, playerState, sliderTime, setSelectedFrame } = props;
-    const [slider2Time, setSliderTime] = useState();
+    const { video, playerState, sliderTime, setSelectedFrame, selectedFrame } = props;
 
     const formatTime = (seconds) => {
         const date = new Date(seconds * 1000);
@@ -23,7 +22,7 @@ export default function VideoSlider(props) {
     }
 
     const handleRelease = (time) => {
-        video.setCurrentTime(time);
+        video.setCurrentFrame(selectedFrame);
     }
 
     return (

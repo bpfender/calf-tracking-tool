@@ -1,5 +1,6 @@
 export const defaultPlayerState = {
     // requestVideoFrameCallback() metadata
+    vsync: 0,
     presentationTime: 0,
     expectedDisplayTime: 0,
     mediaTime: 0,
@@ -39,6 +40,7 @@ export function playerReducer(state = defaultPlayerState, action) {
         case 'FRAME_CALLBACK':
             return {
                 ...state,
+                vsync: payload.vsync,
                 currentFrame: payload.currentFrame,
                 presentationTime: payload.presentationTime,
                 expectedDisplayTime: payload.expectedDisplayTime,

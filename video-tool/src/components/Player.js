@@ -35,8 +35,7 @@ function Player(props) {
                             playerDispatch={playerDispatch}
                             src={playerState.src}
                             fps={playerState.framerate}
-                            vsync={playerState.vsync}
-                            mediaTime={playerState.mediaTime} />
+                            vsync={playerState.vsync} />
                         <Annotation
                             className="video-window annotation-overlay"
                             currentFrame={playerState.currentFrame}

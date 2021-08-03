@@ -1,6 +1,19 @@
 import React from 'react';
 import { Button } from '@blueprintjs/core';
 
+export function Rewind(props) {
+    const { video } = props;
+    const handleClick = () => { video.rewind() }
+
+    return (
+        <Button
+            icon="undo"
+            onClick={handleClick}
+        />
+    )
+}
+
+
 export function NextFrame(props) {
     const { video } = props;
     const handleClick = () => { video.nextFrame() };

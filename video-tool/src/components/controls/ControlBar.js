@@ -16,7 +16,7 @@ export default function ControlBar(props) {
         setSelectedFrame(playerState.currentFrame);
     }, [playerState.currentFrame]);
 
-    //FIXME video? syntax is shite
+    //FIXME video? syntax is shite slider time not directly needed for slider
     return (
         <div className="control-bar">
             <ButtonGroup minimal={true}>
@@ -33,7 +33,8 @@ export default function ControlBar(props) {
                 video={video}
                 playerState={playerState}
                 sliderTime={video ? video.getFramesAsTime(selectedFrame) : 0}
-                setSelectedFrame={setSelectedFrame} />
+                setSelectedFrame={setSelectedFrame}
+                selectedFrame={selectedFrame} />
             <FrameSelector
                 video={video}
                 playerState={playerState}

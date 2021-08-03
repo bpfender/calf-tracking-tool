@@ -12,7 +12,10 @@ function Info(props) {
         <div>
             {seek}
             <p>Frames to skip: {videoState.framesToSkip}  |  Rate: {videoState.playbackRate}x</p>
-            <p>Media time: {videoState.mediaTime}  |  Frame: {videoState.currentFrame}</p>
+            <p>Media time: {videoState.mediaTime}  | Frame: {videoState.currentFrame}</p>
+            <p>Presentation: {videoState.presentationTime} | expected: {videoState.expectedDisplayTime}</p>
+            <p>processing: {videoState.processingDuration} | diff: {videoState.expectedDisplayTime - videoState.presentationTime}</p>
+            <p>vsync: {videoState.vsync}</p>
         </div>
     )
 }
