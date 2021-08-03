@@ -7,6 +7,7 @@ import Player from './components/Player';
 import RightSidebar from './components/right-sidebar/RightSidebar';
 import LeftSidebar from './components/left-sidebar/LeftSidebar';
 import { Header } from './components/header/Header';
+import { UnloadWarning } from './components/utils/UnloadWarning';
 
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
@@ -30,6 +31,7 @@ export default function App(props) {
 
   return (
     <div className="App bp3-dark">
+      <UnloadWarning />
       <Header
         className="App-header"
         fps={playerState.framerate}

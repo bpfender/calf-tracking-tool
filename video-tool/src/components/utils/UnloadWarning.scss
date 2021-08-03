@@ -1,0 +1,25 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.warning-overlay{
+    display: flex;
+    justify-content: flex-start;
+    width:400px ;
+    position: absolute;
+    top: 20vh;
+    left:50%;
+    transform: translate(-50%);
+}
+
+.warning-buttons{
+    display: flex;
+    justify-content: space-between;
+}
+
+.warning-overlay-content{  
+    flex: 1;
+    margin-left: $pt-grid-size;
+}
+
+.warning-button-space{
+    margin-right: $pt-grid-size;
+}
