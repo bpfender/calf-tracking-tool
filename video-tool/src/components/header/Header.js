@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Icon } from '@blueprintjs/core';
+import { Button, ButtonGroup, Divider, Icon } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import SourceSelector from '../SourceSelector';
 
@@ -27,11 +27,22 @@ export function Header(props) {
                 <Button
                     icon="floppy-disk"
                     onClick={handleSave} />
+                <Divider />
+                <Button
+                    icon="import" />
                 <Button
                     icon="export" />
             </ButtonGroup>
-            <title>PROJECT NAME</title>
-            <Icon icon="help"></Icon>
+            <text>PROJECT NAME</text>
+            <ButtonGroup
+                minimal={true}>
+                <Button
+                    icon="undo" />
+                <Button
+                    icon="redo" />
+                <Divider />
+                <Button icon="help" />
+            </ButtonGroup>
 
             <SourceSelector
                 fps={framerate}
