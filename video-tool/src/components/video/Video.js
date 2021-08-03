@@ -36,6 +36,7 @@ class Video extends React.Component {
 
         // Video utils
         this.getMediaTime = this.getMediaTime.bind(this);
+        this.getFrameTime = this.getFrameTime.bind(this);
         this.setCurrentTime = this.setCurrentTime.bind(this);
         this.getCurrentFrame = this.getCurrentFrame.bind(this);
         this.setCurrentFrame = this.setCurrentFrame.bind(this);
@@ -113,10 +114,10 @@ class Video extends React.Component {
     // FIXME metadata passing more data than needed at the moment
     handleVideoFrameCallback(now, metadata) {
         this.videoFrameCallbackMetadata = metadata;
-
         this.props.playerDispatch({
             type: 'FRAME_CALLBACK',
             payload: {
+                vsync: metadata.expectedDisplayTime - now,
                 ...metadata,
                 currentFrame: this.getCurrentFrame()
             }
@@ -137,6 +138,12 @@ class Video extends React.Component {
 
     pause() {
         this.video.pause();
+        // FIXME empirical value of 0.1us for vsync value
+        // https://web.dev/requestvideoframecallback-rvfc/
+        if (this.props.vsync < 0.1) {
+            console.log("VSYNC correction");
+            this.setCurrentTime(this.props.mediaTime);
+        }
     }
 
     load() {
@@ -144,13 +151,15 @@ class Video extends React.Component {
     }
 
     nextFrame(n = 1) {
-        this.setCurrentTime(this.getMediaTime() + FRAME_DELTA / 2 + this.getFramesAsTime(n));
+        this.setCurrentTime(this.getFrameTime() + this.getFramesAsTime(n));
     }
 
     prevFrame(n = 1) {
-        this.setCurrentTime(this.getMediaTime() + FRAME_DELTA / 2 - this.getFramesAsTime(n));
+        this.setCurrentTime(this.getFrameTime() - this.getFramesAsTime(n));
     }
 
+
+    //FIXME redundant functions
     seekTime(time) {
         this.setCurrentTime(time);
     }
@@ -188,13 +197,17 @@ class Video extends React.Component {
         return this.videoFrameCallbackMetadata.mediaTime;
     }
 
+    getFrameTime() {
+        return this.getMediaTime() + FRAME_DELTA / 2;
+    }
+
     setCurrentTime(time) {
         this.video.currentTime = time;
     }
 
     getCurrentFrame() {
         //FIXME potentially shouldn't be round(). considering FRAME_DELTA!
-        return (Math.round(this.getMediaTime() * FPS + 1)); // adding starting frame offset
+        return (Math.ceil(this.getMediaTime() * FPS + 1)); // adding starting frame offset
     }
 
     setCurrentFrame(n) {

@@ -3,12 +3,12 @@ import { ButtonGroup, Divider } from '@blueprintjs/core';
 import "./ControlBar.scss";
 
 import PlayPause from './PlayPause';
-import { NextFrame, PrevFrame, NextNFrames, PrevNFrames } from './FrameNav';
+import { NextFrame, PrevFrame, NextNFrames, PrevNFrames, Rewind } from './FrameNav';
 import VideoSlider from './VideoSlider';
 import FrameSelector from './FrameSelector';
 import PlaybackSettings from './PlaybackSettings';
 
-function ControlBar(props) {
+export default function ControlBar(props) {
     const { video, playerState } = props;
     const [selectedFrame, setSelectedFrame] = useState(1);
 
@@ -16,12 +16,13 @@ function ControlBar(props) {
         setSelectedFrame(playerState.currentFrame);
     }, [playerState.currentFrame]);
 
-    // FIXME worth rewriting so playerState doesn't have to be passed at all?
+    //FIXME video? syntax is shite
     return (
         <div className="control-bar">
             <ButtonGroup minimal={true}>
                 <PlaybackSettings video={video}></PlaybackSettings>
                 <Divider />
+                <Rewind video={video} />
                 <PrevNFrames video={video} playerState={playerState} />
                 <PrevFrame video={video} />
                 <PlayPause video={video} playerState={playerState} />
@@ -42,5 +43,3 @@ function ControlBar(props) {
     );
 
 }
-
-export default ControlBar;
