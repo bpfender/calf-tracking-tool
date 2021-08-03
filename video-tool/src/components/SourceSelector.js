@@ -43,7 +43,6 @@ export default function SourceSelector(props) {
                 onClick={() => {
                     getAnnotationData().then(async (val) => {
                         console.log(readJSON(val));
-
                     })
                 }}>
                 Import

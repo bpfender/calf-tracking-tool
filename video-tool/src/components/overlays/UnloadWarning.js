@@ -1,6 +1,6 @@
 import { Button, Card, Classes, Icon, Overlay } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
-import "./UnloadWarning.scss";
+import "./Overlay.scss";
 
 // TODO check beforeunload lifecycle https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event
 // TODO only activate listener if unsaved   

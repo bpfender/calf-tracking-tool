@@ -88,14 +88,14 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
     console.log(frameDelta);
 
     for (let i = startFrame; i < endFrame - 1; i++) {
-        console.log(i);
+
         const label = Object.fromEntries(keys.map(key => {
 
             const val = ([
                 key,
                 Math.round(startLabel[key] + frameDelta[key] * (i - (startFrame - 1)))
             ]);
-            console.log(val);
+
             return val;
         }))
 

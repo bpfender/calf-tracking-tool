@@ -8,7 +8,7 @@ export function TaskFactory(totalFrames) {
         totalFrames: totalFrames,
         selected: null,
         tracks: Map(),
-        reviewed: List(Array(totalFrames).fill(false)),
+        reviewed: List(Array(totalFrames).fill(0)),
         keyFrames: List(),
     };
 }

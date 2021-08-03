@@ -7,7 +7,7 @@ import Player from './components/Player';
 import RightSidebar from './components/right-sidebar/RightSidebar';
 import LeftSidebar from './components/left-sidebar/LeftSidebar';
 import { Header } from './components/header/Header';
-
+import { UnloadWarning } from "./components/overlays/UnloadWarning"
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
 // QUESTION do i need to pass down whole state?

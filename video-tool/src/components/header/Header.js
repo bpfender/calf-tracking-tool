@@ -1,14 +1,22 @@
 import { Button, ButtonGroup, Divider, Icon } from '@blueprintjs/core';
 import React, { useState } from 'react';
+import { Project } from '../annotations/Project';
 import SourceSelector from '../SourceSelector';
+import { getNewFileHandle } from '../storage/file-access';
+import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
 
 export function Header(props) {
     const { framerate, playerDispatch, annotations } = props;
-    const [openFile, setOpenFile] = useState("folder-close");
+    const [openIcon, setOpenIcon] = useState("folder-close");
 
-    const handleNewProject = () => { };
-    const handleSave = () => { };
-    const handleOpen = () => { };
+    const handleNewProject = async () => {
+
+        const project = new Project();
+        const handle = await getNewFileHandle().then();
+    };
+
+    const handleSaveProject = () => { };
+    const handleOpenProject = () => { };
 
 
 
@@ -20,13 +28,13 @@ export function Header(props) {
                     icon="document"
                     onClick={handleNewProject} />
                 <Button
-                    icon={openFile}
-                    onClick={handleOpen}
-                    onMouseEnter={() => { setOpenFile("folder-open") }}
-                    onMouseLeave={() => { setOpenFile("folder-close") }} />
+                    icon={openIcon}
+                    onClick={handleOpenProject}
+                    onMouseEnter={() => { setOpenIcon("folder-open") }}
+                    onMouseLeave={() => { setOpenIcon("folder-close") }} />
                 <Button
                     icon="floppy-disk"
-                    onClick={handleSave} />
+                    onClick={handleSaveProject} />
                 <Divider />
                 <Button
                     icon="import" />
@@ -43,6 +51,10 @@ export function Header(props) {
                 <Divider />
                 <Button icon="help" />
             </ButtonGroup>
+
+            <NewProjectOverlay />
+
+
 
             <SourceSelector
                 fps={framerate}

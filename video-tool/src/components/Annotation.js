@@ -13,7 +13,7 @@ function Annotation(props) {
     }, [canvasRef, annotationDispatch]);
 
     useEffect(() => {
-        console.log(annotations)
+        console.log(annotations);
         const BBoxes = getBoundingBoxes(annotations, currentFrame);
         sceneRef.current.updateBoundingBoxes(BBoxes);
     }, [currentFrame, annotations]);

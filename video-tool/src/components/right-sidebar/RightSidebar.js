@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { H5, Button } from '@blueprintjs/core';
+import { H5, Button, Tree } from '@blueprintjs/core';
 import { v4 as uuidv4 } from 'uuid';
 import "./RightSidebar.scss"
 import IdPanel from './IdPanel';
