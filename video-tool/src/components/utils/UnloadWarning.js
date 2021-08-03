@@ -1,55 +1,70 @@
-import { Button, Card, Classes, H5, Icon, Overlay } from '@blueprintjs/core';
-import React, { useEffect } from 'react';
+import { Button, Card, Classes, Icon, Overlay } from '@blueprintjs/core';
+import React, { useEffect, useState } from 'react';
 import "./UnloadWarning.scss";
 
 // TODO check beforeunload lifecycle https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event
-
+// TODO only activate listener if unsaved   
 export function UnloadWarning(props) {
+    const [open, setOpen] = useState(true);
 
     useEffect(() => {
-        window.addEventListener("beforeunload", handleUnload)
+        window.addEventListener("beforeunload", alertUser)
 
         return (() => {
-            window.removeEventListener("beforeunload", handleUnload);
+            window.removeEventListener("beforeunload", alertUser);
         })
-    });
+    }, []);
 
-    const handleUnload = () => {
+    const alertUser = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
 
     };
 
+    const handleExit = () => {
+
+    }
+
+    const handleSave = () => {
+
+    }
+
+    const handleCancel = () => {
+
+    }
 
     return (
         <Overlay
             className="bp3-dark"
             canEscapeKeyClose={false}
             canOutsideClickClose={false}
-            isOpen={true}>
+            isOpen={open}>
             <Card className="warning-overlay">
-                <div className="warning-overlay-icon">
-                    <Icon icon="warning-sign"></Icon>
-                </div>
+                <Icon
+                    className="warning-overlay-icon"
+                    icon="warning-sign" />
                 <div className="warning-overlay-content">
                     <h5 className={Classes.HEADING}>You have unsaved progress...</h5>
                     <p>Are you sure you want to exit without saving?</p>
                     <div className="warning-buttons">
-
                         <Button
                             icon="log-out"
-                            intent="danger">
+                            intent="danger"
+                            onClick={handleExit}>
                             Exit
                         </Button>
-
                         <div className="warning-buttons-grouped">
                             <Button
                                 className="warning-button-space"
                                 icon="floppy-disk"
-                                intent="success">
+                                intent="success"
+                                onClick={handleSave}>
                                 Save and exit
                             </Button>
                             <Button
                                 icon="cross"
-                                intent="none">
+                                intent="none"
+                                onClick={handleCancel}>
                                 Cancel
                             </Button>
                         </div>
