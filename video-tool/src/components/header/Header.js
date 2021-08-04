@@ -7,12 +7,12 @@ import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
 
 export function Header(props) {
     const { framerate, playerDispatch, annotations } = props;
+    const [projectFlag, setProjectFlag] = useState(false);
+
     const [openIcon, setOpenIcon] = useState("folder-close");
 
     const handleNewProject = async () => {
-
-        const project = new Project();
-        const handle = await getNewFileHandle().then();
+        setProjectFlag(true);
     };
 
     const handleSaveProject = () => { };
@@ -52,11 +52,15 @@ export function Header(props) {
                 <Button icon="help" />
             </ButtonGroup>
 
-            <NewProjectOverlay />
+            <NewProjectOverlay
+                open={projectFlag}
+                setOpen={setProjectFlag} />
 
 
 
             <SourceSelector
+                open={projectFlag}
+                setOpen={setProjectFlag}
                 fps={framerate}
                 playerDispatch={playerDispatch}
                 annotations={annotations}>
