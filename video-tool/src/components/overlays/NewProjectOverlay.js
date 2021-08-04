@@ -13,11 +13,11 @@ export function NewProjectOverlay(props) {
     const handleConfirm = async () => {
         try {
             if (!input || /^\s*$/.test(input)) {
-                throw new Error("Please enter a valid project name...");
+                throw new Error("Please enter a valid project name.");
             }
 
             if (!(await verifyPermission(dirHandle))) {
-                throw new Error("Permission required to create project");
+                throw new Error("Permission required to create project.");
             }
 
             for await (const entry of dirHandle.keys()) {

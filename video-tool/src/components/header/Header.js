@@ -28,8 +28,9 @@ export function Header(props) {
 
     const handleSaveProject = () => { };
 
-    const handleOpenProject = () => {
-        const projectHandle = getProjectHandle();
+    const handleOpenProject = async () => {
+        const dirHandle = await get('parentDir');
+        const projectHandle = getProjectHandle(dirHandle);
     };
 
 

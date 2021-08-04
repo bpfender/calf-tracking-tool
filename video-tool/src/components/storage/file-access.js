@@ -8,27 +8,15 @@ export async function getParentDirectory() {
 }
 
 export async function createNewProjectHandle(dirHandle, filename) {
-    /*const options = {
-        id: 'project',
-        startIn: 'documents',
-        suggestedName: filename + ".vat",
-        types: [
-            {
-                description: 'VAT Project File',
-                accept: { 'application/json': ['.vat'] }
-            }
-        ]
-    };
-    const handle = await window.showSaveFilePicker(options);*/
-
     const handle = await dirHandle.getFileHandle(filename + ".vat", { create: true });
     return handle;
 }
 
-export async function getProjectHandle() {
+export async function getProjectHandle(dirHandle) {
+    const startIn = dirHandle ? dirHandle : 'documents';
+    console.log(startIn);
     const options = {
-        id: 'project',
-        startIn: 'documents',
+        startIn: startIn,
         types: [
             {
                 description: 'VAT Project File',
@@ -36,7 +24,7 @@ export async function getProjectHandle() {
             },
         ],
         multiple: false,
-    }
+    };
 
     const [handle] = await window.showOpenFilePicker(options);
     return handle;
