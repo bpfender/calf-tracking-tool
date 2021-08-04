@@ -3,10 +3,13 @@ import React, { useState } from 'react';
 import { Project } from '../annotations/Project';
 import { createNewProjectHandle, verifyPermission } from '../storage/file-access';
 import "./Overlay.scss"
+import { saveFailed, SaveToaster } from './toaster';
 
 export function NewProjectOverlay(props) {
+    const { open, setOpen, dirHandle, setTitle, playerDispatch } = props;
+
     const defaultWarning = { intent: "none", label: "" };
-    const { open, setOpen, dirHandle } = props;
+
     const [input, setInput] = useState("");
     const [warning, setWarning] = useState(defaultWarning)
 
@@ -29,6 +32,13 @@ export function NewProjectOverlay(props) {
 
             const projectHandle = await createNewProjectHandle(dirHandle, input);
             const project = new Project(input, projectHandle)
+            playerDispatch({
+                type: 'SRC_CHANGE',
+                payload: {
+                    src: ""
+                }
+            });
+            setTitle(input);
             setOpen(false);
         } catch (error) {
             // QUESTION should errors be reserved for more "important things"?
@@ -49,6 +59,7 @@ export function NewProjectOverlay(props) {
             className="bp3-dark"
             canEscapeKeyClose={false}
             canOutsideClickClose={false}
+            onClosed={() => { setInput("") }}
             isOpen={open}>
             <Card className="overlay">
                 <Icon
