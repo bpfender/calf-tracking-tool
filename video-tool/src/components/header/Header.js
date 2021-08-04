@@ -1,22 +1,35 @@
-import { Button, ButtonGroup, Divider, Icon } from '@blueprintjs/core';
+import { Button, ButtonGroup, Divider } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { Project } from '../annotations/Project';
+import { get } from 'idb-keyval';
 import SourceSelector from '../SourceSelector';
-import { getNewFileHandle } from '../storage/file-access';
 import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
+import { getProjectHandle } from '../storage/file-access';
+import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
 
 export function Header(props) {
     const { framerate, playerDispatch, annotations } = props;
+    const [dirFlag, setDirFlag] = useState(false);
     const [projectFlag, setProjectFlag] = useState(false);
-
     const [openIcon, setOpenIcon] = useState("folder-close");
 
     const handleNewProject = async () => {
-        setProjectFlag(true);
+        try {
+            const documentHandle = await get('parentDir');
+            if (!documentHandle) {
+                setDirFlag(true);
+            } else {
+                setProjectFlag(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const handleSaveProject = () => { };
-    const handleOpenProject = () => { };
+
+    const handleOpenProject = () => {
+        const projectHandle = getProjectHandle();
+    };
 
 
 
@@ -52,6 +65,10 @@ export function Header(props) {
                 <Button icon="help" />
             </ButtonGroup>
 
+            <DirectoryOverlay
+                open={dirFlag}
+                setOpen={setDirFlag}
+                setProject={setProjectFlag} />
             <NewProjectOverlay
                 open={projectFlag}
                 setOpen={setProjectFlag} />

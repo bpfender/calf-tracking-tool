@@ -1,7 +1,7 @@
 import { Button, Card, Classes, FormGroup, Icon, InputGroup, Overlay } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import { Project } from '../annotations/Project';
-import { getNewFileHandle } from '../storage/file-access';
+import { getNewProjectHandle } from '../storage/file-access';
 import "./Overlay.scss"
 
 export function NewProjectOverlay(props) {
@@ -19,7 +19,7 @@ export function NewProjectOverlay(props) {
                 throw new Error("Invalid project filename.");
             }
 
-            const projectHandle = await getNewFileHandle(input);
+            const projectHandle = await getNewProjectHandle(input);
             const project = new Project(input, projectHandle)
             console.log(project);
         } catch (error) {
@@ -44,6 +44,7 @@ export function NewProjectOverlay(props) {
                         className={Classes.HEADING}
                     >New Project</h5>
                     <p>Enter and confirm your project name and then select where you want to save it.</p>
+                    <p>We recommend keeping all your project files in one folder.</p>
                     <FormGroup
                         helperText={warning.label}
                         intent={warning.intent}>

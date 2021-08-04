@@ -1,7 +1,7 @@
 import { Task } from "./Task";
 
 export class Project {
-    constructor(fileHandle) {
+    constructor(name, fileHandle) {
         this._name = ""
         this._fileHandle = fileHandle;
         this.tasks = [new Task()];

@@ -14,6 +14,21 @@ function* colourGenerator(colours) {
     }
 }
 
+
+//https://stackoverflow.com/questions/7193238/wait-until-a-condition-is-true/52652681#52652681
+//https://stackoverflow.com/questions/22125865/wait-until-flag-true?answertab=votes#tab-top
+const until = async conditionFunction => {
+    const delay = () => {
+        return new Promise((resolve) => setTimeout(resolve, 500));
+    }
+    if (conditionFunction()) {
+        return;
+    } else {
+        await delay();
+        await until(conditionFunction);
+    }
+}
+
 export const colourGen = colourGenerator(colourPalette);
 
 export function framerateCallback(metadata, video, prev = [0, 0, 0]) {
