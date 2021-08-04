@@ -9,6 +9,8 @@ import { saveFailed, saveSuccess, SaveToaster } from '../overlays/toaster';
 
 export function Header(props) {
     const { framerate, playerDispatch, annotations } = props;
+
+    const [title, setTitle] = useState("");
     const [dirFlag, setDirFlag] = useState(false);
     const [projectFlag, setProjectFlag] = useState(false);
     const [openIcon, setOpenIcon] = useState("folder-close");
@@ -71,7 +73,7 @@ export function Header(props) {
                 <Button
                     icon="export" />
             </ButtonGroup>
-            <text>PROJECT NAME</text>
+            <text>{title}</text>
             <ButtonGroup
                 minimal={true}>
                 <Button
@@ -89,16 +91,22 @@ export function Header(props) {
             <NewProjectOverlay
                 open={projectFlag}
                 setOpen={setProjectFlag}
-                dirHandle={dirHandleRef.current} />
+                setTitle={setTitle}
+                dirHandle={dirHandleRef.current}
+                playerDispatch={playerDispatch} />
 
 
-            <SourceSelector
-                open={projectFlag}
-                setOpen={setProjectFlag}
-                fps={framerate}
-                playerDispatch={playerDispatch}
-                annotations={annotations}>
-            </SourceSelector>
+
         </header>
     );
 }
+
+/*
+<SourceSelector
+open={projectFlag}
+setOpen={setProjectFlag}
+fps={framerate}
+playerDispatch={playerDispatch}
+annotations={annotations}>
+</SourceSelector>
+*/

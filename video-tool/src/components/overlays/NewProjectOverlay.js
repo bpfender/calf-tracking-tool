@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Project } from '../annotations/Project';
 import { createNewProjectHandle, verifyPermission } from '../storage/file-access';
 import "./Overlay.scss"
-import { saveFailed, SaveToaster } from './toaster';
 
 export function NewProjectOverlay(props) {
     const { open, setOpen, dirHandle, setTitle, playerDispatch } = props;
