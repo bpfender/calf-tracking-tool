@@ -1,10 +1,11 @@
-import { Button, ButtonGroup, Divider } from '@blueprintjs/core';
+import { Button, ButtonGroup, Divider, } from '@blueprintjs/core';
 import React, { useRef, useState } from 'react';
-import { get } from 'idb-keyval';
+import { get, set } from 'idb-keyval';
 import SourceSelector from '../SourceSelector';
 import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
-import { getProjectHandle } from '../storage/file-access';
+import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-access';
 import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
+import { saveFailed, saveSuccess, SaveToaster } from '../overlays/toaster';
 
 export function Header(props) {
     const { framerate, playerDispatch, annotations } = props;
@@ -12,6 +13,7 @@ export function Header(props) {
     const [projectFlag, setProjectFlag] = useState(false);
     const [openIcon, setOpenIcon] = useState("folder-close");
     const dirHandleRef = useRef(null);
+
 
     const handleNewProject = async () => {
         try {
@@ -26,14 +28,27 @@ export function Header(props) {
         }
     };
 
-    const handleSaveProject = () => { };
-
-    const handleOpenProject = async () => {
-        const dirHandle = await get('parentDir');
-        const projectHandle = getProjectHandle(dirHandle);
+    const handleSaveProject = async () => {
+        const fileHandle = null, data = null;
+        try {
+            await verifyPermission(fileHandle);
+            await writeFile(fileHandle, data);
+            SaveToaster(saveSuccess);
+        } catch (error) {
+            SaveToaster.show(saveFailed);
+            console.log(error);
+        }
     };
 
-
+    const handleOpenProject = async () => {
+        try {
+            const dirHandle = await get('parentDir');
+            const projectHandle = getProjectHandle(dirHandle);
+            await set('project', projectHandle);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <header className={props.className}>

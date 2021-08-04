@@ -1,9 +1,6 @@
-import { set } from "idb-keyval";
-
 //https://web.dev/file-system-access/
 export async function getParentDirectory() {
     const dirHandle = await window.showDirectoryPicker({ startIn: 'documents' });
-    await set('parentDir', dirHandle);
     return dirHandle;
 }
 
@@ -34,8 +31,10 @@ export async function readFile() {
 
 }
 
-export async function writeFile() {
-
+export async function writeFile(fileHandle, data) {
+    const writable = await fileHandle.createWritable()
+    await writable.write(data);
+    await writable.close();
 }
 
 export async function verifyPermission(handle) {

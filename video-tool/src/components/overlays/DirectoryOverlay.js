@@ -1,4 +1,5 @@
 import { Button, Card, Classes, Icon, Overlay } from '@blueprintjs/core';
+import { set } from 'idb-keyval';
 import React from 'react';
 import { getParentDirectory } from '../storage/file-access';
 
@@ -7,13 +8,15 @@ import "./Overlay.scss"
 export function DirectoryOverlay(props) {
     const { open, setOpen, setProject } = props;
 
+    // FIXME transition from directory to file window not clean
     const handleConfirm = async () => {
         try {
-            await getParentDirectory();
+            const dirHandle = await getParentDirectory();
+            await set('parentDir', dirHandle);
             setOpen(false);
             setProject(true);
         } catch (error) {
-            console.log(error);
+            // No error handling
         }
     };
 
