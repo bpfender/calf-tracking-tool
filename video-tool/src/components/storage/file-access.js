@@ -1,4 +1,4 @@
-import { set, get } from "idb-keyval";
+import { set } from "idb-keyval";
 
 //https://web.dev/file-system-access/
 export async function getParentDirectory() {
@@ -7,11 +7,8 @@ export async function getParentDirectory() {
     return dirHandle;
 }
 
-
-
-
-export async function getNewProjectHandle(filename) {
-    const options = {
+export async function createNewProjectHandle(dirHandle, filename) {
+    /*const options = {
         id: 'project',
         startIn: 'documents',
         suggestedName: filename + ".vat",
@@ -22,10 +19,9 @@ export async function getNewProjectHandle(filename) {
             }
         ]
     };
+    const handle = await window.showSaveFilePicker(options);*/
 
-    const handle = await window.showSaveFilePicker(options);
-
-
+    const handle = await dirHandle.getFileHandle(filename + ".vat", { create: true });
     return handle;
 }
 
@@ -54,6 +50,18 @@ export async function writeFile() {
 
 }
 
-export async function verifyPermission() {
+export async function verifyPermission(handle) {
+    const options = {
+        mode: 'readwrite',
+    };
 
+    if (await handle.queryPermission(options) === 'granted') {
+        return true;
+    }
+
+    if (await handle.requestPermission(options) === 'granted') {
+        return true;
+    }
+
+    return false;
 }

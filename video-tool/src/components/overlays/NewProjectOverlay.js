@@ -1,13 +1,14 @@
 import { Button, Card, Classes, FormGroup, Icon, InputGroup, Overlay } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import { Project } from '../annotations/Project';
-import { getNewProjectHandle } from '../storage/file-access';
+import { createNewProjectHandle, verifyPermission } from '../storage/file-access';
 import "./Overlay.scss"
 
 export function NewProjectOverlay(props) {
-    const { open, setOpen } = props;
+    const defaultWarning = { intent: "none", label: "" };
+    const { open, setOpen, dirHandle } = props;
     const [input, setInput] = useState("");
-    const [warning, setWarning] = useState({ intent: "none", label: "" })
+    const [warning, setWarning] = useState(defaultWarning)
 
     const handleConfirm = async () => {
         try {
@@ -19,14 +20,37 @@ export function NewProjectOverlay(props) {
                 throw new Error("Invalid project filename.");
             }
 
-            const projectHandle = await getNewProjectHandle(input);
-            const project = new Project(input, projectHandle)
-            console.log(project);
+            if (await verifyPermission(dirHandle)) {
+                for await (const entry of dirHandle.keys()) {
+                    //FIXME not sure how complete this regex is
+                    if (entry.replace(/\.[^/.]+$/, "") === input) {
+                        setWarning({
+                            intent: "warning",
+                            label: "This project name already exists."
+                        });
+                        return;
+                    }
+                }
+                const projectHandle = await createNewProjectHandle(dirHandle, input);
+                const project = new Project(input, projectHandle)
+
+                setOpen(false);
+
+            } else {
+                setWarning({
+                    intent: "warning",
+                    label: "Permission required to create project",
+                });
+            }
         } catch (error) {
             console.log(error);
         }
-
     };
+
+    const handleCancel = () => {
+        setWarning(defaultWarning);
+        setOpen(false);
+    }
 
     return (
         <Overlay
@@ -60,7 +84,7 @@ export function NewProjectOverlay(props) {
                         <Button
                             className="overlay-buttons-space"
                             icon="cross"
-                            onClick={() => { setOpen(false) }}>
+                            onClick={handleCancel}>
                             Cancel
                         </Button>
                         <Button

@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Divider } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { get } from 'idb-keyval';
 import SourceSelector from '../SourceSelector';
 import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
@@ -11,11 +11,12 @@ export function Header(props) {
     const [dirFlag, setDirFlag] = useState(false);
     const [projectFlag, setProjectFlag] = useState(false);
     const [openIcon, setOpenIcon] = useState("folder-close");
+    const dirHandleRef = useRef(null);
 
     const handleNewProject = async () => {
         try {
-            const documentHandle = await get('parentDir');
-            if (!documentHandle) {
+            dirHandleRef.current = await get('parentDir');
+            if (!dirHandleRef.current) {
                 setDirFlag(true);
             } else {
                 setProjectFlag(true);
@@ -71,8 +72,8 @@ export function Header(props) {
                 setProject={setProjectFlag} />
             <NewProjectOverlay
                 open={projectFlag}
-                setOpen={setProjectFlag} />
-
+                setOpen={setProjectFlag}
+                dirHandle={dirHandleRef.current} />
 
 
             <SourceSelector
