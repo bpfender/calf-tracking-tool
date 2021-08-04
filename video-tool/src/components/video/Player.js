@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
-import Video from './video/Video';
-import ControlBar from './controls/ControlBar';
-import Info from './Info';
+import Video from './Video';
+import ControlBar from '../controls/ControlBar';
+import Info from '../Info';
 import Annotation from './Annotation.js';
 import "./Player.scss";
-import { VideoBar } from './video/VideoBar';
+import { VideoBar } from './VideoBar';
 
 //FIXME position of video isn't quite right yet. Not sure what's happen
 
