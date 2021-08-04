@@ -13,37 +13,29 @@ export function NewProjectOverlay(props) {
     const handleConfirm = async () => {
         try {
             if (!input || /^\s*$/.test(input)) {
-                setWarning({
-                    intent: "warning",
-                    label: "Please enter a valid project name..."
-                });
-                throw new Error("Invalid project filename.");
+                throw new Error("Please enter a valid project name...");
             }
 
-            if (await verifyPermission(dirHandle)) {
-                for await (const entry of dirHandle.keys()) {
-                    //FIXME not sure how complete this regex is
-                    if (entry.replace(/\.[^/.]+$/, "") === input) {
-                        setWarning({
-                            intent: "warning",
-                            label: "This project name already exists."
-                        });
-                        return;
-                    }
+            if (!(await verifyPermission(dirHandle))) {
+                throw new Error("Permission required to create project");
+            }
+
+            for await (const entry of dirHandle.keys()) {
+                //FIXME not sure how complete this regex is
+                if (entry.replace(/\.[^/.]+$/, "") === input) {
+                    throw new Error("This project name already exists.");
                 }
-                const projectHandle = await createNewProjectHandle(dirHandle, input);
-                const project = new Project(input, projectHandle)
-
-                setOpen(false);
-
-            } else {
-                setWarning({
-                    intent: "warning",
-                    label: "Permission required to create project",
-                });
             }
+
+            const projectHandle = await createNewProjectHandle(dirHandle, input);
+            const project = new Project(input, projectHandle)
+            setOpen(false);
         } catch (error) {
-            console.log(error);
+            // QUESTION should errors be reserved for more "important things"?
+            setWarning({
+                intent: "warning",
+                label: error.message,
+            });
         }
     };
 
@@ -76,7 +68,7 @@ export function NewProjectOverlay(props) {
                             intent={warning.intent}
                             className="overlay-input"
                             placeholder="Enter your project name..."
-                            onFocus={() => { setWarning({ intent: "none", label: warning.label }) }}
+                            onFocus={() => { setWarning(defaultWarning) }}
                             onChange={(event) => { setInput(event.target.value) }}>
                         </InputGroup>
                     </FormGroup>
