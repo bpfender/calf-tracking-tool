@@ -11,7 +11,6 @@ export async function createNewProjectHandle(dirHandle, filename) {
 
 export async function getProjectHandle(dirHandle) {
     const startIn = dirHandle ? dirHandle : 'documents';
-    console.log(startIn);
     const options = {
         startIn: startIn,
         types: [
@@ -26,6 +25,31 @@ export async function getProjectHandle(dirHandle) {
     const [handle] = await window.showOpenFilePicker(options);
     return handle;
 }
+
+//TODO check MIME types
+export async function getVideoHandle(dirHandle) {
+    const startIn = dirHandle ? dirHandle : 'video';
+    const options = {
+        startIn: startIn,
+        types: [
+            {
+                description: 'Video file',
+                accept: {
+                    'video/x-msvideo': ['.avi'],
+                    'video/mp4': ['.mp4'],
+                    'video/mpeg': ['.mpeg'],
+                    'video/ogg': ['.ogv'],
+                    'video/webm': ['.webm'],
+                },
+                multiple: false,
+            }
+        ]
+    }
+
+    const [handle] = await window.showOpenFilePicker(options);
+    return handle;
+}
+
 
 export async function readFile() {
 

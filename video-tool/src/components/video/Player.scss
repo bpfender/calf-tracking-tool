@@ -16,11 +16,25 @@
     flex-direction: column;
     align-items: center;    
     justify-content:space-evenly;
+    cursor: grab;
+    
+}
+
+.player-video-source-content p{
+    font-size: $pt-font-size-large;
+    color:$dark-gray5;
 }
 
 .player-video-source-icon{
-    color: $dark-gray1;
     top:50%;
+}
+
+.player-video-source-content.primary{
+    border: 1px solid $pt-intent-primary;
+}
+
+.player-video-source-content.warning{
+    border: 1px solid $pt-intent-warning;
 }
 
 .video-bar{
@@ -30,11 +44,6 @@
     align-items: center;
     justify-content: space-between;
 }
-
-.video-bar p{
-    margin: 0;
-}
-
 
 .video-container{
     flex:1;
