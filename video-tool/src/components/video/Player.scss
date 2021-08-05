@@ -1,5 +1,6 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 
+
 /* TODO not clear how to set this height properly */
 .video-content{
     background-color:$dark-gray2;
@@ -7,6 +8,19 @@
     margin-bottom: $pt-grid-size;
     border:1px solid $dark-gray1;
     min-height: 50%;
+}
+
+.player-video-source-content {
+    height:100%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;    
+    justify-content:space-evenly;
+}
+
+.player-video-source-icon{
+    color: $dark-gray1;
+    top:50%;
 }
 
 .video-bar{
@@ -23,7 +37,13 @@
 
 
 .video-container{
+    flex:1;
     padding: 1em;
+}
+
+.video-content{
+    display:flex;
+    flex-direction: column;
 }
 
 .video-window-container{

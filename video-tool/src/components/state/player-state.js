@@ -32,7 +32,7 @@ export const defaultPlayerState = {
     timeToSkip: 1,
 };
 
-export function playerReducer(state = defaultPlayerState, action) {
+export function playerReducer(state, action) {
     const payload = action.payload;
     // console.log(action.type, payload);
 
@@ -166,6 +166,9 @@ export function playerReducer(state = defaultPlayerState, action) {
                 ...state,
                 framerate: payload.framerate,
             }
+        case 'RESET':
+            return defaultPlayerState;
+
         default: {
             throw new Error(`Unknown action type: ${action.type}`);
         }

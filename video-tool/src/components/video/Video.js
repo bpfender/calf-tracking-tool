@@ -74,6 +74,7 @@ class Video extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
+        console.log(prevProps);
         if (prevProps.src !== this.props.src) {
             this.video.src = this.props.src;
             this.video.load();
@@ -82,6 +83,10 @@ class Video extends React.Component {
             })
             this.play();
         }
+
+        /* if (this.props.src === null) {
+             this.video.load();
+         }*/
     }
 
     framerateCalcCallback(metadata, prev = [0, 0, 0]) {

@@ -5,6 +5,7 @@ import Info from '../Info';
 import Annotation from './Annotation.js';
 import "./Player.scss";
 import { VideoBar } from './VideoBar';
+import VideoSource from './VideoSource';
 
 //FIXME position of video isn't quite right yet. Not sure what's happen
 
@@ -26,24 +27,9 @@ function Player(props) {
                     framerate={playerState.framerate}
                     videoWidth={playerState.videoWidth}
                     videoHeight={playerState.videoHeight} />
-                <div className="video-container">
-                    <div className="video-window-container"
-                        style={style}>
-                        <Video
-                            className="video-window"
-                            ref={videoRef}
-                            playerDispatch={playerDispatch}
-                            src={playerState.src}
-                            fps={playerState.framerate}
-                            vsync={playerState.vsync} />
-                        <Annotation
-                            className="video-window annotation-overlay"
-                            currentFrame={playerState.currentFrame}
-                            annotations={annotations}
-                            annotationDispatch={annotationDispatch}
-                            pauseVideo={() => { videoRef.current.pause() }} />
-                    </div>
-                </div>
+
+                <VideoSource />
+
             </div>
             <ControlBar video={videoRef.current} playerState={playerState} />
             <Info videoState={playerState} />
@@ -52,3 +38,24 @@ function Player(props) {
 }
 
 export default Player;
+
+/*
+<div className="video-container">
+<div className="video-window-container"
+style={style}>
+<Video
+    className="video-window"
+    ref={videoRef}
+    playerDispatch={playerDispatch}
+    src={playerState.src}
+    fps={playerState.framerate}
+    vsync={playerState.vsync} />
+<Annotation
+    className="video-window annotation-overlay"
+    currentFrame={playerState.currentFrame}
+    annotations={annotations}
+    annotationDispatch={annotationDispatch}
+    pauseVideo={() => { videoRef.current.pause() }} />
+</div>
+</div>
+*/

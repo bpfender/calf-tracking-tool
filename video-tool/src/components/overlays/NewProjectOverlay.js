@@ -31,12 +31,7 @@ export function NewProjectOverlay(props) {
 
             const projectHandle = await createNewProjectHandle(dirHandle, input);
             const project = new Project(input, projectHandle)
-            playerDispatch({
-                type: 'SRC_CHANGE',
-                payload: {
-                    src: ""
-                }
-            });
+            playerDispatch({ type: 'RESET' });
             setTitle(input);
             setOpen(false);
         } catch (error) {
