@@ -11,7 +11,6 @@ import { getVideoHandle } from '../storage/file-access';
 
 export default function VideoSource(props) {
     const { annotationDispatch } = props;
-    const [videoHandle, setVideoHandle] = useState(null);
 
     const [dragState, setDragState] = useState("");
     const [message, setMessage] = useState("Add a video file to get started...");
@@ -27,10 +26,6 @@ export default function VideoSource(props) {
             window.removeEventListener("drop", prevent);
         })
     }, [])
-
-    useEffect(() => {
-        console.log("HELLO");
-    }, [videoHandle])
 
     const setVideoDispatch = (handle) => {
         annotationDispatch({

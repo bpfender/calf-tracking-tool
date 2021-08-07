@@ -6,6 +6,7 @@ import Annotation from './Annotation.js';
 import "./Player.scss";
 import { VideoBar } from './VideoBar';
 import VideoSource from './VideoSource';
+import VideoPlayer from './VideoPlayer';
 
 //FIXME position of video isn't quite right yet. Not sure what's happen
 
@@ -20,6 +21,24 @@ function Player(props) {
         height: playerState.videoHeight + "px"
     };
 
+    const videoWindow = () => {
+        if (!playerState.src) {
+            return (
+                <VideoSource
+                    annotationDispatch={annotationDispatch} />
+            );
+        } else {
+            return (
+                <VideoPlayer
+                    videoRef={videoRef}
+                    playerDispatch={playerDispatch}
+                    playerState={playerState}
+                    annotations={annotations}
+                    annotationDispatch={annotationDispatch} />
+            );
+        }
+    }
+
     return (
         <div className={props.className}>
             <div className="video-content">
@@ -28,9 +47,7 @@ function Player(props) {
                     videoWidth={playerState.videoWidth}
                     videoHeight={playerState.videoHeight}
                 />
-                <VideoSource
-                    annotationDispatch={annotationDispatch}
-                />
+                {videoWindow()}
             </div>
             <ControlBar video={videoRef.current} playerState={playerState} />
             <Info videoState={playerState} />
@@ -39,6 +56,9 @@ function Player(props) {
 }
 
 export default Player;
+
+
+
 
 /*
 <div className="video-container">

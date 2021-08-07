@@ -45,24 +45,23 @@ export default function App(props) {
         playerDispatch={playerDispatch}
         annotations={annotations}>
       </Header>
-      <div>
-        <LeftSidebar
-          className="left-sidebar">
-        </LeftSidebar>
-        <Player
-          className="main-content"
-          playerState={playerState}
-          playerDispatch={playerDispatch}
-          annotations={annotations}
-          annotationDispatch={annotationDispatch}>
-        </Player>
-        <RightSidebar
-          className="right-sidebar"
-          playerState={playerState}
-          annotations={annotations}
-          annotationDispatch={annotationDispatch}>
-        </RightSidebar>
-      </div>
+      <LeftSidebar
+        className="left-sidebar">
+      </LeftSidebar>
+      <Player
+        className="main-content"
+        playerState={playerState}
+        playerDispatch={playerDispatch}
+        annotations={annotations}
+        annotationDispatch={annotationDispatch}>
+      </Player>
+      <RightSidebar
+        className="right-sidebar"
+        playerState={playerState}
+        annotations={annotations}
+        annotationDispatch={annotationDispatch}>
+      </RightSidebar>
+
       <footer className="footer">FOOTER</footer>
     </div >
   );

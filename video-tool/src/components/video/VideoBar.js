@@ -11,7 +11,7 @@ export function VideoBar(props) {
         if (bool) {
             return <Spinner size={20} />
         } else {
-            return <p>{videoWidth}x{videoHeight}</p>
+            return <p>{framerate}fps {videoWidth}x{videoHeight}</p>
         }
     }
 
