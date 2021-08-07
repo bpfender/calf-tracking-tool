@@ -100,13 +100,3 @@ export function Header(props) {
         </header>
     );
 }
-
-/*
-<SourceSelector
-open={projectFlag}
-setOpen={setProjectFlag}
-fps={framerate}
-playerDispatch={playerDispatch}
-annotations={annotations}>
-</SourceSelector>
-*/

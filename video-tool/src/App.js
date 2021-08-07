@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import './App.scss';
 import { defaultPlayerState, playerReducer } from './components/state/player-state.js';
 import { TaskFactory } from './components/annotations/TaskFactory';
@@ -15,19 +15,21 @@ import { get } from 'idb-keyval';
 //FIXME whole tree updates all the time
 // TODO https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/hidden
 export default function App(props) {
+  const [parentDir, setParentDir] = useState(null);
+
   const [project, projectDispatch] = useReducer();
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
   const [annotations, annotationDispatch] = useReducer(annotationReducer, TaskFactory(null));
 
+  // Check whether VAT directory has been set before
   useEffect(() => {
     (async function () {
-      const projectDir = await get('parentDir');
-      if (projectDir) {
-        console.log("PROJECT");
+      const parentDir = await get('parentDir');
+      if (parentDir) {
+        setParentDir(parentDir);
       }
     })();
   }, [])
-
 
   // FIXME how to make sure annotations are persistent
   useEffect(() => {
@@ -41,28 +43,21 @@ export default function App(props) {
     <div className="App bp3-dark">
       <Header
         className="App-header"
-        fps={playerState.framerate}
-        playerDispatch={playerDispatch}
-        annotations={annotations}>
-      </Header>
+        playerDispatch={playerDispatch} />
       <LeftSidebar
-        className="left-sidebar">
-      </LeftSidebar>
+        className="left-sidebar" />
       <Player
         className="main-content"
         playerState={playerState}
         playerDispatch={playerDispatch}
         annotations={annotations}
-        annotationDispatch={annotationDispatch}>
-      </Player>
+        annotationDispatch={annotationDispatch} />
       <RightSidebar
         className="right-sidebar"
         playerState={playerState}
         annotations={annotations}
-        annotationDispatch={annotationDispatch}>
-      </RightSidebar>
-
-      <footer className="footer">FOOTER</footer>
+        annotationDispatch={annotationDispatch} />
+      <footer className="footer" />
     </div >
   );
 }
