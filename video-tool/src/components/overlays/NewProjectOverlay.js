@@ -1,6 +1,5 @@
 import { Button, Card, Classes, FormGroup, Icon, InputGroup, Overlay } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { Project } from '../annotations/Project';
 import { createNewProjectHandle, verifyPermission } from '../storage/file-access';
 import "./Overlay.scss"
 
@@ -30,7 +29,7 @@ export function NewProjectOverlay(props) {
             }
 
             const projectHandle = await createNewProjectHandle(dirHandle, input);
-            const project = new Project(input, projectHandle)
+
             playerDispatch({ type: 'RESET' });
             setTitle(input);
             setOpen(false);

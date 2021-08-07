@@ -33,6 +33,10 @@
     border: 1px solid $pt-intent-primary;
 }
 
+.player-video-source-content.success{
+    border: 1px solid $pt-intent-success;
+}
+
 .player-video-source-content.warning{
     border: 1px solid $pt-intent-warning;
 }

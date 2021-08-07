@@ -26,10 +26,11 @@ function Player(props) {
                 <VideoBar
                     framerate={playerState.framerate}
                     videoWidth={playerState.videoWidth}
-                    videoHeight={playerState.videoHeight} />
-
-                <VideoSource />
-
+                    videoHeight={playerState.videoHeight}
+                />
+                <VideoSource
+                    annotationDispatch={annotationDispatch}
+                />
             </div>
             <ControlBar video={videoRef.current} playerState={playerState} />
             <Info videoState={playerState} />

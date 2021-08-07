@@ -2,38 +2,77 @@
 // https://stackoverflow.com/questions/33420306/drag-drop-datatransfer-object
 //https://web.dev/datatransfer/
 
+
+//FIXME this needs some cleaning!
 import { Colors, Icon } from '@blueprintjs/core';
 import { get } from 'idb-keyval';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getVideoHandle } from '../storage/file-access';
 
-export default function VideoSource() {
+export default function VideoSource(props) {
+    const { annotationDispatch } = props;
+    const [videoHandle, setVideoHandle] = useState(null);
+
     const [dragState, setDragState] = useState("");
     const [message, setMessage] = useState("Add a video file to get started...");
 
     // Removing default effects
     useEffect(() => {
-        window.addEventListener("dragover", event => { event.preventDefault() });
-        window.addEventListener("drop", event => { event.preventDefault() });
+        const prevent = (event) => { event.preventDefault() };
+        window.addEventListener("dragover", prevent);
+        window.addEventListener("drop", prevent);
 
         return (() => {
-            window.removeEventListener("dragover");
-            window.removeEventListener("drop");
+            window.removeEventListener("dragover", prevent);
+            window.removeEventListener("drop", prevent);
         })
     }, [])
 
+    useEffect(() => {
+        console.log("HELLO");
+    }, [videoHandle])
 
-    const handleClick = async () => {
-        setDragState("primary");
-        const parentDir = await get('parentDir');
-        const videoHandle = await getVideoHandle(parentDir);
+    const setVideoDispatch = (handle) => {
+        annotationDispatch({
+            type: 'SET_VIDEO',
+            payload: { handle: handle }
+        });
     }
 
-    const handleDrop = (event) => {
+
+    const handleClick = async () => {
+        try {
+            setDragState("primary");
+            const parentDir = await get('parentDir');
+            const handle = await getVideoHandle(parentDir);
+            setVideoDispatch(handle);
+        } catch (error) {
+            console.log("Video select cancelled");
+        }
+    }
+
+    const handleDrop = async (event) => {
         event.preventDefault();
-        console.log(event.dataTransfer.files[0]);
+        const item = event.dataTransfer.items[0];
+        console.log(item);
+        try {
+            if (!item.type.includes("video")) {
+                throw new Error("This is not a valid video file");
+            }
+
+            const handle = await item.getAsFileSystemHandle();
+            if (handle.kind === 'directory') {
+                throw new Error("SOMETHING WENT WRONG");
+            }
+
+            setVideoDispatch(handle);
+        } catch (error) {
+            setDragState("warning");
+            setMessage(error.message);
+        }
     };
 
+    // Validate input for number of files
     const handleDragOver = (event) => {
         event.preventDefault();
         console.log(event.dataTransfer.types[0]);
@@ -43,10 +82,6 @@ export default function VideoSource() {
         } else {
             setDragState("primary")
         }
-    }
-
-    const handleDragEnter = (event) => {
-        event.preventDefault();
     }
 
     const handleDragLeave = (event) => {
@@ -61,7 +96,6 @@ export default function VideoSource() {
             onClick={handleClick}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
-            onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}>
             <Icon
                 className={"player-video-source-icon"}
@@ -69,7 +103,6 @@ export default function VideoSource() {
                 iconSize={160}
                 color={Colors.DARK_GRAY1}
             />
-
             <p>{message}</p>
 
         </ div >

@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Divider, } from '@blueprintjs/core';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { get, set } from 'idb-keyval';
 import SourceSelector from '../SourceSelector';
 import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
@@ -8,7 +8,7 @@ import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
 import { saveFailed, saveSuccess, SaveToaster } from '../overlays/toaster';
 
 export function Header(props) {
-    const { framerate, playerDispatch, annotations } = props;
+    const { playerDispatch } = props;
 
     const [title, setTitle] = useState("");
     const [dirFlag, setDirFlag] = useState(false);
@@ -16,6 +16,10 @@ export function Header(props) {
     const [openIcon, setOpenIcon] = useState("folder-close");
     const dirHandleRef = useRef(null);
 
+    // TODO needs actual project value
+    const autoSave = async () => {
+        await set('autoSave', "project");
+    };
 
     const handleNewProject = async () => {
         try {
@@ -94,9 +98,6 @@ export function Header(props) {
                 setTitle={setTitle}
                 dirHandle={dirHandleRef.current}
                 playerDispatch={playerDispatch} />
-
-
-
         </header>
     );
 }

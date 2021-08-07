@@ -22,7 +22,6 @@ function Annotation(props) {
         sceneRef.current.handleMouseMove(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
     };
 
-    // FIXME mouse click should pause playback really
     const handleMouseDown = (event) => {
         props.pauseVideo();
         const selectID = sceneRef.current.handleMouseDown(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
@@ -34,7 +33,6 @@ function Annotation(props) {
     };
 
     const handleMouseUp = () => {
-        // FIXME not happy about this as return value
         const update = sceneRef.current.handleMouseUp();
 
         if (update) {
@@ -45,6 +43,7 @@ function Annotation(props) {
         }
     };
 
+    //FIXME hardcoded values
     return (
         <canvas
             className={props.className}

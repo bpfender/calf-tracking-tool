@@ -5,12 +5,24 @@ import { getLabel, TrackFactory } from "./TrackFactory";
 // TODO add videoname key
 export function TaskFactory(totalFrames) {
     return {
+        videoName: null,
+        videoHandle: null,
+
         totalFrames: totalFrames,
         selected: null,
         tracks: Map(),
         reviewed: List(Array(totalFrames).fill(0)),
         keyFrames: List(),
     };
+}
+
+// TODO Video name and handle can be combined
+export function setVideoName(task, name) {
+    return setIn(task, ['videoName'], name);
+}
+
+export function setVideoHandle(task, handle) {
+    return setIn(task, ['videoHandle'], handle);
 }
 
 export function setTotalFrames(task, frames) {
