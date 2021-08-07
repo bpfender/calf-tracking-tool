@@ -29,6 +29,10 @@
     top:50%;
 }
 
+.player-video-source-content.hidden{
+    display:none;
+}
+
 .player-video-source-content.primary{
     border: 1px solid $pt-intent-primary;
 }

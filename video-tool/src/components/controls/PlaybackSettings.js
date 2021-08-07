@@ -7,14 +7,17 @@ import PlaybackRateSelect from "./PlaybackRateSelect";
 
 
 export default function PlaybackSettings(props) {
-    const { video } = props;
+    const { video, disabled } = props;
 
     return (
         <Popover2
+            disabled={disabled}
             className="playback-settings-button"
             content={<PlaybackSettingsMenu video={video} />}
         >
-            <Button icon="cog"></Button>
+            <Button
+                disabled={disabled}
+                icon="cog" />
         </Popover2>
     );
 }
@@ -24,8 +27,10 @@ function PlaybackSettingsMenu(props) {
 
     return (
         <div className="playback-settings-menu">
-            <PlaybackRateSelect video={video}></PlaybackRateSelect>
-            <FrameSkipSelect video={video}></FrameSkipSelect>
+            <PlaybackRateSelect
+                video={video} />
+            <FrameSkipSelect
+                video={video} />
         </div>
     );
 }

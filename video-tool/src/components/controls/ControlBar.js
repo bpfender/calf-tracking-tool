@@ -19,23 +19,43 @@ export default function ControlBar(props) {
     //FIXME video? syntax is shite slider time not directly needed for slider
     return (
         <div className="control-bar">
-            <ButtonGroup minimal={true}>
-                <PlaybackSettings video={video}></PlaybackSettings>
+            <ButtonGroup
+                minimal={true}>
+                <PlaybackSettings
+                    disabled={playerState.src ? false : true}
+                    video={video} />
                 <Divider />
-                <Rewind video={video} />
-                <PrevNFrames video={video} playerState={playerState} />
-                <PrevFrame video={video} />
-                <PlayPause video={video} playerState={playerState} />
-                <NextFrame video={video} />
-                <NextNFrames video={video} playerState={playerState} />
+                <Rewind
+                    disabled={playerState.src ? false : true}
+                    video={video} />
+                <PrevNFrames
+                    disabled={playerState.src ? false : true}
+                    video={video}
+                    playerState={playerState} />
+                <PrevFrame
+                    disabled={playerState.src ? false : true}
+                    video={video} />
+                <PlayPause
+                    disabled={playerState.src ? false : true}
+                    video={video}
+                    playerState={playerState} />
+                <NextFrame
+                    disabled={playerState.src ? false : true}
+                    video={video} />
+                <NextNFrames
+                    disabled={playerState.src ? false : true}
+                    video={video}
+                    playerState={playerState} />
             </ButtonGroup>
             <VideoSlider
+                disabled={playerState.src ? false : true}
                 video={video}
                 playerState={playerState}
-                sliderTime={video ? video.getFramesAsTime(selectedFrame) : 0}
+                sliderTime={playerState.src ? video.getFramesAsTime(selectedFrame) : 0}
                 setSelectedFrame={setSelectedFrame}
                 selectedFrame={selectedFrame} />
             <FrameSelector
+                disabled={playerState.src ? false : true}
                 video={video}
                 playerState={playerState}
                 selectedFrame={selectedFrame}

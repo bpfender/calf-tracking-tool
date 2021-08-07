@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Video from './Video';
 import ControlBar from '../controls/ControlBar';
 import Info from '../Info';
@@ -14,6 +14,8 @@ function Player(props) {
         annotations, annotationDispatch,
         playerState, playerDispatch } = props;
 
+    const [hidden, setHidden] = useState(false);
+
     // TODO useeffect to mount video?
     const videoRef = useRef(null);
     const videoContainerRef = useRef(null);
@@ -26,7 +28,22 @@ function Player(props) {
     // Initialise component with video elements hidden
     useEffect(() => {
         videoContainerRef.current.hidden = true;
-    }, [videoContainerRef])
+    }, [videoContainerRef]);
+
+    useEffect(() => {
+        if (playerState.src) {
+            videoRef.current.load()
+            videoContainerRef.current.hidden = false;
+        } else {
+            videoContainerRef.current.hidden = true;
+        }
+
+        setHidden(!videoContainerRef.current.hidden);
+    }, [playerState.src]);
+
+    useEffect(() => {
+        console.log(hidden);
+    }, [hidden]);
 
 
     return (
@@ -38,7 +55,9 @@ function Player(props) {
                     videoHeight={playerState.videoHeight}
                 />
                 <VideoSource
-                    annotationDispatch={annotationDispatch} />
+                    hidden={hidden}
+                    annotationDispatch={annotationDispatch}
+                    playerDispatch={playerDispatch} />
                 <div
                     ref={videoContainerRef}
                     className="video-container">
@@ -50,6 +69,7 @@ function Player(props) {
                             playerDispatch={playerDispatch}
                             src={playerState.src}
                             fps={playerState.framerate}
+                            readyState={playerState.readyState}
                             vsync={playerState.vsync} />
                         <Annotation
                             className="video-window annotation-overlay"
@@ -59,6 +79,7 @@ function Player(props) {
                             pauseVideo={() => { videoRef.current.pause() }} />
                     </div>
                 </div>
+
             </div>
             <ControlBar video={videoRef.current} playerState={playerState} />
             <Info videoState={playerState} />

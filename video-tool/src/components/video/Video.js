@@ -16,6 +16,8 @@ class Video extends React.Component {
         this.canvas = null;
         this.ctx = null;
         this.videoFrameCallbackMetadata = null;
+        this.fps = props.fps;
+        this.frame_delta = 1 / props.fps;
 
         // Frame callbacks
         this.framerateCalcCallback = this.framerateCalcCallback.bind(this);
@@ -68,25 +70,30 @@ class Video extends React.Component {
 
     // TODO not quite sure about lifecycle and where forceupdates() are needed
     componentDidMount() {
-        this.seekTime(FRAME_DELTA / 2); // Initialise current time to avoid null ref. TODO, not sure this is actually required
+        //this.seekTime(this.frame_delta / 2); // Initialise current time to avoid null ref. TODO, not sure this is actually required
         this.ctx = this.canvas.getContext('2d'); // Setup canvas context
         this.video.requestVideoFrameCallback(this.handleVideoFrameCallback);
     }
 
     componentDidUpdate(prevProps) {
-        console.log(prevProps);
+
         if (prevProps.src !== this.props.src) {
             this.video.src = this.props.src;
             this.video.load();
+        }
+
+        if (this.props.readyState === 4 && this.props.fps === 0) {
             this.video.requestVideoFrameCallback((now, metadata) => {
                 this.framerateCalcCallback(metadata)
             })
             this.play();
         }
 
-        /* if (this.props.src === null) {
-             this.video.load();
-         }*/
+        if (prevProps.fps !== this.props.fps) {
+            this.fps = this.props.fps;
+            this.frame_delta = 1 / this.fps;
+        }
+        console.log("FRAMERATE", this.fps);
     }
 
     framerateCalcCallback(metadata, prev = [0, 0, 0]) {
@@ -95,16 +102,18 @@ class Video extends React.Component {
         const [prevTime, prevFrames, prevFps] = prev;
 
         const fps = Math.round((frames - prevFrames) / (time - prevTime) * 1000);
-        console.log(fps, prevFps, frames, prevFrames, time, prevTime);
+        // console.log(fps, prevFps, frames, prevFrames, time, prevTime);
 
         if (fps === prevFps) {
             this.video.pause();
 
             this.props.playerDispatch({
                 type: 'SET_FRAMERATE',
-                payload: { framerate: fps / 1000 }
+                payload: {
+                    framerate: fps / 1000,
+                }
             });
-
+            console.log("REWIND");
             this.rewind();
             this.video.requestVideoFrameCallback(this.handleVideoFrameCallback);
         } else {
@@ -204,7 +213,7 @@ class Video extends React.Component {
     // Frame time is defined as halfway through frame, to allow next/prev navigation. Media time
     // appear to be beginning of frame
     getFrameTime() {
-        return this.getMediaTime() + FRAME_DELTA / 2;
+        return this.getMediaTime() + this.frame_delta / 2;
     }
 
     setCurrentTime(time) {
@@ -212,20 +221,19 @@ class Video extends React.Component {
     }
 
     getCurrentFrame() {
-        return (Math.round(this.getMediaTime() * FPS + 1)); // adding starting frame offset
+        return (Math.round(this.getMediaTime() * this.fps + 1)); // adding starting frame offset
     }
 
     setCurrentFrame(n) {
-        this.setCurrentTime(this.getFramesAsTime(n) - FRAME_DELTA / 2);
+        this.setCurrentTime(this.getFramesAsTime(n) - this.frame_delta / 2);
     }
 
     getFramesAsTime(n) {
-        return (n) * FRAME_DELTA;
+        return (n) * this.frame_delta;
     }
 
     getTimeAsFrames(t) {
-        console.log(t);
-        return Math.floor(t * FPS + 1);
+        return Math.floor(t * this.fps + 1);
     }
 
     /* ---- VIDEO EVENTS ---- */
@@ -253,7 +261,6 @@ class Video extends React.Component {
             type: 'DURATION_CHANGE',
             payload: {
                 duration: this.video.duration,
-                totalFrames: this.getTimeAsFrames(this.video.duration)
             }
         });
     }
@@ -362,7 +369,7 @@ class Video extends React.Component {
                     ref={element => {
                         this.video = element;
                     }}
-                    src={video_src}
+                    src=""
                     onAbort={this.handleAbort}
                     onCanPlay={this.handleCanPlay}
                     onCanPlayThrough={this.handleCanPlayThrough}

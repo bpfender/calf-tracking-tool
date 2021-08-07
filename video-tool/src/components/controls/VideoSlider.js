@@ -3,7 +3,7 @@ import { Tag, Slider } from '@blueprintjs/core';
 import "./VideoSlider.scss";
 
 export default function VideoSlider(props) {
-    const { video, playerState, sliderTime, setSelectedFrame, selectedFrame } = props;
+    const { disabled, video, playerState, sliderTime, setSelectedFrame, selectedFrame } = props;
 
     const formatTime = (seconds) => {
         const date = new Date(seconds * 1000);
@@ -28,6 +28,7 @@ export default function VideoSlider(props) {
     return (
         <div className="video-slider">
             <Slider
+                disabled={disabled}
                 className="slider"
                 onChange={handleChange}
                 onRelease={handleRelease}

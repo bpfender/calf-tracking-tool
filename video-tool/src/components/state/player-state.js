@@ -64,7 +64,6 @@ export function playerReducer(state, action) {
             return {
                 ...state,
                 duration: payload.duration,
-                totalFrames: payload.totalFrames
             };
         case 'EMPTIED':
             return state;
@@ -165,6 +164,7 @@ export function playerReducer(state, action) {
             return {
                 ...state,
                 framerate: payload.framerate,
+                totalFrames: Math.floor(state.duration * payload.framerate + 1)
             }
         case 'RESET':
             return defaultPlayerState;

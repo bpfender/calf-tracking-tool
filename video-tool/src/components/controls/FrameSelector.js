@@ -4,7 +4,7 @@ import "./FrameSelector.scss";
 
 // FIXME useref() for timeout
 export default function FrameSelector(props) {
-    const { video, playerState, selectedFrame, setSelectedFrame } = props;
+    const { video, playerState, selectedFrame, setSelectedFrame, disabled } = props;
     const [intent, setIntent] = useState("none");
     const timeoutRef = useRef(null);
 
@@ -43,6 +43,7 @@ export default function FrameSelector(props) {
     return (
         <div className="frame-selector">
             <InputGroup
+                disabled={disabled}
                 className="frame-input"
                 onClick={event => { event.target.select() }}
                 onChange={handleChange}

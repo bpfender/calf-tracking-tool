@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { getVideoHandle } from '../storage/file-access';
 
 export default function VideoSource(props) {
-    const { annotationDispatch } = props;
+    const { annotationDispatch, playerDispatch, hidden } = props;
 
     const [dragState, setDragState] = useState("");
     const [message, setMessage] = useState("Add a video file to get started...");
@@ -27,14 +27,18 @@ export default function VideoSource(props) {
         })
     }, [])
 
-    const setVideoDispatch = (handle) => {
+    const setVideoDispatch = async (handle) => {
         annotationDispatch({
             type: 'SET_VIDEO',
             payload: { handle: handle }
         });
+        playerDispatch({
+            type: 'SRC_CHANGE',
+            payload: { src: URL.createObjectURL(await handle.getFile()) }
+        });
     }
 
-
+    //FIXME no validation here
     const handleClick = async () => {
         try {
             setDragState("primary");
@@ -42,6 +46,7 @@ export default function VideoSource(props) {
             const handle = await getVideoHandle(parentDir);
             setVideoDispatch(handle);
         } catch (error) {
+            console.log(error);
             console.log("Video select cancelled");
         }
     }
@@ -85,9 +90,14 @@ export default function VideoSource(props) {
         setMessage("Add a video file to get started...");
     }
 
+    const hiddenClass = () => {
+        return hidden ? " hidden" : "";
+    }
+
+    // FIZME Hidden class is a bit messy
     return (
         <div
-            className={"video-container player-video-source-content " + dragState}
+            className={"video-container player-video-source-content " + dragState + hiddenClass()}
             onClick={handleClick}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
@@ -99,7 +109,6 @@ export default function VideoSource(props) {
                 color={Colors.DARK_GRAY1}
             />
             <p>{message}</p>
-
         </ div >
     );
 }
