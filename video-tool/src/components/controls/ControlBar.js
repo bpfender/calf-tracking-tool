@@ -7,14 +7,22 @@ import { NextFrame, PrevFrame, NextNFrames, PrevNFrames, Rewind } from './FrameN
 import VideoSlider from './VideoSlider';
 import FrameSelector from './FrameSelector';
 import PlaybackSettings from './PlaybackSettings';
+import { getFramesAsTime } from '../video/video-functions';
 
 export default function ControlBar(props) {
-    const { video, playerState } = props;
+    const {
+        videoRef, playerDispatch, totalFrames, duration,
+        src, mediaTime, paused, seeking,
+        currentFrame, framerate,
+        framesToSkip, vsync } = props;
+
     const [selectedFrame, setSelectedFrame] = useState(1);
+    console.log(selectedFrame);
+    console.log(currentFrame);
 
     useEffect(() => {
-        setSelectedFrame(playerState.currentFrame);
-    }, [playerState.currentFrame]);
+        setSelectedFrame(currentFrame);
+    }, [currentFrame]);
 
     //FIXME video? syntax is shite slider time not directly needed for slider
     return (
@@ -22,42 +30,55 @@ export default function ControlBar(props) {
             <ButtonGroup
                 minimal={true}>
                 <PlaybackSettings
-                    disabled={playerState.src ? false : true}
-                    video={video} />
+                    videoRef={videoRef}
+                    playerDispatch={playerDispatch}
+                    disabled={src ? false : true} />
                 <Divider />
                 <Rewind
-                    disabled={playerState.src ? false : true}
-                    video={video} />
+                    videoRef={videoRef}
+                    disabled={src ? false : true} />
                 <PrevNFrames
-                    disabled={playerState.src ? false : true}
-                    video={video}
-                    playerState={playerState} />
+                    videoRef={videoRef}
+                    currentFrame={currentFrame}
+                    framerate={framerate}
+                    framesToSkip={framesToSkip}
+                    disabled={src ? false : true} />
                 <PrevFrame
-                    disabled={playerState.src ? false : true}
-                    video={video} />
+                    videoRef={videoRef}
+                    currentFrame={currentFrame}
+                    framerate={framerate}
+                    disabled={src ? false : true} />
                 <PlayPause
-                    disabled={playerState.src ? false : true}
-                    video={video}
-                    playerState={playerState} />
+                    videoRef={videoRef}
+                    mediaTime={mediaTime}
+                    vsync={vsync}
+                    paused={paused}
+                    disabled={src ? false : true} />
                 <NextFrame
-                    disabled={playerState.src ? false : true}
-                    video={video} />
+                    videoRef={videoRef}
+                    currentFrame={currentFrame}
+                    framerate={framerate}
+                    disabled={src ? false : true} />
                 <NextNFrames
-                    disabled={playerState.src ? false : true}
-                    video={video}
-                    playerState={playerState} />
+                    videoRef={videoRef}
+                    currentFrame={currentFrame}
+                    framerate={framerate}
+                    framesToSkip={framesToSkip}
+                    disabled={src ? false : true} />
             </ButtonGroup>
             <VideoSlider
-                disabled={playerState.src ? false : true}
-                video={video}
-                playerState={playerState}
-                sliderTime={playerState.src ? video.getFramesAsTime(selectedFrame) : 0}
-                setSelectedFrame={setSelectedFrame}
-                selectedFrame={selectedFrame} />
+                videoRef={videoRef}
+                duration={duration}
+                framerate={framerate}
+                disabled={src ? false : true}
+                sliderTime={src ? getFramesAsTime(selectedFrame, framerate) : 0}
+                setSelectedFrame={setSelectedFrame} />
             <FrameSelector
-                disabled={playerState.src ? false : true}
-                video={video}
-                playerState={playerState}
+                videoRef={videoRef}
+                totalFrames={totalFrames}
+                framerate={framerate}
+                seeking={seeking}
+                disabled={src ? false : true}
                 selectedFrame={selectedFrame}
                 setSelectedFrame={setSelectedFrame} />
         </div >

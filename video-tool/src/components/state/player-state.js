@@ -1,3 +1,5 @@
+import { getFramesAsTime, getTimeAsFrames } from "../video/video-functions";
+
 export const defaultPlayerState = {
     // requestVideoFrameCallback() metadata
     vsync: 0,
@@ -34,14 +36,14 @@ export const defaultPlayerState = {
 
 export function playerReducer(state, action) {
     const payload = action.payload;
-    // console.log(action.type, payload);
 
     switch (action.type) {
+        // FIXME Not sure about calculating this here
         case 'FRAME_CALLBACK':
             return {
                 ...state,
                 vsync: payload.vsync,
-                currentFrame: payload.currentFrame,
+                currentFrame: getTimeAsFrames(payload.mediaTime, state.framerate),
                 presentationTime: payload.presentationTime,
                 expectedDisplayTime: payload.expectedDisplayTime,
                 mediaTime: payload.mediaTime,
@@ -156,7 +158,7 @@ export function playerReducer(state, action) {
             };
         case 'SRC_CHANGE':
             return {
-                ...state,
+                ...defaultPlayerState,
                 framerate: 0,
                 src: payload.src,
             };

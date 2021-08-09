@@ -1,17 +1,22 @@
 import React from 'react';
 import { Button } from '@blueprintjs/core';
+import { pause, play } from '../video/video-functions';
 
 export default function PlayPause(props) {
-    const { video, playerState, disabled } = props;
-    const handlePlayClick = () => { video.play() };
-    const handlePauseClick = () => { video.pause() };
+    const { videoRef, mediaTime, vsync, paused, disabled } = props;
 
+    const handlePlayClick = async () => {
+        await play(videoRef.current);
+    };
+
+    const handlePauseClick = () => {
+        pause(videoRef.current, mediaTime, vsync);
+    };
 
     return (
         <Button
             disabled={disabled}
-            icon={playerState.paused ? "play" : "pause"}
-            onClick={playerState.paused ? handlePlayClick : handlePauseClick}
-        ></Button>
+            icon={paused ? "play" : "pause"}
+            onClick={paused ? handlePlayClick : handlePauseClick} />
     );
 }

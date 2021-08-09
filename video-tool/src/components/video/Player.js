@@ -32,7 +32,6 @@ function Player(props) {
 
     useEffect(() => {
         if (playerState.src) {
-            videoRef.current.load()
             videoContainerRef.current.hidden = false;
         } else {
             videoContainerRef.current.hidden = true;
@@ -65,10 +64,12 @@ function Player(props) {
                         style={style}>
                         <Video
                             className="video-window"
-                            ref={videoRef}
+                            videoRef={videoRef}
                             playerDispatch={playerDispatch}
                             src={playerState.src}
-                            fps={playerState.framerate}
+                            currentFrame={playerState.currentFrame}
+                            mediaTime={playerState.mediaTime}
+                            framerate={playerState.framerate}
                             readyState={playerState.readyState}
                             vsync={playerState.vsync} />
                         <Annotation
@@ -81,7 +82,19 @@ function Player(props) {
                 </div>
 
             </div>
-            <ControlBar video={videoRef.current} playerState={playerState} />
+            <ControlBar
+                videoRef={videoRef}
+                playerDispatch={playerDispatch}
+                totalFrames={playerState.totalFrames}
+                duration={playerState.duration}
+                src={playerState.src}
+                mediaTime={playerState.mediaTime}
+                paused={playerState.paused}
+                seeking={playerState.seeking}
+                currentFrame={playerState.currentFrame}
+                framerate={playerState.framerate}
+                framesToSkip={playerState.framesToSkip}
+                vsync={playerState.vsync} />
             <Info videoState={playerState} />
         </div >
     );

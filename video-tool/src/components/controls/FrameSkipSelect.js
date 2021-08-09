@@ -2,17 +2,19 @@ import React from "react";
 import { HTMLSelect } from "@blueprintjs/core";
 
 export default function FrameSkipSelect(props) {
-    const { video } = props;
+    const { playerDispatch } = props;
 
     const handleChange = (event) => {
-        video.changeFramesToSkip(parseInt(event.currentTarget.value));
+        const n = parseInt(event.currentTarget.value);
+        playerDispatch({
+            type: 'FRAMES_TO_SKIP',
+            payload: { framesToSkip: n }
+        });
     }
 
     return (
         <HTMLSelect
-            onChange={handleChange}
-            defaultValue="5"
-        >
+            onChange={handleChange}>
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="20">20</option>

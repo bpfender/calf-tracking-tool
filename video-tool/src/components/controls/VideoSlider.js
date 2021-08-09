@@ -1,9 +1,10 @@
 import React from 'react';
 import { Tag, Slider } from '@blueprintjs/core';
 import "./VideoSlider.scss";
+import { getTimeAsFrames, seekTime } from '../video/video-functions';
 
 export default function VideoSlider(props) {
-    const { disabled, video, playerState, sliderTime, setSelectedFrame, selectedFrame } = props;
+    const { duration, framerate, disabled, videoRef, sliderTime, setSelectedFrame } = props;
 
     const formatTime = (seconds) => {
         const date = new Date(seconds * 1000);
@@ -18,11 +19,12 @@ export default function VideoSlider(props) {
     }
 
     const handleChange = (time) => {
-        setSelectedFrame(video.getTimeAsFrames(time));
+        console.log(time);
+        setSelectedFrame(getTimeAsFrames(time, framerate));
     }
 
     const handleRelease = (time) => {
-        video.setCurrentFrame(selectedFrame);
+        seekTime(videoRef.current, time);
     }
 
     return (
@@ -35,13 +37,13 @@ export default function VideoSlider(props) {
                 labelRenderer={false}
                 value={sliderTime}
                 min={0}
-                max={playerState.duration}
+                max={duration}
                 stepSize={.01} />
             <Tag
                 className="time-display bp3-text-small"
                 icon="time"
                 minimal={true}>
-                {formatTime(sliderTime)} / {formatTime(playerState.duration)}
+                {formatTime(sliderTime)} / {formatTime(duration)}
             </Tag>
         </div >
     )

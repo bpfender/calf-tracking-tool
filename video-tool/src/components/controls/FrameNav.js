@@ -1,69 +1,64 @@
 import React from 'react';
 import { Button } from '@blueprintjs/core';
+import { nextFrame, prevFrame, rewind } from '../video/video-functions';
 
 export function Rewind(props) {
-    const { video, disabled } = props;
-    const handleClick = () => { video.rewind() }
-
+    const { videoRef, disabled } = props;
     return (
         <Button
             disabled={disabled}
             icon="undo"
-            onClick={handleClick}
-        />
+            onClick={() => {
+                rewind(videoRef.current);
+            }} />
     )
 }
 
-
 export function NextFrame(props) {
-    const { video, disabled } = props;
-    const handleClick = () => { video.nextFrame() };
-
+    const { videoRef, currentFrame, framerate, disabled } = props;
     return (
         <Button
             disabled={disabled}
             icon="arrow-right"
-            onClick={handleClick}
-        />
+            onClick={() => {
+                nextFrame(videoRef.current, currentFrame, framerate);
+            }} />
     );
 }
 
 export function PrevFrame(props) {
-    const { video, disabled } = props;
-    const handleClick = () => { video.prevFrame() };
-
+    const { videoRef, currentFrame, framerate, disabled } = props;
     return (
         <Button
             disabled={disabled}
             icon="arrow-left"
-            onClick={handleClick}
-        />
+            onClick={() => {
+                prevFrame(videoRef.current, currentFrame, framerate);
+            }} />
     );
 }
 
 export function NextNFrames(props) {
-    const { video, playerState, disabled } = props;
-    const handleClick = () => { video.nextFrame(playerState.framesToSkip) };
-
+    const { videoRef, currentFrame, framerate, framesToSkip, disabled } = props;
     return (
         <Button
             disabled={disabled}
             icon="double-chevron-right"
-            onClick={handleClick}
-        />
+            onClick={() => {
+                nextFrame(videoRef.current, currentFrame, framerate, framesToSkip);
+            }} />
     );
 }
 
 export function PrevNFrames(props) {
-    const { video, playerState, disabled } = props;
-    const handleClick = () => { video.prevFrame(playerState.framesToSkip) };
-
+    const { videoRef, currentFrame, framerate, framesToSkip, disabled } = props;
     return (
         <Button
             disabled={disabled}
             icon="double-chevron-left"
-            onClick={handleClick}
-        />
+            onClick={() => {
+                prevFrame(videoRef.current, currentFrame, framerate, framesToSkip);
+            }} />
     );
 }
 

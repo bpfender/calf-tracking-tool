@@ -35,7 +35,7 @@ export function setLabel(track, frame, label) {
     const nextFrame = getNextAnchor(track.anchors, frame);
     let newLabels = null;
 
-
+    console.log(frame, label);
     if (prevFrame === -1 && nextFrame === -1) {
         newLabels = List(Array(track.labels.size).fill(label));
 
@@ -90,7 +90,6 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
     for (let i = startFrame; i < endFrame - 1; i++) {
 
         const label = Object.fromEntries(keys.map(key => {
-
             const val = ([
                 key,
                 Math.round(startLabel[key] + frameDelta[key] * (i - (startFrame - 1)))
@@ -98,6 +97,8 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
 
             return val;
         }))
+
+        console.log(label);
 
         mutableList.set(i, label);
     }

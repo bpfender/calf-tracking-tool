@@ -17,6 +17,7 @@ export async function calculateFramerate(video, prev = [0, 0, 0]) {
     const metadata = await requestVideoFramePromise(video)
     const fps = await framerateCalcCallback(video, metadata, prev);
     video.pause();
+    video.currentTime = 0;
     return fps;
 }
 
@@ -26,9 +27,8 @@ async function framerateCalcCallback(video, metadata, prev) {
     const [prevTime, prevFrames, prevFps] = prev;
     const fps = Math.round((frames - prevFrames) / (time - prevTime) * 1000);
 
-    console.log(fps, prevFps);
     if (fps === prevFps) {
-        return fps;
+        return fps / 1000;
     } else {
         return await calculateFramerate(video, [time, frames, fps]);
     }
@@ -39,3 +39,44 @@ const requestVideoFramePromise = (video) => new Promise((resolve) => {
         resolve(metadata);
     });
 })
+
+export async function play(video) {
+    await video.play();
+}
+
+export function pause(video, mediaTime, vsync) {
+    video.pause();
+    // FIXME empirical value of 0.1us for vsync value
+    // https://web.dev/requestvideoframecallback-rvfc/
+    if (vsync < 0.1) {
+        seekTime(video, mediaTime);
+    }
+}
+
+export function load(video) {
+    video.load();
+}
+
+export function seekTime(video, time) {
+    video.currentTime = time;
+}
+
+export function seekFrame(video, frame, framerate) {
+    video.currentTime = getFramesAsTime(frame, framerate) - getFrameOffset(framerate);
+}
+
+export function rewind(video) {
+    seekTime(video, 0);
+}
+
+export function nextFrame(video, currentFrame, framerate, n = 1) {
+    seekFrame(video, currentFrame + n, framerate);
+}
+
+export function prevFrame(video, currentFrame, framerate, n = 1) {
+    seekFrame(video, currentFrame - n, framerate);
+}
+
+export function setPlaybackRate(video, rate) {
+    video.playbackRate = rate;
+}

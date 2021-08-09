@@ -1,22 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
 import { InputGroup } from "@blueprintjs/core";
 import "./FrameSelector.scss";
+import { seekFrame } from "../video/video-functions";
 
 // FIXME useref() for timeout
 export default function FrameSelector(props) {
-    const { video, playerState, selectedFrame, setSelectedFrame, disabled } = props;
+    const { selectedFrame, setSelectedFrame } = props;
+
+    const {
+        videoRef,
+        totalFrames,
+        framerate,
+        seeking,
+        disabled } = props;
+
     const [intent, setIntent] = useState("none");
     const timeoutRef = useRef(null);
 
     useEffect(() => {
-        if (playerState.seeking) {
+        if (seeking) {
             setIntent("warning");
         } else {
             setIntent("none")
         }
-    }, [playerState.seeking])
+    }, [seeking])
 
-    // TODO needs to be updated based on slider value
     const handleChange = (event) => {
         clearTimeout(timeoutRef.current);
 
@@ -26,20 +34,22 @@ export default function FrameSelector(props) {
             frame = 1;
         } else {
             const value = parseInt(event.target.value);
-            if (value > playerState.totalFrames) {
-                setSelectedFrame(playerState.totalFrames);
-                frame = playerState.totalFrames;
+            if (value > totalFrames) {
+                setSelectedFrame(totalFrames);
+                frame = totalFrames;
             } else {
                 setSelectedFrame(value);
                 frame = value;
             }
         }
-        const timeout = setTimeout(video.setCurrentFrame, 700, frame);
+
+        const timeout = setTimeout(() => {
+            seekFrame(videoRef.current, frame, framerate)
+        }, 700);
+
         timeoutRef.current = timeout;
     }
 
-    // TODO possible to select all on click?
-    // TODO wrap in label to extend clickable area?
     return (
         <div className="frame-selector">
             <InputGroup
@@ -51,13 +61,13 @@ export default function FrameSelector(props) {
                 leftIcon="duplicate"
                 value={selectedFrame}
                 min={1}
-                max={playerState.totalFrames}
+                max={totalFrames}
                 step={1}
                 intent={intent}
                 async={true}
                 small={true}
             ></InputGroup>
-            <span className="frame-count">/ {playerState.totalFrames}</span>
+            <span className="frame-count">/ {totalFrames}</span>
         </div >
     );
 }
