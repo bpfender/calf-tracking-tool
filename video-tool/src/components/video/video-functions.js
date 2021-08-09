@@ -3,7 +3,7 @@ export function getFramesAsTime(n, fps) {
 }
 
 export function getTimeAsFrames(time, fps) {
-    return Math.floor(time * fps + 1); // +1 starting frame offset
+    return Math.round(time * fps + 1); // +1 starting frame offset
 }
 
 // media time is at beginning of given frame, so "frameTime" is
