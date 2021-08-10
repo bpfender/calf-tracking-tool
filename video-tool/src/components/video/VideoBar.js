@@ -1,7 +1,5 @@
 import { Button, ButtonGroup, Spinner } from '@blueprintjs/core';
 import React from 'react';
-import { HAVE_METADATA } from './video-constants';
-
 
 //FIXME spinner not centred properly
 export function VideoBar(props) {

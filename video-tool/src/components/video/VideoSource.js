@@ -6,16 +6,16 @@
 //FIXME this needs some cleaning!
 import { Colors, Icon } from '@blueprintjs/core';
 import { get } from 'idb-keyval';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getVideoHandle } from '../storage/file-access';
 
 export default function VideoSource(props) {
-    const { annotationDispatch, playerDispatch, hidden } = props;
+    const { src, annotationDispatch, playerDispatch, hidden } = props;
 
     const [dragState, setDragState] = useState("");
     const [message, setMessage] = useState("Add a video file to get started...");
 
-    // Removing default effects
+    // Removing default effects on mount
     useEffect(() => {
         const prevent = (event) => { event.preventDefault() };
         window.addEventListener("dragover", prevent);
@@ -26,6 +26,13 @@ export default function VideoSource(props) {
             window.removeEventListener("drop", prevent);
         })
     }, [])
+
+    useEffect(() => {
+        if (src) {
+            setDragState("success");
+            setMessage("Loading...");
+        }
+    }, [src]);
 
     const setVideoDispatch = async (handle) => {
         annotationDispatch({
@@ -90,14 +97,14 @@ export default function VideoSource(props) {
         setMessage("Add a video file to get started...");
     }
 
-    const hiddenClass = () => {
+    const setHiddenClass = () => {
         return hidden ? " hidden" : "";
     }
 
     // FIZME Hidden class is a bit messy
     return (
         <div
-            className={"video-container player-video-source-content " + dragState + hiddenClass()}
+            className={["video-container player-video-source-content", dragState, setHiddenClass()].join(" ")}
             onClick={handleClick}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
@@ -106,8 +113,7 @@ export default function VideoSource(props) {
                 className={"player-video-source-icon"}
                 icon="add"
                 iconSize={160}
-                color={Colors.DARK_GRAY1}
-            />
+                color={Colors.DARK_GRAY1} />
             <p>{message}</p>
         </ div >
     );

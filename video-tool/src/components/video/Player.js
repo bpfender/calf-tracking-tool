@@ -31,14 +31,14 @@ function Player(props) {
     }, [videoContainerRef]);
 
     useEffect(() => {
-        if (playerState.src) {
+        if (playerState.framerate !== 0) {
             videoContainerRef.current.hidden = false;
         } else {
             videoContainerRef.current.hidden = true;
         }
 
         setHidden(!videoContainerRef.current.hidden);
-    }, [playerState.src]);
+    }, [playerState.framerate]);
 
     useEffect(() => {
         console.log(hidden);
@@ -55,6 +55,7 @@ function Player(props) {
                     videoHeight={playerState.videoHeight}
                 />
                 <VideoSource
+                    src={playerState.src}
                     hidden={hidden}
                     annotationDispatch={annotationDispatch}
                     playerDispatch={playerDispatch} />
