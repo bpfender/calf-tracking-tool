@@ -1,10 +1,11 @@
 import { Button, Card, Classes, Icon, Overlay } from '@blueprintjs/core';
 import { get } from 'immutable';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./Overlay.scss";
 
 export function StartupOverlay(props) {
-    const { handleNewProject, handleOpenProject } = props;
+    const { handleNewProject, handleOpenProject, project } = props;
+    const [open, setOpen] = useState(true);
 
     useEffect(() => {
         (async () => {
@@ -14,10 +15,13 @@ export function StartupOverlay(props) {
         })();
     }, []);
 
+    // When project is initialised, this can be closed
     useEffect(() => {
-
-    })
-
+        console.log("HELLO");
+        if (project) {
+            setOpen(false);
+        }
+    }, [project])
 
     const handleNew = async () => {
         await handleNewProject();
@@ -32,7 +36,7 @@ export function StartupOverlay(props) {
             className="bp3-dark"
             canEscapeKeyClose={false}
             canOutsideClickClose={false}
-            isOpen={true}>
+            isOpen={open}>
             <Card className="overlay">
                 <Icon
                     className="overlay-icon"
@@ -61,7 +65,7 @@ export function StartupOverlay(props) {
             className="bp3-dark"
             canEscapeKeyClose={false}
             canOutsideClickClose={false}
-            isOpen={true}>
+            isOpen={open}>
             <Card className="overlay">
                 <Icon
                     className="overlay-icon"
@@ -104,7 +108,7 @@ export function StartupOverlay(props) {
             className="bp3-dark"
             canEscapeKeyClose={false}
             canOutsideClickClose={false}
-            isOpen={true}>
+            isOpen={open}>
             <Card className="overlay">
                 <Icon
                     className="overlay-icon"

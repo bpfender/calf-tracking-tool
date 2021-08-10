@@ -11,8 +11,8 @@ export function ProjectFactory(name, fileHandle) {
         name: name,
         fileHandle: fileHandle,
         selectedTask: key,
-        tasks: new Map(key, TaskFactory()),
-        labels: new List(),
+        tasks: Map([[key, TaskFactory()]]),
+        labels: List(),
     }
 }
 

@@ -4,7 +4,7 @@ import { createNewProjectHandle, verifyPermission } from '../storage/file-access
 import "./Overlay.scss"
 
 export function NewProjectOverlay(props) {
-    const { open, setOpen, dirHandle, setTitle, playerDispatch } = props;
+    const { open, setOpen, dirHandle, setTitle, playerDispatch, projectDispatch } = props;
 
     const defaultWarning = { intent: "none", label: "" };
 
@@ -30,6 +30,10 @@ export function NewProjectOverlay(props) {
 
             const projectHandle = await createNewProjectHandle(dirHandle, input);
 
+            projectDispatch({
+                type: 'NEW_PROJECT',
+                payload: { name: input, fileHandle: projectHandle }
+            });
             playerDispatch({ type: 'RESET' });
             setTitle(input);
             setOpen(false);

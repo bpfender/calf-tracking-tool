@@ -8,7 +8,7 @@ import { saveFailed, saveSuccess, SaveToaster } from '../overlays/toaster';
 import { StartupOverlay } from '../overlays/StartupOverlay';
 
 export function Header(props) {
-    const { playerDispatch } = props;
+    const { projectDispatch, playerDispatch, project } = props;
 
     const [title, setTitle] = useState("");
     const [dirFlag, setDirFlag] = useState(false);
@@ -59,6 +59,7 @@ export function Header(props) {
     return (
         <header className={props.className}>
             <StartupOverlay
+                project={project}
                 handleNewProject={handleNewProject}
                 handleOpenProject={handleOpenProject} />
             <DirectoryOverlay
@@ -70,6 +71,7 @@ export function Header(props) {
                 setOpen={setProjectFlag}
                 setTitle={setTitle}
                 dirHandle={dirHandleRef.current}
+                projectDispatch={projectDispatch}
                 playerDispatch={playerDispatch} />
 
 

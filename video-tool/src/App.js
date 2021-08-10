@@ -9,7 +9,7 @@ import LeftSidebar from './components/left-sidebar/LeftSidebar';
 import { Header } from './components/header/Header';
 import { get } from 'idb-keyval';
 import { projectReducer } from './components/state/project-reducer';
-import { StartupOverlay } from './components/overlays/StartupOverlay';
+import { ProjectFactory } from './components/annotations/ProjectFactory';
 
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
@@ -19,7 +19,7 @@ import { StartupOverlay } from './components/overlays/StartupOverlay';
 export default function App(props) {
   const [parentDir, setParentDir] = useState(null);
 
-  const [project, projectDispatch] = useReducer();
+  const [project, projectDispatch] = useReducer(projectReducer, null);
 
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
   const [annotations, annotationDispatch] = useReducer(annotationReducer, TaskFactory(null));
@@ -46,6 +46,8 @@ export default function App(props) {
     <div className="App bp3-dark">
       <Header
         className="App-header"
+        project={project}
+        projectDispatch={projectDispatch}
         playerDispatch={playerDispatch} />
       <LeftSidebar
         className="left-sidebar" />
