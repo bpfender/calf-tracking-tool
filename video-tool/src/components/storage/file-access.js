@@ -35,7 +35,6 @@ export async function getVideoHandle(dirHandle) {
             {
                 description: 'Video file',
                 accept: {
-                    'video/x-msvideo': ['.avi'],
                     'video/mp4': ['.mp4'],
                     'video/mpeg': ['.mpeg'],
                     'video/ogg': ['.ogv'],

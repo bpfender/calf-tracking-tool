@@ -3,15 +3,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { List, Map, setIn } from "immutable";
 import { TaskFactory } from "./TaskFactory";
 
-
 export function ProjectFactory(name, fileHandle) {
-    const key = uuidv4();
-
     return {
         name: name,
         fileHandle: fileHandle,
-        selectedTask: key,
-        tasks: Map([[key, TaskFactory()]]),
+        selectedTask: null,
+        tasks: Map(),
         labels: List(),
     }
 }
@@ -57,4 +54,20 @@ export function getSelectedKey(project) {
 
 export function getTask(project, key) {
     return project.tasks(key);
+}
+
+export function generateProjectJSON(project) {
+    const plainObject = {
+        name: project.name,
+        fileHandle: project.fileHandle,
+        selectedTask: project.selectedTask,
+        tasks: project.tasks.toJS(),
+        labels: project.labels.toJS(),
+    };
+
+    return JSON.stringify(plainObject);
+}
+
+export function readProjectJSON(project) {
+
 }
