@@ -31,14 +31,6 @@ export default function App(props) {
       if (parentDir) {
         setParentDir(parentDir);
       }
-
-      const autosave = await get('autosave');
-      const recent = await get('recent');
-      const projectFile = await get('projectFile');
-      if (!projectFile) {
-
-      }
-
     })();
   }, [])
 
@@ -52,7 +44,6 @@ export default function App(props) {
 
   return (
     <div className="App bp3-dark">
-      <StartupOverlay></StartupOverlay>
       <Header
         className="App-header"
         playerDispatch={playerDispatch} />

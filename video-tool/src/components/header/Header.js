@@ -1,10 +1,11 @@
 import { Button, ButtonGroup, Divider, } from '@blueprintjs/core';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { get, set } from 'idb-keyval';
 import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
 import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-access';
 import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
 import { saveFailed, saveSuccess, SaveToaster } from '../overlays/toaster';
+import { StartupOverlay } from '../overlays/StartupOverlay';
 
 export function Header(props) {
     const { playerDispatch } = props;
@@ -57,6 +58,21 @@ export function Header(props) {
 
     return (
         <header className={props.className}>
+            <StartupOverlay
+                handleNewProject={handleNewProject}
+                handleOpenProject={handleOpenProject} />
+            <DirectoryOverlay
+                open={dirFlag}
+                setDirFlag={setDirFlag}
+                setProjectFlag={setProjectFlag} />
+            <NewProjectOverlay
+                open={projectFlag}
+                setOpen={setProjectFlag}
+                setTitle={setTitle}
+                dirHandle={dirHandleRef.current}
+                playerDispatch={playerDispatch} />
+
+
             <ButtonGroup
                 minimal={true}>
                 <Button
@@ -86,17 +102,6 @@ export function Header(props) {
                 <Divider />
                 <Button icon="help" />
             </ButtonGroup>
-
-            <DirectoryOverlay
-                open={dirFlag}
-                setOpen={setDirFlag}
-                setProject={setProjectFlag} />
-            <NewProjectOverlay
-                open={projectFlag}
-                setOpen={setProjectFlag}
-                setTitle={setTitle}
-                dirHandle={dirHandleRef.current}
-                playerDispatch={playerDispatch} />
         </header>
     );
 }

@@ -1,9 +1,13 @@
-import { addLabel, addTask, setSelectedKey, updateTask } from "../annotations/ProjectFactory";
+import { addLabel, addTask, ProjectFactory, setSelectedKey, updateTask } from "../annotations/ProjectFactory";
 
 export function projectReducer(state, action) {
     const payload = action.payload;
 
     switch (action.type) {
+        case 'NEW_PROJECT':
+            {
+                return ProjectFactory(payload.name, payload.fileHandle);
+            }
         case 'ADD_TASK':
             {
                 return addTask(state);

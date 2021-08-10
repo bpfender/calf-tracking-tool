@@ -6,19 +6,23 @@ import { getParentDirectory } from '../storage/file-access';
 import "./Overlay.scss"
 
 export function DirectoryOverlay(props) {
-    const { open, setOpen, setProject } = props;
+    const { open, setDirFlag, setProjectFlag } = props;
 
     // FIXME transition from directory to file window not clean
     const handleConfirm = async () => {
         try {
             const dirHandle = await getParentDirectory();
             await set('parentDir', dirHandle);
-            setOpen(false);
-            setProject(true);
+            setDirFlag(false);
+            setProjectFlag(true);
         } catch (error) {
             // No error handling
         }
     };
+
+    const handleCancel = () => {
+        setDirFlag(false);
+    }
 
     return (
         <Overlay
@@ -41,7 +45,7 @@ export function DirectoryOverlay(props) {
                         <Button
                             className="overlay-buttons-space"
                             icon="cross"
-                            onClick={() => { setOpen(false) }}>
+                            onClick={handleCancel}>
                             Cancel
                         </Button>
                         <Button

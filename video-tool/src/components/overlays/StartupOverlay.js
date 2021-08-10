@@ -1,11 +1,31 @@
 import { Button, Card, Classes, Icon, Overlay } from '@blueprintjs/core';
-import React from 'react';
+import { get } from 'immutable';
+import React, { useEffect } from 'react';
 import "./Overlay.scss";
 
 export function StartupOverlay(props) {
-    const handleConfirm = () => {
+    const { handleNewProject, handleOpenProject } = props;
 
+    useEffect(() => {
+        (async () => {
+            const parentDir = await get('parentDir');
+            const autoSave = await get('autosave');
+            const recent = await get('recent');
+        })();
+    }, []);
+
+    useEffect(() => {
+
+    })
+
+
+    const handleNew = async () => {
+        await handleNewProject();
+        console.log("NEW");
     };
+
+    const handleOpen = async () => { };
+
 
     const newProjectOverlay = (
         <Overlay
@@ -27,7 +47,7 @@ export function StartupOverlay(props) {
                         <Button
                             icon="tick"
                             intent="success"
-                            onClick={handleConfirm}>
+                            onClick={handleNew}>
                             Continue
                         </Button>
                     </div>
@@ -52,18 +72,27 @@ export function StartupOverlay(props) {
                         className={Classes.HEADING}
                     >Welcome to VAT!</h5>
                     <p>Please open an existing project or create a new one</p>
-                    <div className="overlay-buttons-right">
+                    <div className="overlay-buttons">
                         <Button
-                            className="overlay-buttons-space"
-                            icon="folder-open">
-                            Open existing
+                            icon="repeat"
+                            onClick>
+                            Last open
                         </Button>
-                        <Button
-                            icon="folder-new"
-                            intent="primary"
-                            onClick={handleConfirm}>
-                            New project
-                        </Button>
+
+                        <div className="overlay-buttons-right">
+                            <Button
+                                className="overlay-buttons-space"
+                                icon="folder-open"
+                                onClick={handleOpen}>
+                                Open
+                            </Button>
+                            <Button
+                                icon="folder-new"
+                                intent="primary"
+                                onClick={handleNew}>
+                                New
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </Card >
@@ -90,13 +119,14 @@ export function StartupOverlay(props) {
 
                         <Button
                             className="overlay-buttons-space"
-                            icon="folder-new">
+                            icon="folder-new"
+                            onClick={handleNew}>
                             New project
                         </Button>
                         <Button
                             icon="repeat"
                             intent="primary"
-                            onClick={handleConfirm}>
+                            onClick>
                             Recover
                         </Button>
                     </div>
