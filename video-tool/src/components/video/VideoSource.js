@@ -12,7 +12,7 @@ import { getVideoHandle } from '../storage/file-access';
 export default function VideoSource(props) {
     const { src, annotationDispatch, playerDispatch, hidden } = props;
 
-    const [dragState, setDragState] = useState("");
+    const [dragState, setDragState] = useState("none");
     const [message, setMessage] = useState("Add a video file to get started...");
 
     // Removing default effects on mount
@@ -51,10 +51,21 @@ export default function VideoSource(props) {
             setDragState("primary");
             const parentDir = await get('parentDir');
             const handle = await getVideoHandle(parentDir);
+            const file = await handle.getFile();
+
+            if (!file.type.includes("video")) {
+                throw new Error("This is not a valid video file");
+            }
+
             setVideoDispatch(handle);
         } catch (error) {
-            console.log(error);
-            console.log("Video select cancelled");
+            if (error.message.includes("valid")) {
+                setDragState("warning");
+                setMessage(error.message);
+            } else {
+                setDragState("none");
+                setMessage("Plase add a video file");
+            }
         }
     }
 
@@ -68,10 +79,6 @@ export default function VideoSource(props) {
             }
 
             const handle = await item.getAsFileSystemHandle();
-            if (handle.kind === 'directory') {
-                throw new Error("SOMETHING WENT WRONG");
-            }
-
             setVideoDispatch(handle);
         } catch (error) {
             setDragState("warning");
