@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { defaultPlayerState } from '../state/player-state';
 import { HAVE_ENOUGH_DATA } from './video-constants';
-import { calculateFramerate, getFrameOffset, getFramesAsTime } from './video-functions';
+import { calculateFramerate } from './video-functions';
 import "./Video.scss";
 
 export default function Video(props) {
@@ -9,14 +9,9 @@ export default function Video(props) {
         videoRef,
         playerDispatch,
         src,
-        framerate,
-        mediaTime,
-        currentFrame,
         readyState,
-        vsync } = props;
+        framerate } = props;
 
-    console.log(framerate);
-    //const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const contextRef = useRef(null);
 
@@ -26,7 +21,6 @@ export default function Video(props) {
     }, []);
 
     useEffect(() => {
-        //playerDispatch({ type: 'RESET' });
         videoRef.current.load();
     }, [src, videoRef]);
 
@@ -45,59 +39,18 @@ export default function Video(props) {
         if (readyState === HAVE_ENOUGH_DATA && framerate === 0) {
             console.log("HEELO");
             (async () => {
-                const framerate = await calculateFramerate(videoRef.current);
-                console.log("SETTING FRAMERATE", framerate);
+                const fps = await calculateFramerate(videoRef.current);
                 playerDispatch({
                     type: 'SET_FRAMERATE',
                     payload: {
-                        framerate: framerate,
+                        framerate: fps,
                     }
                 });
                 // Register initial callback when video has loaded properly
                 videoRef.current.requestVideoFrameCallback(handleVideoFrameCallback);
             })();
         }
-    }, [readyState, framerate, playerDispatch, videoRef, handleVideoFrameCallback])
-
-    const play = async () => {
-        await videoRef.current.play();
-    }
-
-    const pause = () => {
-        // FIXME empirical value of 0.1us for vsync value
-        // https://web.dev/requestvideoframecallback-rvfc/
-        if (vsync < 0.1) {
-            seekTime(mediaTime);
-        }
-    }
-
-    const load = () => {
-        videoRef.current.load();
-    }
-
-    const setPlaybackRate = (rate) => {
-        videoRef.current.playbackRate = rate;
-    }
-
-    const seekTime = (time) => {
-        videoRef.current.currentTime = time;
-    }
-
-    const seekFrame = (frame) => {
-        videoRef.current.currentTime = getFramesAsTime(frame, framerate) - getFrameOffset(framerate);
-    }
-
-    const rewind = () => {
-        seekTime(0);
-    }
-
-    const nextFrame = (n = 1) => {
-        seekFrame(currentFrame + n);
-    }
-
-    const prevFrame = (n = 1) => {
-        seekFrame(currentFrame - n);
-    }
+    }, [readyState, playerDispatch, videoRef, handleVideoFrameCallback, framerate])
 
     // EVENTS
     const handleCanPlayThrough = () => {
