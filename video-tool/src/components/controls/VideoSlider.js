@@ -37,7 +37,7 @@ export default function VideoSlider(props) {
                 labelRenderer={false}
                 value={sliderTime}
                 min={0}
-                max={duration}
+                max={duration || 1}
                 stepSize={.01} />
             <Tag
                 className="time-display bp3-text-small"
