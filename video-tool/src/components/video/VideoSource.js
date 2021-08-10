@@ -9,6 +9,8 @@ import { get } from 'idb-keyval';
 import React, { useEffect, useState } from 'react';
 import { getVideoHandle } from '../storage/file-access';
 
+
+// FIXME pull validation out into separate function
 export default function VideoSource(props) {
     const { src, annotationDispatch, playerDispatch, hidden } = props;
 
@@ -45,7 +47,6 @@ export default function VideoSource(props) {
         });
     }
 
-    //FIXME no validation here
     const handleClick = async () => {
         try {
             setDragState("primary");

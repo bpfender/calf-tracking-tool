@@ -93,8 +93,6 @@ export function NewProjectOverlay(props) {
                 </div>
             </Card >
         </Overlay >
-
-
     )
 }
 /*

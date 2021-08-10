@@ -20,7 +20,6 @@ export function projectReducer(state, action) {
             {
                 return addLabel(state, payload.label);
             }
-
         default:
             throw new Error(`Unexpeted project reducer case ${action.type}`);
     }

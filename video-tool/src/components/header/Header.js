@@ -49,7 +49,7 @@ export function Header(props) {
         try {
             const dirHandle = await get('parentDir');
             const projectHandle = getProjectHandle(dirHandle);
-            await set('project', projectHandle);
+            await set('projectFile', projectHandle);
         } catch (error) {
             console.log(error);
         }

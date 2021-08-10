@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import './App.scss';
 import { defaultPlayerState, playerReducer } from './components/state/player-state.js';
 import { TaskFactory } from './components/annotations/TaskFactory';
@@ -8,6 +8,8 @@ import RightSidebar from './components/right-sidebar/RightSidebar';
 import LeftSidebar from './components/left-sidebar/LeftSidebar';
 import { Header } from './components/header/Header';
 import { get } from 'idb-keyval';
+import { projectReducer } from './components/state/project-reducer';
+import { StartupOverlay } from './components/overlays/StartupOverlay';
 
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
@@ -18,6 +20,7 @@ export default function App(props) {
   const [parentDir, setParentDir] = useState(null);
 
   const [project, projectDispatch] = useReducer();
+
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
   const [annotations, annotationDispatch] = useReducer(annotationReducer, TaskFactory(null));
 
@@ -28,6 +31,14 @@ export default function App(props) {
       if (parentDir) {
         setParentDir(parentDir);
       }
+
+      const autosave = await get('autosave');
+      const recent = await get('recent');
+      const projectFile = await get('projectFile');
+      if (!projectFile) {
+
+      }
+
     })();
   }, [])
 
@@ -41,6 +52,7 @@ export default function App(props) {
 
   return (
     <div className="App bp3-dark">
+      <StartupOverlay></StartupOverlay>
       <Header
         className="App-header"
         playerDispatch={playerDispatch} />
