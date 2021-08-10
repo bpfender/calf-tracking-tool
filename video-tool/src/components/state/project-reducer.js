@@ -8,6 +8,10 @@ export function projectReducer(state, action) {
             {
                 return ProjectFactory(payload.name, payload.fileHandle);
             }
+        case 'LOAD_PROJECT':
+            {
+                return;
+            }
         case 'ADD_TASK':
             {
                 return addTask(state);

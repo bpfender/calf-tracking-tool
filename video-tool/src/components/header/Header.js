@@ -6,20 +6,28 @@ import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-a
 import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
 import { saveFailed, saveSuccess, SaveToaster } from '../overlays/toaster';
 import { StartupOverlay } from '../overlays/StartupOverlay';
+import { getHandle } from '../annotations/ProjectFactory';
 
 export function Header(props) {
     const { projectDispatch, playerDispatch, project } = props;
 
-    const [title, setTitle] = useState("");
     const [dirFlag, setDirFlag] = useState(false);
     const [projectFlag, setProjectFlag] = useState(false);
     const [openIcon, setOpenIcon] = useState("folder-close");
     const dirHandleRef = useRef(null);
 
-    // TODO needs actual project value
-    const autoSave = async () => {
-        await set('autoSave', "project");
-    };
+    // FIXME this requires some form of timeout
+    useEffect(() => {
+        console.log("AUTOSAVE");
+        const autoSave = async () => {
+            await set('autoSave', {
+                project: project,
+                timeSaved: Date.now(),
+            });
+        }
+
+        autoSave();
+    }, [project])
 
     const handleNewProject = async () => {
         try {
@@ -35,11 +43,11 @@ export function Header(props) {
     };
 
     const handleSaveProject = async () => {
-        const fileHandle = null, data = null;
+        const fileHandle = getHandle(project);
         try {
             await verifyPermission(fileHandle);
-            await writeFile(fileHandle, data);
-            SaveToaster(saveSuccess);
+            await writeFile(fileHandle, "project");
+            SaveToaster.show(saveSuccess);
         } catch (error) {
             SaveToaster.show(saveFailed);
             console.log(error);
@@ -49,8 +57,14 @@ export function Header(props) {
     const handleOpenProject = async () => {
         try {
             const dirHandle = await get('parentDir');
-            const projectHandle = getProjectHandle(dirHandle);
+            const projectHandle = await getProjectHandle(dirHandle);
+
             await set('projectFile', projectHandle);
+
+
+
+
+
         } catch (error) {
             console.log(error);
         }
@@ -69,12 +83,9 @@ export function Header(props) {
             <NewProjectOverlay
                 open={projectFlag}
                 setOpen={setProjectFlag}
-                setTitle={setTitle}
                 dirHandle={dirHandleRef.current}
                 projectDispatch={projectDispatch}
                 playerDispatch={playerDispatch} />
-
-
             <ButtonGroup
                 minimal={true}>
                 <Button
@@ -94,7 +105,7 @@ export function Header(props) {
                 <Button
                     icon="export" />
             </ButtonGroup>
-            <text>{title}</text>
+            <text>{project ? project.name : ""}</text>
             <ButtonGroup
                 minimal={true}>
                 <Button

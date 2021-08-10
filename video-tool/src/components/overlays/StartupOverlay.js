@@ -25,10 +25,11 @@ export function StartupOverlay(props) {
 
     const handleNew = async () => {
         await handleNewProject();
-        console.log("NEW");
     };
 
-    const handleOpen = async () => { };
+    const handleOpen = async () => {
+        await handleOpenProject();
+    };
 
 
     const newProjectOverlay = (
@@ -79,7 +80,7 @@ export function StartupOverlay(props) {
                     <div className="overlay-buttons">
                         <Button
                             icon="repeat"
-                            onClick>
+                            onClick={handleOpen}>
                             Last open
                         </Button>
 
