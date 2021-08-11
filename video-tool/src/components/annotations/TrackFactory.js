@@ -1,3 +1,4 @@
+import { TH_DISCONNECT } from "@blueprintjs/icons/lib/esm/generated/iconContents";
 import { List, setIn } from "immutable";
 import { colourGen } from "../utils";
 import { getNextAnchor, getPrevAnchor, setAnchorFrame } from "./Anchor";
@@ -11,6 +12,15 @@ export function TrackFactory(totalFrames) {
         labels: List(Array(totalFrames).fill(LabelFactory())),
         anchors: List(),
         predicted: List(),
+
+        toJSON: function () {
+            return [this.name,
+            this.colour,
+            this.visible,
+            this.labels,
+            this.anchors,
+            this.predicted];
+        }
     }
 }
 
@@ -97,9 +107,6 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
 
             return val;
         }))
-
-        console.log(label);
-
         mutableList.set(i, label);
     }
 

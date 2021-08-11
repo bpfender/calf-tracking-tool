@@ -16,14 +16,22 @@ export function TaskFactory(videoHandle) {
         keyFrames: List(),
 
         toJSON: function () {
-            return {
+            const obj = {
                 videoHandle: this.videoHandle.name,
-                totalFrame: this.totalFrames,
+                totalFrames: this.totalFrames,
                 selected: this.selected,
                 tracks: this.tracks.toJS(),
                 reviewed: this.reviewed.toJSON(),
                 keyFrames: this.keyFrames.toJSON(),
             }
+
+            return [
+                this.videoHandle,
+                this.totalFrames,
+                this.selected,
+                this.tracks,
+                this.reviewed,
+                this.keyFrames]
         }
     }
 }
