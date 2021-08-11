@@ -3,14 +3,21 @@ import { v4 as uuidv4 } from 'uuid';
 import { List, Map, setIn } from "immutable";
 import { TaskFactory } from "./TaskFactory";
 
-export function ProjectFactory(name, fileHandle) {
+export function ProjectFactory() {
     return {
-        name: name,
-        fileHandle: fileHandle,
+        //FIXME name probably not needed
+        name: "",
+        fileHandle: null,
         selectedTask: null,
         tasks: Map(),
         labels: List(),
     }
+}
+
+export function initialiseProject(project, fileHandle) {
+    const newProject = setIn(project, ['fileHandle'], fileHandle);
+    newProject.name = fileHandle.name;
+    return newProject;
 }
 
 export function setHandle(project, handle) {
@@ -21,7 +28,7 @@ export function setSelectedKey(project, key) {
     return setIn(project, ['selectedTask'], key);
 }
 
-export function addTask(project, videoName, videoHandle) {
+export function addTask(project, videoHandle) {
     const key = uuidv4();
     const newMap = project.tasks.set(key, TaskFactory(videoHandle));
     const newProject = setIn(project, ['tasks'], newMap);
@@ -31,7 +38,7 @@ export function addTask(project, videoName, videoHandle) {
 }
 
 export function updateTask(project, task) {
-    const newMap = project.task.set(project.selectedTask, task);
+    const newMap = project.tasks.set(project.selectedTask, task);
     return setIn(project, ['tasks'], newMap);
 }
 
@@ -53,20 +60,13 @@ export function getSelectedKey(project) {
 }
 
 export function getTask(project, key) {
-    return project.tasks(key);
+    return project.tasks.get(key);
 }
 
-export function generateProjectJSON(project) {
-    const plainObject = {
-        name: project.name,
-        fileHandle: project.fileHandle.name,
-        selectedTask: project.selectedTask,
-        tasks: project.tasks.toJS(),
-        labels: project.labels.toJS(),
-    };
-
-    return JSON.stringify(plainObject);
+export function getCurrentTask(project) {
+    return project.tasks.get(project.selectedTask);
 }
+
 
 export function readProjectJSON(project) {
 

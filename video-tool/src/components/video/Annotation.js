@@ -13,8 +13,10 @@ function Annotation(props) {
     }, [canvasRef]);
 
     useEffect(() => {
-        const BBoxes = getBoundingBoxes(annotations, currentFrame);
-        sceneRef.current.updateBoundingBoxes(BBoxes);
+        if (annotations) {
+            const BBoxes = getBoundingBoxes(annotations, currentFrame);
+            sceneRef.current.updateBoundingBoxes(BBoxes);
+        }
     }, [currentFrame, annotations]);
 
     const handleMouseMove = (event) => {

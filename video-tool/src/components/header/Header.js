@@ -18,15 +18,15 @@ export function Header(props) {
 
     // FIXME this requires some form of timeout
     useEffect(() => {
-        console.log("AUTOSAVE");
+        /*console.log("AUTOSAVE");
         const autoSave = async () => {
             await set('autoSave', {
-                project: project,
+                project: JSON.stringify(project),
                 timeSaved: Date.now(),
             });
         }
 
-        autoSave();
+        autoSave();*/
     }, [project])
 
     const handleNewProject = async () => {
@@ -47,10 +47,11 @@ export function Header(props) {
         try {
             await verifyPermission(fileHandle);
             console.log(fileHandle);
-            await writeFile(fileHandle, "empty");
-            console.log(generateProjectJSON(project));
 
             console.log(project);
+            console.log(JSON.stringify(project));
+            await writeFile(fileHandle, JSON.stringify(project));
+
 
             SaveToaster.show(saveSuccess);
         } catch (error) {

@@ -36,7 +36,7 @@ export default function VideoSource(props) {
         }
     }, [src]);
 
-    const setVideoDispatch = async (handle) => {
+    const confirmVideo = async (handle) => {
         projectDispatch({
             type: 'ADD_TASK',
             payload: {
@@ -44,10 +44,6 @@ export default function VideoSource(props) {
             }
         });
 
-        annotationDispatch({
-            type: 'SET_VIDEO',
-            payload: { handle: handle }
-        });
         //FIXME move this into effect in player?
         playerDispatch({
             type: 'SRC_CHANGE',
@@ -66,7 +62,7 @@ export default function VideoSource(props) {
                 throw new Error("This is not a valid video file");
             }
 
-            setVideoDispatch(handle);
+            confirmVideo(handle);
         } catch (error) {
             if (error.message.includes("valid")) {
                 setDragState("warning");
@@ -88,7 +84,7 @@ export default function VideoSource(props) {
             }
 
             const handle = await item.getAsFileSystemHandle();
-            setVideoDispatch(handle);
+            confirmVideo(handle);
         } catch (error) {
             setDragState("warning");
             setMessage(error.message);

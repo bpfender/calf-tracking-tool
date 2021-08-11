@@ -3,6 +3,9 @@ import { setColour, setLabel, setName, toggleVisible } from "../annotations/Trac
 
 export function annotationReducer(state, action) {
     const payload = action.payload;
+
+    console.log("TASK: ", action.type);
+
     switch (action.type) {
         case 'NEW_TASK': {
             return TaskFactory(payload.totalFrames, payload.videoHandle)

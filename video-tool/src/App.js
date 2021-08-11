@@ -9,7 +9,7 @@ import LeftSidebar from './components/left-sidebar/LeftSidebar';
 import { Header } from './components/header/Header';
 import { get } from 'idb-keyval';
 import { projectReducer } from './components/state/project-reducer';
-import { ProjectFactory } from './components/annotations/ProjectFactory';
+import { getCurrentTask, getTask, ProjectFactory } from './components/annotations/ProjectFactory';
 
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
@@ -19,10 +19,10 @@ import { ProjectFactory } from './components/annotations/ProjectFactory';
 export default function App(props) {
   const [parentDir, setParentDir] = useState(null);
 
-  const [project, projectDispatch] = useReducer(projectReducer, null);
+  const [project, projectDispatch] = useReducer(projectReducer, ProjectFactory());
+  const [annotations, annotationDispatch] = useReducer(annotationReducer, null);
 
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
-  const [annotations, annotationDispatch] = useReducer(annotationReducer, TaskFactory(null));
 
   // Check whether VAT directory has been set before
   /* useEffect(() => {
@@ -35,12 +35,35 @@ export default function App(props) {
    }, [])*/
 
   // FIXME how to make sure annotations are persistent
+
   useEffect(() => {
-    annotationDispatch({
-      type: 'SET_TOTAL_FRAME_COUNT',
-      payload: { totalFrames: playerState.totalFrames }
-    });
+    if (playerState.totalFrames) {
+      annotationDispatch({
+        type: 'SET_TOTAL_FRAME_COUNT',
+        payload: { totalFrames: playerState.totalFrames }
+      });
+    }
   }, [playerState.totalFrames]);
+
+  useEffect(() => {
+    console.log("PROJECT SELECTED EFFECT");
+    console.log(project.selectedTask);
+    if (project.selectedTask) {
+      annotationDispatch({
+        type: 'LOAD_TASK',
+        payload: { task: getCurrentTask(project) },
+      });
+    }
+  }, [project.selectedTask, project])
+
+  // When selected task updates, this also needs to be update in project state
+  useEffect(() => {
+    console.log("UPDATE TASK EFFECT");
+    projectDispatch({
+      type: 'UPDATE_TASK',
+      payload: { task: annotations }
+    });
+  }, [annotations])
 
   return (
     <div className="App bp3-dark">

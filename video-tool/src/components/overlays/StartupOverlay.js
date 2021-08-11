@@ -17,11 +17,10 @@ export function StartupOverlay(props) {
 
     // When project is initialised, this can be closed
     useEffect(() => {
-        console.log("HELLO");
-        if (project) {
+        if (project.fileHandle) {
             setOpen(false);
         }
-    }, [project])
+    }, [project.fileHandle])
 
     const handleNew = async () => {
         await handleNewProject();

@@ -3,16 +3,29 @@ import BoundingBox from "../canvas/BoundingBox";
 import { getLabel, TrackFactory } from "./TrackFactory";
 
 // TODO add videoname key
-export function TaskFactory(videoHandle, totalFrames) {
+export function TaskFactory(videoHandle) {
     return {
         videoHandle: videoHandle,
+        framerate: null,
+        size: null,
 
         totalFrames: null,
         selected: null,
         tracks: Map(),
-        reviewed: List(Array(totalFrames).fill(0)),
+        reviewed: List(),
         keyFrames: List(),
-    };
+
+        toJSON: function () {
+            return {
+                videoHandle: this.videoHandle.name,
+                totalFrame: this.totalFrames,
+                selected: this.selected,
+                tracks: this.tracks.toJS(),
+                reviewed: this.reviewed.toJSON(),
+                keyFrames: this.keyFrames.toJSON(),
+            }
+        }
+    }
 }
 
 // TODO Video name and handle can be combined
@@ -25,7 +38,9 @@ export function setVideoHandle(task, handle) {
 }
 
 export function setTotalFrames(task, frames) {
-    return setIn(task, ['totalFrames'], frames);
+    const newTask = setIn(task, ['totalFrames'], frames);
+    newTask.reviewed = List(Array(frames).fill(0));
+    return newTask;
 }
 
 export function setSelected(task, key) {
