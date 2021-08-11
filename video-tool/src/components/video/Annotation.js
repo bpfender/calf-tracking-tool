@@ -10,7 +10,7 @@ function Annotation(props) {
 
     useEffect(() => {
         sceneRef.current = new Scene(canvasRef.current.getContext('2d'))
-    }, [canvasRef, annotationDispatch]);
+    }, [canvasRef]);
 
     useEffect(() => {
         const BBoxes = getBoundingBoxes(annotations, currentFrame);

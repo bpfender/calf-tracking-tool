@@ -50,6 +50,8 @@ export function Header(props) {
             await writeFile(fileHandle, "empty");
             console.log(generateProjectJSON(project));
 
+            console.log(project);
+
             SaveToaster.show(saveSuccess);
         } catch (error) {
             SaveToaster.show(saveFailed);

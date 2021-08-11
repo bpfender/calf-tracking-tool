@@ -14,7 +14,7 @@ export function projectReducer(state, action) {
             }
         case 'ADD_TASK':
             {
-                return addTask(state);
+                return addTask(state, payload.videoHandle, payload.videoName);
             }
         case 'UPDATE_TASK':
             {
@@ -29,6 +29,6 @@ export function projectReducer(state, action) {
                 return addLabel(state, payload.label);
             }
         default:
-            throw new Error(`Unexpeted project reducer case ${action.type}`);
+            throw new Error(`Unexpected project reducer case ${action.type}`);
     }
 }

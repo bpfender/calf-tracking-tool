@@ -21,9 +21,9 @@ export function setSelectedKey(project, key) {
     return setIn(project, ['selectedTask'], key);
 }
 
-export function addTask(project) {
+export function addTask(project, videoName, videoHandle) {
     const key = uuidv4();
-    const newMap = project.tasks.set(key, TaskFactory());
+    const newMap = project.tasks.set(key, TaskFactory(videoHandle));
     const newProject = setIn(project, ['tasks'], newMap);
     newProject.selectedTask = key;
 
@@ -59,7 +59,7 @@ export function getTask(project, key) {
 export function generateProjectJSON(project) {
     const plainObject = {
         name: project.name,
-        fileHandle: project.fileHandle,
+        fileHandle: project.fileHandle.name,
         selectedTask: project.selectedTask,
         tasks: project.tasks.toJS(),
         labels: project.labels.toJS(),

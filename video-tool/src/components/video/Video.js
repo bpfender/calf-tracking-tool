@@ -46,6 +46,7 @@ export default function Video(props) {
                         framerate: fps,
                     }
                 });
+
                 // Register initial callback when video has loaded properly
                 videoRef.current.requestVideoFrameCallback(handleVideoFrameCallback);
             })();

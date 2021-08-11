@@ -1,9 +1,15 @@
-import { addTrack, deleteTrack, getTrack, setSelected, setTotalFrames, setTrack, setVideoHandle } from "../annotations/TaskFactory";
+import { addTrack, deleteTrack, getTrack, setSelected, setTotalFrames, setTrack, setVideoHandle, TaskFactory } from "../annotations/TaskFactory";
 import { setColour, setLabel, setName, toggleVisible } from "../annotations/TrackFactory";
 
 export function annotationReducer(state, action) {
     const payload = action.payload;
     switch (action.type) {
+        case 'NEW_TASK': {
+            return TaskFactory(payload.totalFrames, payload.videoHandle)
+        }
+        case 'LOAD_TASK': {
+            return payload.task;
+        }
         case 'ADD_TRACK': {
             const { key } = payload;
             return addTrack(state, key);

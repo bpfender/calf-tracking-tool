@@ -12,7 +12,7 @@ import VideoSource from './VideoSource';
 function Player(props) {
     const {
         annotations, annotationDispatch,
-        playerState, playerDispatch } = props;
+        playerState, playerDispatch, projectDispatch } = props;
 
     const [hidden, setHidden] = useState(false);
 
@@ -58,7 +58,8 @@ function Player(props) {
                     src={playerState.src}
                     hidden={hidden}
                     annotationDispatch={annotationDispatch}
-                    playerDispatch={playerDispatch} />
+                    playerDispatch={playerDispatch}
+                    projectDispatch={projectDispatch} />
                 <div
                     ref={videoContainerRef}
                     className="video-container">

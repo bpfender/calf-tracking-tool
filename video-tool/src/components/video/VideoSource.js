@@ -12,7 +12,7 @@ import { getVideoHandle } from '../storage/file-access';
 
 // FIXME pull validation out into separate function
 export default function VideoSource(props) {
-    const { src, annotationDispatch, playerDispatch, hidden } = props;
+    const { src, annotationDispatch, playerDispatch, hidden, projectDispatch } = props;
 
     const [dragState, setDragState] = useState("none");
     const [message, setMessage] = useState("Add a video file to get started...");
@@ -37,10 +37,18 @@ export default function VideoSource(props) {
     }, [src]);
 
     const setVideoDispatch = async (handle) => {
+        projectDispatch({
+            type: 'ADD_TASK',
+            payload: {
+                videoHandle: handle,
+            }
+        });
+
         annotationDispatch({
             type: 'SET_VIDEO',
             payload: { handle: handle }
         });
+        //FIXME move this into effect in player?
         playerDispatch({
             type: 'SRC_CHANGE',
             payload: { src: URL.createObjectURL(await handle.getFile()) }

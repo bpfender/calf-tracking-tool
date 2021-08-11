@@ -17,8 +17,6 @@ export default function ControlBar(props) {
         framesToSkip, vsync } = props;
 
     const [selectedFrame, setSelectedFrame] = useState(1);
-    console.log(selectedFrame);
-    console.log(currentFrame);
 
     useEffect(() => {
         setSelectedFrame(currentFrame);

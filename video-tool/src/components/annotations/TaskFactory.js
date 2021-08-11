@@ -3,12 +3,11 @@ import BoundingBox from "../canvas/BoundingBox";
 import { getLabel, TrackFactory } from "./TrackFactory";
 
 // TODO add videoname key
-export function TaskFactory(totalFrames) {
+export function TaskFactory(videoHandle, totalFrames) {
     return {
-        videoName: null,
-        videoHandle: null,
+        videoHandle: videoHandle,
 
-        totalFrames: totalFrames,
+        totalFrames: null,
         selected: null,
         tracks: Map(),
         reviewed: List(Array(totalFrames).fill(0)),

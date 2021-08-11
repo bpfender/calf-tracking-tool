@@ -25,14 +25,14 @@ export default function App(props) {
   const [annotations, annotationDispatch] = useReducer(annotationReducer, TaskFactory(null));
 
   // Check whether VAT directory has been set before
-  useEffect(() => {
-    (async function () {
-      const parentDir = await get('parentDir');
-      if (parentDir) {
-        setParentDir(parentDir);
-      }
-    })();
-  }, [])
+  /* useEffect(() => {
+     (async function () {
+       const parentDir = await get('parentDir');
+       if (parentDir) {
+         setParentDir(parentDir);
+       }
+     })();
+   }, [])*/
 
   // FIXME how to make sure annotations are persistent
   useEffect(() => {
@@ -56,7 +56,8 @@ export default function App(props) {
         playerState={playerState}
         playerDispatch={playerDispatch}
         annotations={annotations}
-        annotationDispatch={annotationDispatch} />
+        annotationDispatch={annotationDispatch}
+        projectDispatch={projectDispatch} />
       <RightSidebar
         className="right-sidebar"
         playerState={playerState}
