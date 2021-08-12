@@ -1,4 +1,3 @@
-import { TH_DISCONNECT } from "@blueprintjs/icons/lib/esm/generated/iconContents";
 import { List, setIn } from "immutable";
 import { colourGen } from "../utils";
 import { getNextAnchor, getPrevAnchor, setAnchorFrame } from "./Anchor";
@@ -65,13 +64,14 @@ export function setLabel(track, frame, label) {
         });
     } else {
         newLabels = track.labels.withMutations(list => {
-            list.set(frame, label);
+            list = list.set(frame - 1, label);
             interpolateLabels(list, prevFrame, frame);
             interpolateLabels(list, frame, nextFrame);
         });
     }
 
     const newAnchors = setAnchorFrame(track.anchors, frame);
+    console.log([...newAnchors]);
     const trackNewAnchors = setIn(track, ['anchors'], newAnchors);
 
     return setIn(trackNewAnchors, ['labels'], newLabels);
@@ -99,7 +99,7 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
 
     for (let i = startFrame; i < endFrame - 1; i++) {
 
-        const label = Object.fromEntries(keys.map(key => {
+        const newVals = Object.fromEntries(keys.map(key => {
             const val = ([
                 key,
                 Math.round(startLabel[key] + frameDelta[key] * (i - (startFrame - 1)))
@@ -107,6 +107,15 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
 
             return val;
         }))
+
+        const label = LabelFactory(
+            newVals.x,
+            newVals.y,
+            newVals.w,
+            newVals.h,
+            newVals.rotation,
+        );
+
         mutableList.set(i, label);
     }
 
