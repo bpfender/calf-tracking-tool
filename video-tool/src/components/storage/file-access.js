@@ -75,3 +75,15 @@ export async function verifyPermission(handle) {
 
     return false;
 }
+
+export async function moveVideoIntoProject(dirHandle) {
+    const videoSrcHandle = await getVideoHandle(dirHandle);
+    const videoFolderHandle = await dirHandle.getDirectoryHandle("videos", { create: true });
+    const videoDesthandle = await videoFolderHandle.getFileHandle(videoSrcHandle.filename, { create: true })
+
+    const videoSrcFile = await videoSrcHandle.getFile();
+    const videoSrcStream = await videoSrcFile.stream();
+    const videoDestStream = await videoDesthandle.createWritable();
+
+    await videoSrcStream.pipeTo(videoDestStream);
+}
