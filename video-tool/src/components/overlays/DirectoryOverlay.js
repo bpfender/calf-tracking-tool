@@ -1,10 +1,12 @@
 import { Button, Card, Classes, Icon, Overlay } from '@blueprintjs/core';
 import { set } from 'idb-keyval';
 import React from 'react';
-import { getParentDirectory } from '../storage/file-access';
+import { getParentDirectory } from '../storage/indexedDB';
 
 import "./Overlay.scss"
 
+
+// FIXME directory followed by new project not working currently
 export function DirectoryOverlay(props) {
     const { open, setDirFlag, setProjectFlag } = props;
 

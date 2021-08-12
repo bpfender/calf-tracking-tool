@@ -1,7 +1,7 @@
 import { Button, Card, Classes, FormGroup, Icon, InputGroup, Overlay } from '@blueprintjs/core';
 import { set } from 'idb-keyval';
 import React, { useState } from 'react';
-import { createNewProjectHandle, verifyPermission } from '../storage/file-access';
+import { createNewProjectHandle, verifyPermission } from '../storage/indexedDB';
 import "./Overlay.scss"
 
 export function NewProjectOverlay(props) {

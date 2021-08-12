@@ -96,3 +96,19 @@ export function readProjectJSON(project) {
 
 }
 
+export async function verifyVideoFiles(project, videoDirHandle) {
+    const failed = [];
+    const tasks = project.tasks;
+
+    for (const task of tasks.values()) {
+        try {
+            const videoHandle = await videoDirHandle.getFileHandle(task.fileHandle);
+            task.videoHandle = videoHandle;
+        } catch (error) {
+            failed.push(task);
+        }
+    }
+
+    return failed ? failed : null;
+}
+

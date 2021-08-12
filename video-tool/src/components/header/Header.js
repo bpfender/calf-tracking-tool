@@ -2,7 +2,7 @@ import { Button, ButtonGroup, Divider, } from '@blueprintjs/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { get, set } from 'idb-keyval';
 import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
-import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-access';
+import { getProjectHandle, verifyPermission, writeFile } from '../storage/indexedDB';
 import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
 import { saveFailed, saveSuccess, SaveToaster } from '../overlays/toaster';
 import { StartupOverlay } from '../overlays/StartupOverlay';

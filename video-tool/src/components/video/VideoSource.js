@@ -7,7 +7,7 @@
 import { Colors, Icon } from '@blueprintjs/core';
 import { get } from 'idb-keyval';
 import React, { useEffect, useState } from 'react';
-import { getVideoHandle } from '../storage/file-access';
+import { getVideoHandle, selectMoveVideoIntoProject } from '../storage/indexedDB';
 
 
 // FIXME pull validation out into separate function
@@ -55,14 +55,18 @@ export default function VideoSource(props) {
         try {
             setDragState("primary");
             const parentDir = await get('parentDir');
-            const handle = await getVideoHandle(parentDir);
-            const file = await handle.getFile();
 
-            if (!file.type.includes("video")) {
+            //            const handle = await getVideoHandle(parentDir);
+            //          const file = await handle.getFile();
+            console.log("COPYING");
+            const videoHandle = selectMoveVideoIntoProject(parentDir)
+            const videoFile = await videoHandle.getFile()
+
+            if (!videoFile.type.includes("video")) {
                 throw new Error("This is not a valid video file");
             }
 
-            confirmVideo(handle);
+            confirmVideo(videoHandle);
         } catch (error) {
             if (error.message.includes("valid")) {
                 setDragState("warning");
