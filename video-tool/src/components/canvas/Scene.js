@@ -1,3 +1,4 @@
+import { LabelFactory } from "../annotations/LabelFactory";
 import RotationHandle from "./RotationHandle";
 
 // FIXME mouseover order isn't quite right yet
@@ -74,15 +75,14 @@ class Scene {
 
         if (this.updateFlag) {
             this.updateFlag = false;
+            const x = Math.round(this.selected.x);
+            const y = Math.round(this.selected.y);
+            const w = Math.round(this.selected.width);
+            const h = Math.round(this.selected.height);
+            const rotation = Math.round(this.selected.rotation);
+
             return {
-                label: {
-                    x: Math.round(this.selected.x),
-                    y: Math.round(this.selected.y),
-                    w: Math.round(this.selected.width),
-                    h: Math.round(this.selected.height),
-                    rotation: Math.round(this.selected.rotation),
-                    labelled: true
-                },
+                label: LabelFactory(x, y, w, h, rotation),
                 key: this.selected.key
             }
         }

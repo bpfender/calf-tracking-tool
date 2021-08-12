@@ -16,17 +16,8 @@ export function TaskFactory(videoHandle) {
         keyFrames: List(),
 
         toJSON: function () {
-            const obj = {
-                videoHandle: this.videoHandle.name,
-                totalFrames: this.totalFrames,
-                selected: this.selected,
-                tracks: this.tracks.toJS(),
-                reviewed: this.reviewed.toJSON(),
-                keyFrames: this.keyFrames.toJSON(),
-            }
-
             return [
-                this.videoHandle,
+                this.videoHandle.name,
                 this.totalFrames,
                 this.selected,
                 this.tracks,

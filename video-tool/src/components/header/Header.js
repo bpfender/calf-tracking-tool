@@ -6,7 +6,7 @@ import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-a
 import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
 import { saveFailed, saveSuccess, SaveToaster } from '../overlays/toaster';
 import { StartupOverlay } from '../overlays/StartupOverlay';
-import { generateProjectJSON, getHandle } from '../annotations/ProjectFactory';
+import { getHandle } from '../annotations/ProjectFactory';
 
 export function Header(props) {
     const { projectDispatch, playerDispatch, project } = props;

@@ -64,7 +64,7 @@ export function setLabel(track, frame, label) {
         });
     } else {
         newLabels = track.labels.withMutations(list => {
-            list = list.set(frame - 1, label);
+            list.set(frame - 1, label);
             interpolateLabels(list, prevFrame, frame);
             interpolateLabels(list, frame, nextFrame);
         });

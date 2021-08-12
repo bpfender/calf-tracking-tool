@@ -11,6 +11,15 @@ export function ProjectFactory() {
         selectedTask: null,
         tasks: Map(),
         labels: List(),
+
+        toJSON: function () {
+            return [
+                this.fileHandle.name,
+                this.selectedTask,
+                this.tasks,
+                this.labels,
+            ]
+        }
     }
 }
 
