@@ -59,10 +59,12 @@ export default function App(props) {
   // When selected task updates, this also needs to be update in project state
   useEffect(() => {
     console.log("UPDATE TASK EFFECT");
-    projectDispatch({
-      type: 'UPDATE_TASK',
-      payload: { task: annotations }
-    });
+    if (project.selectedTask) {
+      projectDispatch({
+        type: 'UPDATE_TASK',
+        payload: { task: annotations }
+      });
+    }
   }, [annotations])
 
   return (
