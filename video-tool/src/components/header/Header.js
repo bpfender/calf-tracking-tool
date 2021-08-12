@@ -2,11 +2,12 @@ import { Button, ButtonGroup, Divider, } from '@blueprintjs/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { get, set } from 'idb-keyval';
 import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
-import { getProjectHandle, verifyPermission, writeFile } from '../storage/indexedDB';
+import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-access';
 import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
-import { saveFailed, saveSuccess, SaveToaster } from '../overlays/toaster';
+import { saveFailed, saveProgress, saveSuccess, SaveToaster } from '../overlays/toaster';
 import { StartupOverlay } from '../overlays/StartupOverlay';
 import { getHandle, loadProject } from '../annotations/ProjectFactory';
+import { getAppDirHandle } from '../storage/indexedDB';
 
 export function Header(props) {
     const { projectDispatch, playerDispatch, project } = props;
@@ -14,7 +15,6 @@ export function Header(props) {
     const [dirFlag, setDirFlag] = useState(false);
     const [projectFlag, setProjectFlag] = useState(false);
     const [openIcon, setOpenIcon] = useState("folder-close");
-    const dirHandleRef = useRef(null);
 
     // FIXME this requires some form of timeout
     useEffect(() => {
@@ -31,8 +31,7 @@ export function Header(props) {
 
     const handleNewProject = async () => {
         try {
-            dirHandleRef.current = await get('parentDir');
-            if (!dirHandleRef.current) {
+            if (!await getAppDirHandle()) {
                 setDirFlag(true);
             } else {
                 setProjectFlag(true);
@@ -47,7 +46,9 @@ export function Header(props) {
         const fileHandle = getHandle(project);
         try {
             await verifyPermission(fileHandle);
+            const progToast = SaveToaster.show(saveProgress);
             await writeFile(fileHandle, JSON.stringify(project));
+            SaveToaster.dismiss(progToast);
             SaveToaster.show(saveSuccess);
         } catch (error) {
             SaveToaster.show(saveFailed);
@@ -86,7 +87,6 @@ export function Header(props) {
             <NewProjectOverlay
                 open={projectFlag}
                 setOpen={setProjectFlag}
-                dirHandle={dirHandleRef.current}
                 projectDispatch={projectDispatch}
                 playerDispatch={playerDispatch} />
             <ButtonGroup
