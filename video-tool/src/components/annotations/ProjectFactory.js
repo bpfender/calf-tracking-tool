@@ -14,6 +14,7 @@ export function ProjectFactory() {
 
         toJSON: function () {
             return [
+                this.name,
                 this.fileHandle.name,
                 this.selectedTask,
                 this.tasks,
@@ -28,10 +29,11 @@ export function loadProject(projectJSON) {
     console.log(parsedProject);
 
     const project = ProjectFactory();
-    project.fileHandle = parsedProject[0];
-    project.selectedTask = parsedProject[1];
-    project.tasks = Map(Object.entries(parsedProject[2]).map(([key, value]) => [key, loadTask(value)]));
-    project.labels = List(parsedProject[3]);
+    project.name = parsedProject[0];
+    project.fileHandle = parsedProject[1];
+    project.selectedTask = parsedProject[2];
+    project.tasks = Map(Object.entries(parsedProject[3]).map(([key, value]) => [key, loadTask(value)]));
+    project.labels = List(parsedProject[4]);
 
     return project;
 }

@@ -43,19 +43,11 @@ export function Header(props) {
     };
 
     const handleSaveProject = async () => {
+        // FIXME where to store filehandle reference?
         const fileHandle = getHandle(project);
         try {
             await verifyPermission(fileHandle);
-            console.log(fileHandle);
-
-            console.log(project);
-            const json = JSON.stringify(project);
-            console.log(json);
             await writeFile(fileHandle, JSON.stringify(project));
-
-            const loadedProj = loadProject(json);
-            console.log(loadedProj);
-            console.log(project);
             SaveToaster.show(saveSuccess);
         } catch (error) {
             SaveToaster.show(saveFailed);
@@ -67,12 +59,14 @@ export function Header(props) {
         try {
             const dirHandle = await get('parentDir');
             const projectHandle = await getProjectHandle(dirHandle);
+            const projectFile = await projectHandle.getFile();
+            const projectJSON = await projectFile.text();
+
+            const project = loadProject(projectJSON);
+            project.fileHandle = projectHandle;
+
 
             await set('projectFile', projectHandle);
-
-
-
-
 
         } catch (error) {
             console.log(error);

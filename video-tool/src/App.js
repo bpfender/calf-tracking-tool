@@ -47,14 +47,13 @@ export default function App(props) {
 
   useEffect(() => {
     console.log("PROJECT SELECTED EFFECT");
-    console.log(project.selectedTask);
     if (project.selectedTask) {
       annotationDispatch({
         type: 'LOAD_TASK',
         payload: { task: getCurrentTask(project) },
       });
     }
-  }, [project.selectedTask, project])
+  }, [project.selectedTask])
 
   // When selected task updates, this also needs to be update in project state
   useEffect(() => {
