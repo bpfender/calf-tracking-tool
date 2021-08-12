@@ -18,3 +18,8 @@ export function LabelFactory(x = 400, y = 300, w = 50, h = 50, rotation = 45) {
         }
     };
 }
+
+export function loadLabel(parsedLabel) {
+    return LabelFactory(...parsedLabel);
+}
+

@@ -1,7 +1,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { List, Map, setIn } from "immutable";
-import { TaskFactory } from "./TaskFactory";
+import { loadTask, TaskFactory } from "./TaskFactory";
 
 export function ProjectFactory() {
     return {
@@ -21,6 +21,19 @@ export function ProjectFactory() {
             ]
         }
     }
+}
+
+export function loadProject(projectJSON) {
+    const parsedProject = JSON.parse(projectJSON);
+    console.log(parsedProject);
+
+    const project = ProjectFactory();
+    project.fileHandle = parsedProject[0];
+    project.selectedTask = parsedProject[1];
+    project.tasks = Map(Object.entries(parsedProject[2]).map(([key, value]) => [key, loadTask(value)]));
+    project.labels = List(parsedProject[3]);
+
+    return project;
 }
 
 export function initialiseProject(project, fileHandle) {
@@ -80,3 +93,4 @@ export function getCurrentTask(project) {
 export function readProjectJSON(project) {
 
 }
+

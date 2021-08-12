@@ -1,7 +1,7 @@
 import { List, setIn } from "immutable";
 import { colourGen } from "../utils";
 import { getNextAnchor, getPrevAnchor, setAnchorFrame } from "./Anchor";
-import { LabelFactory } from "./LabelFactory";
+import { LabelFactory, loadLabel } from "./LabelFactory";
 
 export function TrackFactory(totalFrames) {
     return {
@@ -22,6 +22,19 @@ export function TrackFactory(totalFrames) {
         }
     }
 }
+
+export function loadTrack(parsedTrack) {
+    const track = TrackFactory();
+    track.name = parsedTrack[0];
+    track.colour = parsedTrack[1];
+    track.visible = parsedTrack[2];
+    track.labels = List(parsedTrack[3].map(label => loadLabel(label)));
+    track.anchors = List(parsedTrack[4]);
+    track.predicted = List(parsedTrack[5]);
+
+    return track;
+}
+
 
 export function setName(track, name) {
     return setIn(track, ['name'], name);
@@ -71,20 +84,18 @@ export function setLabel(track, frame, label) {
     }
 
     const newAnchors = setAnchorFrame(track.anchors, frame);
-    console.log([...newAnchors]);
     const trackNewAnchors = setIn(track, ['anchors'], newAnchors);
 
     return setIn(trackNewAnchors, ['labels'], newLabels);
 }
 
+// FIXME rotation interpolation probably needs fixing
 // QUESTION performance of withmutations vs other methods?
 // Need to work with mutableList as we depend on mutated values
 function interpolateLabels(mutableList, startFrame, endFrame) {
     const startLabel = mutableList.get(startFrame - 1);
     const endLabel = mutableList.get(endFrame - 1);
     const frameCount = endFrame - startFrame;
-    console.log("INTERP", startLabel, endLabel, frameCount);
-
     const keys = Object.keys(startLabel);
 
     const frameDelta = Object.fromEntries(keys.map(key => {
@@ -118,6 +129,4 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
 
         mutableList.set(i, label);
     }
-
 }
-

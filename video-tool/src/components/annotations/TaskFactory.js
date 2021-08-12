@@ -1,6 +1,6 @@
 import { fromJS, isKeyed, List, Map, setIn } from "immutable";
 import BoundingBox from "../canvas/BoundingBox";
-import { getLabel, TrackFactory } from "./TrackFactory";
+import { getLabel, loadTrack, TrackFactory } from "./TrackFactory";
 
 // TODO add videoname key
 export function TaskFactory(videoHandle) {
@@ -25,6 +25,18 @@ export function TaskFactory(videoHandle) {
                 this.keyFrames]
         }
     }
+}
+
+export function loadTask(parsedTask) {
+    const task = TaskFactory();
+    task.videoHandle = null;
+    task.totalFrames = parsedTask[1];
+    task.select = parsedTask[2];
+    task.tracks = Map(Object.entries(parsedTask[3]).map(entry => [entry[0], loadTrack(entry[1])]));
+    task.reviewed = List(parsedTask[4]);
+    task.keyFrames = List(parsedTask[5]);
+
+    return task;
 }
 
 // TODO Video name and handle can be combined

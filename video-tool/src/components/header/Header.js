@@ -6,7 +6,7 @@ import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-a
 import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
 import { saveFailed, saveSuccess, SaveToaster } from '../overlays/toaster';
 import { StartupOverlay } from '../overlays/StartupOverlay';
-import { getHandle } from '../annotations/ProjectFactory';
+import { getHandle, loadProject } from '../annotations/ProjectFactory';
 
 export function Header(props) {
     const { projectDispatch, playerDispatch, project } = props;
@@ -49,10 +49,13 @@ export function Header(props) {
             console.log(fileHandle);
 
             console.log(project);
-            console.log(JSON.stringify(project));
+            const json = JSON.stringify(project);
+            console.log(json);
             await writeFile(fileHandle, JSON.stringify(project));
 
-
+            const loadedProj = loadProject(json);
+            console.log(loadedProj);
+            console.log(project);
             SaveToaster.show(saveSuccess);
         } catch (error) {
             SaveToaster.show(saveFailed);
