@@ -1,4 +1,5 @@
 //https://web.dev/file-system-access/
+
 export async function getParentDirectory() {
     const dirHandle = await window.showDirectoryPicker({ startIn: 'documents' });
     return dirHandle;
@@ -27,8 +28,8 @@ export async function getProjectHandle(dirHandle) {
 }
 
 //TODO check MIME types
-export async function getVideoHandle(dirHandle) {
-    const startIn = dirHandle ? dirHandle : 'video';
+export async function getVideoHandle(dirHandle = null, multiple = false) {
+    const startIn = dirHandle ? dirHandle : 'videos';
     const options = {
         startIn: startIn,
         types: [
@@ -40,7 +41,7 @@ export async function getVideoHandle(dirHandle) {
                     'video/ogg': ['.ogv'],
                     'video/webm': ['.webm'],
                 },
-                multiple: false,
+                multiple: multiple,
             }
         ]
     }
@@ -77,7 +78,7 @@ export async function verifyPermission(handle) {
 }
 
 export async function getVideoDirHandle(parentDir) {
-    const videoDirHandle = await parentDir.getDirectoryHandle("videos", { create: true });
+    return await parentDir.getDirectoryHandle("videos", { create: true });
 }
 
 
@@ -93,4 +94,52 @@ export async function selectMoveVideoIntoProject(dirHandle) {
     await videoSrcStream.pipeTo(videoDestStream);
 
     return videoDestHandle;
+}
+
+
+async function fileExists(file, destDirHandle) {
+    const filenames = await destDirHandle.entries();
+
+    for (const filename of filenames) {
+        if (file.name === filename) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+async function fileInFolder(fileHandle, destDirHandle) {
+    const filePath = await destDirHandle.resolve(fileHandle);
+    const dirPath = await destDirHandle.resolve(destDirHandle);
+
+    // If file path is null, it's not in the same dir
+    if (!filePath) {
+        return false;
+    }
+
+    // If they share a parent directory, check paths are equal
+    dirPath.forEach((subPath, i) => {
+        if (filePath[i] !== subPath) {
+            return false;
+        }
+    })
+
+    return true;
+}
+
+async function moveFileIntoFolder(file, destDirHandle) {
+    const destFileHandle = await destDirHandle.getFileHandle(file.name, { create: true });
+    const destFileWritable = await destFileHandle.createWritable();
+
+    const fileStream = await file.stream();
+
+    await fileStream.pipeTo(destFileWritable);
+
+}
+
+//https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Containers
+
+function validateVideoFile(file) {
+    const MIMEtypes = []
 }
