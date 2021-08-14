@@ -53,22 +53,14 @@ export default function VideoSource(props) {
 
             // FIXME what to do if appdirhandle can't be retrieved?
             const appDirHandle = await retrieveAppDirHandle();
-            const videoFileHandle = await getVideoHandle(appDirHandle);
-            const file = await videoFileHandle.getFile();
+            const videoHandle = await getVideoHandle(appDirHandle);
+            const video = await videoHandle.getFile();
 
-            await validateVideo(file);
-
-            //const videoHandle = await selectMoveVideoIntoProject(appDirHandle);
-            // const videoFile = await videoHandle.getFile()
-
-            //confirmVideo(videoHandle);
+            if (await validateVideo(video)) {
+                confirmVideo(videoHandle);
+            }
         } catch (error) {
-            console.log(error);
-            /*if (error.message.includes("valid")) {
-                setSourceState(sourceStates.error);
-            } else {
-                setSourceState(sourceStates.start);
-            }*/
+            setSourceState(sourceStates.start);
         }
     }
 
@@ -78,18 +70,15 @@ export default function VideoSource(props) {
         try {
             if (event.dataTransfer.items.length > 1) {
                 setSourceState(sourceStates.multiple);
-                throw new Error("Please add just one video file");
+                return;
             }
 
-            const item = event.dataTransfer.items[0];
+            const videoHandle = await event.dataTransfer.items[0].getAsFileSystemHandle();
+            const video = await videoHandle.getFile();
 
-            if (!item.type.includes("video")) {
-                setSourceState(sourceStates.error);
-                throw new Error("This is not a valid video file");
+            if (await validateVideo(video)) {
+                confirmVideo(videoHandle);
             }
-
-            const handle = await item.getAsFileSystemHandle();
-            confirmVideo(handle);
         } catch (error) {
         }
     };
@@ -107,28 +96,30 @@ export default function VideoSource(props) {
 
     const validateVideo = async (videoFile) => {
         videoRef.current.src = URL.createObjectURL(videoFile);
-        console.log(videoFile);
-        console.log(videoRef.current.src);
 
+        // If metadata is loaded, file is probably good
         const validationPromise = () =>
             new Promise(
                 (res, rej) => {
-                    videoRef.current.onloadeddata = () => { res() };
-                    videoRef.current.onerror = () => { rej() };
+                    videoRef.current.onloadedmetadata = res;
+                    videoRef.current.onerror = rej;
                     videoRef.current.load();
                 });
 
         try {
             await validationPromise();
             setSourceState(sourceStates.copying);
+            return true;
         } catch (error) {
             setSourceState(sourceStates.error);
+            return false;
         } finally {
+            // Clear video element
             URL.revokeObjectURL(videoRef.current.src);
+            videoRef.current.src = "";
+            videoRef.current.load();
         }
-
     };
-
 
     const confirmVideo = async (handle) => {
         projectDispatch({
