@@ -65,6 +65,21 @@
     justify-content: space-between;
 }
 
+.video-bar text{
+    flex:1;
+    
+}
+
+.video-bar.center{
+    flex:1;
+    justify-content: center;    
+}
+
+.video-bar-review-buttons{
+    flex:1;
+    justify-content:flex-end;
+}
+
 .video-container{
     flex:1;
     padding: 1em;

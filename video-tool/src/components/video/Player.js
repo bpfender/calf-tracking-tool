@@ -48,6 +48,7 @@ function Player(props) {
         <div className={props.className}>
             <div className="video-content">
                 <VideoBar
+                    filename={playerState.filename}
                     src={playerState.src}
                     framerate={playerState.framerate}
                     videoWidth={playerState.videoWidth}

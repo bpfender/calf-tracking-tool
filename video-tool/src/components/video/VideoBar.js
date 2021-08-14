@@ -4,6 +4,7 @@ import React from 'react';
 //FIXME spinner not centred properly
 export function VideoBar(props) {
     const { src,
+        filename,
         framerate,
         videoWidth,
         videoHeight } = props;
@@ -20,7 +21,7 @@ export function VideoBar(props) {
 
     return (
         <div className="video-bar bp3-text-small">
-            <text>VIDEO NAME</text>
+            <text>{filename}</text>
             <div className="video-bar-key-info">
                 {setVideoInfo()}
             </div>
