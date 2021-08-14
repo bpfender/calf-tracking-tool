@@ -6,14 +6,15 @@
 //FIXME this needs some cleaning!
 import { Colors, Icon } from '@blueprintjs/core';
 import React, { useEffect, useRef, useState } from 'react';
-import { getVideoHandle, selectMoveVideoIntoProject } from '../storage/file-access';
-import { retrieveAppDirHandle } from '../storage/indexedDB';
+import { fileAlreadyInFolder, fileExists, getVideoHandle, moveFileIntoFolder } from '../storage/file-access';
+import { retrieveAppDirHandle, retrieveVideoDirHandle } from '../storage/indexedDB';
 
 const sourceStates = {
     start: { intent: "none", message: "Add a video file to get started..." },
     click: { intent: "primary", message: "Select file to be loaded." },
     dragged: { intent: "primary", message: "Drop file to load." },
     multiple: { intent: "warning", message: "Please add just one video file." },
+    exists: { intent: "warning", message: "Video with this name already exists in VAT video folder." },
     error: { intent: "warning", message: "Could not load this file." },
     copying: { intent: "primary", message: "Copying video to VAT videos folder." },
     success: { intent: "success", message: "Loading video..." },
@@ -54,11 +55,7 @@ export default function VideoSource(props) {
             // FIXME what to do if appdirhandle can't be retrieved?
             const appDirHandle = await retrieveAppDirHandle();
             const videoHandle = await getVideoHandle(appDirHandle);
-            const video = await videoHandle.getFile();
-
-            if (await validateVideo(video)) {
-                confirmVideo(videoHandle);
-            }
+            checkCopyLoadVideo(videoHandle);
         } catch (error) {
             setSourceState(sourceStates.start);
         }
@@ -72,13 +69,8 @@ export default function VideoSource(props) {
                 setSourceState(sourceStates.multiple);
                 return;
             }
-
             const videoHandle = await event.dataTransfer.items[0].getAsFileSystemHandle();
-            const video = await videoHandle.getFile();
-
-            if (await validateVideo(video)) {
-                confirmVideo(videoHandle);
-            }
+            checkCopyLoadVideo(videoHandle);
         } catch (error) {
         }
     };
@@ -94,7 +86,27 @@ export default function VideoSource(props) {
         setSourceState(sourceStates.start);
     }
 
-    const validateVideo = async (videoFile) => {
+    const checkCopyLoadVideo = async (videoHandle) => {
+        const video = await videoHandle.getFile();
+        const videoDirHandle = await retrieveVideoDirHandle();
+
+        if (await fileExists(video, videoDirHandle)) {
+            if (await fileAlreadyInFolder(videoHandle, videoDirHandle)) {
+                loadVideo(video, videoHandle);
+            } else {
+                setSourceState(sourceStates.exists);
+            }
+        } else if (await validVideo(video)) {
+            setSourceState(sourceStates.copying);
+            const copiedVideoHandle = await moveFileIntoFolder(video, videoDirHandle);
+            const copiedVideo = await copiedVideoHandle.getFile();
+            loadVideo(copiedVideo, copiedVideoHandle);
+        } else {
+            setSourceState(sourceStates.error);
+        }
+    }
+
+    const validVideo = async (videoFile) => {
         videoRef.current.src = URL.createObjectURL(videoFile);
 
         // If metadata is loaded, file is probably good
@@ -108,10 +120,8 @@ export default function VideoSource(props) {
 
         try {
             await validationPromise();
-            setSourceState(sourceStates.copying);
             return true;
         } catch (error) {
-            setSourceState(sourceStates.error);
             return false;
         } finally {
             // Clear video element
@@ -121,7 +131,7 @@ export default function VideoSource(props) {
         }
     };
 
-    const confirmVideo = async (handle) => {
+    const loadVideo = (file, handle) => {
         projectDispatch({
             type: 'ADD_TASK',
             payload: {
@@ -129,10 +139,10 @@ export default function VideoSource(props) {
             }
         });
 
-        //FIXME move this into effect in player?
+        // TODO move this into effect in player?
         playerDispatch({
             type: 'SRC_CHANGE',
-            payload: { src: URL.createObjectURL(await handle.getFile()) }
+            payload: { src: URL.createObjectURL(file) }
         });
     }
 

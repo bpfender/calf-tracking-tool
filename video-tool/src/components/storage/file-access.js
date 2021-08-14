@@ -27,7 +27,8 @@ export async function getProjectHandle(dirHandle) {
     return handle;
 }
 
-//TODO check MIME types
+// TODO more extensive type checking?
+// https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Containers
 export async function getVideoHandle(dirHandle = null, multiple = false) {
     const startIn = dirHandle ? dirHandle : 'videos';
     const options = {
@@ -97,38 +98,28 @@ export async function selectMoveVideoIntoProject(dirHandle) {
 }
 
 
-async function fileExists(file, destDirHandle) {
-    const filenames = await destDirHandle.entries();
 
-    for (const filename of filenames) {
+
+
+export async function fileExists(file, destDirHandle) {
+    for await (const filename of destDirHandle.keys()) {
         if (file.name === filename) {
             return true;
         }
     }
-
     return false;
 }
 
-async function fileInFolder(fileHandle, destDirHandle) {
+export async function fileAlreadyInFolder(fileHandle, destDirHandle) {
     const filePath = await destDirHandle.resolve(fileHandle);
-    const dirPath = await destDirHandle.resolve(destDirHandle);
-
     // If file path is null, it's not in the same dir
     if (!filePath) {
         return false;
     }
-
-    // If they share a parent directory, check paths are equal
-    dirPath.forEach((subPath, i) => {
-        if (filePath[i] !== subPath) {
-            return false;
-        }
-    })
-
     return true;
 }
 
-async function moveFileIntoFolder(file, destDirHandle) {
+export async function moveFileIntoFolder(file, destDirHandle) {
     const destFileHandle = await destDirHandle.getFileHandle(file.name, { create: true });
     const destFileWritable = await destFileHandle.createWritable();
 
@@ -136,10 +127,5 @@ async function moveFileIntoFolder(file, destDirHandle) {
 
     await fileStream.pipeTo(destFileWritable);
 
-}
-
-//https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Containers
-
-function validateVideoFile(file) {
-    const MIMEtypes = []
+    return destFileHandle;
 }
