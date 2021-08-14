@@ -4,10 +4,10 @@ import { get, set } from 'idb-keyval';
 import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
 import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-access';
 import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
-import { saveFailed, saveProgress, saveSuccess, SaveToaster } from '../overlays/toaster';
+import { saveFailed, saveProgress, saveSuccess, AppToaster } from '../overlays/toaster';
 import { StartupOverlay } from '../overlays/StartupOverlay';
 import { getHandle, loadProject } from '../annotations/ProjectFactory';
-import { getAppDirHandle } from '../storage/indexedDB';
+import { retrieveAppDirHandle } from '../storage/indexedDB';
 
 export function Header(props) {
     const { projectDispatch, playerDispatch, project } = props;
@@ -31,7 +31,7 @@ export function Header(props) {
 
     const handleNewProject = async () => {
         try {
-            if (!await getAppDirHandle()) {
+            if (!await retrieveAppDirHandle()) {
                 setDirFlag(true);
             } else {
                 setProjectFlag(true);
@@ -46,12 +46,12 @@ export function Header(props) {
         const fileHandle = getHandle(project);
         try {
             await verifyPermission(fileHandle);
-            const progToast = SaveToaster.show(saveProgress);
+            const progToast = AppToaster.show(saveProgress);
             await writeFile(fileHandle, JSON.stringify(project));
-            SaveToaster.dismiss(progToast);
-            SaveToaster.show(saveSuccess);
+            AppToaster.dismiss(progToast);
+            AppToaster.show(saveSuccess);
         } catch (error) {
-            SaveToaster.show(saveFailed);
+            AppToaster.show(saveFailed);
             console.log(error);
         }
     };

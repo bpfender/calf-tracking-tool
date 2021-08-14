@@ -130,7 +130,7 @@ export default function Video(props) {
                 onDurationChange={handleDurationChange}
                 onEmptied={handleEmptied}
                 onEnded={() => { }}
-                onError={() => { }}
+                onError={() => { console.log("Video Error") }}
                 onLoadedData={() => { }}
                 onLoadedMetadata={handleLoadedMetadata}
                 onLoadStart={() => { }}

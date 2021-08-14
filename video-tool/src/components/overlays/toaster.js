@@ -1,7 +1,7 @@
 // https://blueprintjs.com/docs/#core/components/toast
 import { Position, ProgressBar, Toaster } from "@blueprintjs/core";
 
-export const SaveToaster = Toaster.create({
+export const AppToaster = Toaster.create({
     position: Position.TOP,
     maxToasts: 5,
 });
@@ -26,4 +26,10 @@ export const saveSuccess = {
     icon: "floppy-disk",
     intent: "success",
     timeout: 2000,
+};
+
+export const copyVideo = {
+    message: "Copying to Video folder",
+    intent: "primary",
+    timeout: 0,
 };

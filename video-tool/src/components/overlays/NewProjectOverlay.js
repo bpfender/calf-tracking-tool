@@ -1,7 +1,7 @@
 import { Button, Card, Classes, FormGroup, Icon, InputGroup, Overlay } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import { createNewProjectHandle, verifyPermission } from '../storage/file-access';
-import { getAppDirHandle, setRecentProjectHandle } from '../storage/indexedDB';
+import { retrieveAppDirHandle, storeRecentProjectHandle } from '../storage/indexedDB';
 import "./Overlay.scss"
 
 export function NewProjectOverlay(props) {
@@ -18,7 +18,7 @@ export function NewProjectOverlay(props) {
                 throw new Error("Please enter a valid project name.");
             }
 
-            const dirHandle = await getAppDirHandle()
+            const dirHandle = await retrieveAppDirHandle()
 
             if (!(await verifyPermission(dirHandle))) {
                 throw new Error("Permission required to create project.");
@@ -33,7 +33,7 @@ export function NewProjectOverlay(props) {
 
             const projectHandle = await createNewProjectHandle(dirHandle, input);
 
-            setRecentProjectHandle(projectHandle);
+            storeRecentProjectHandle(projectHandle);
 
             projectDispatch({
                 type: 'NEW_PROJECT',

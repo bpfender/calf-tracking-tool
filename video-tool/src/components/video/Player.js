@@ -16,7 +16,6 @@ function Player(props) {
 
     const [hidden, setHidden] = useState(false);
 
-    // TODO useeffect to mount video?
     const videoRef = useRef(null);
     const videoContainerRef = useRef(null);
 
@@ -31,18 +30,18 @@ function Player(props) {
     }, [videoContainerRef]);
 
     useEffect(() => {
-        if (playerState.framerate !== 0) {
-            videoContainerRef.current.hidden = false;
+        if (playerState.framerate === 0) {
+            videoContainerRef.current.hidden = true
+            setHidden(false);
         } else {
-            videoContainerRef.current.hidden = true;
+            setTimeout(() => {
+                videoContainerRef.current.hidden = false;
+                setHidden(true);
+            }, 500);
         }
-
-        setHidden(!videoContainerRef.current.hidden);
     }, [playerState.framerate]);
 
-    useEffect(() => {
-        console.log(hidden);
-    }, [hidden]);
+
 
 
     return (

@@ -1,7 +1,7 @@
 import { Button, Card, Classes, Icon, Overlay } from '@blueprintjs/core';
 import React from 'react';
-import { getParentDirectory } from '../storage/file-access';
-import { setAppDirHandle } from '../storage/indexedDB';
+import { getParentDirectory, getVideoDirHandle } from '../storage/file-access';
+import { storeAppDirHandle, storeVideoDirHandle } from '../storage/indexedDB';
 
 import "./Overlay.scss"
 
@@ -10,8 +10,11 @@ export function DirectoryOverlay(props) {
 
     const handleConfirm = async () => {
         try {
-            const dirHandle = await getParentDirectory();
-            await setAppDirHandle(dirHandle);
+            const appDirHandle = await getParentDirectory();
+            await storeAppDirHandle(appDirHandle);
+
+            const videoDirHandle = await getVideoDirHandle(appDirHandle);
+            await storeVideoDirHandle(videoDirHandle);
 
             setDirFlag(false);
             setProjectFlag(true);

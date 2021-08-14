@@ -1,3 +1,5 @@
+//FIXME no error handling on delete directories or cleared indexDB
+
 import { get, set } from "idb-keyval";
 
 const appDir = 'parentDir';

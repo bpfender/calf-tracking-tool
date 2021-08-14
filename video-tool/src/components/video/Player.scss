@@ -37,12 +37,24 @@
     border: 1px solid $pt-intent-primary;
 }
 
+.player-video-source-content.primary p{
+    color: $pt-intent-primary;
+}
+
 .player-video-source-content.success{
     border: 1px solid $pt-intent-success;
 }
 
+.player-video-source-content.success p{
+    color: $pt-intent-success;
+}
+
 .player-video-source-content.warning{
     border: 1px solid $pt-intent-warning;
+}
+
+.player-video-source-content.warning p{
+    color: $pt-intent-warning;
 }
 
 .video-bar{
