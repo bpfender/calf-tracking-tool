@@ -5,19 +5,29 @@
 
 //FIXME this needs some cleaning!
 import { Colors, Icon } from '@blueprintjs/core';
-import { get } from 'idb-keyval';
-import React, { useEffect, useState } from 'react';
-import { getVideoHandle, selectMoveVideoIntoProject } from '../storage/indexedDB';
+import React, { useEffect, useRef, useState } from 'react';
+import { getVideoHandle, selectMoveVideoIntoProject } from '../storage/file-access';
+import { retrieveAppDirHandle } from '../storage/indexedDB';
 
+const sourceStates = {
+    start: { intent: "none", message: "Add a video file to get started..." },
+    click: { intent: "primary", message: "Select file to be loaded." },
+    dragged: { intent: "primary", message: "Drop file to load." },
+    multiple: { intent: "warning", message: "Please add just one video file." },
+    error: { intent: "warning", message: "Could not load this file." },
+    copying: { intent: "primary", message: "Copying video to VAT videos folder." },
+    success: { intent: "success", message: "Loading video..." },
+};
 
 // FIXME pull validation out into separate function
 export default function VideoSource(props) {
-    const { src, annotationDispatch, playerDispatch, hidden, projectDispatch } = props;
+    const { src, playerDispatch, hidden, projectDispatch } = props;
 
-    const [dragState, setDragState] = useState("none");
-    const [message, setMessage] = useState("Add a video file to get started...");
+    const [sourceState, setSourceState] = useState(sourceStates.start);
 
-    // Removing default effects on mount
+    const videoRef = useRef(null);
+
+    // Removing default effects on component mount and only handle drop in source element
     useEffect(() => {
         const prevent = (event) => { event.preventDefault() };
         window.addEventListener("dragover", prevent);
@@ -26,15 +36,99 @@ export default function VideoSource(props) {
         return (() => {
             window.removeEventListener("dragover", prevent);
             window.removeEventListener("drop", prevent);
-        })
-    }, [])
+        });
+    }, []);
 
+    // When player.src state changes, new video has been added
+    // TODO potentially use readyState instead?
     useEffect(() => {
         if (src) {
-            setDragState("success");
-            setMessage("Loading...");
+            setSourceState(sourceStates.success);
         }
     }, [src]);
+
+    const handleClick = async () => {
+        try {
+            setSourceState(sourceStates.click);
+
+            // FIXME what to do if appdirhandle can't be retrieved?
+            const appDirHandle = await retrieveAppDirHandle();
+            const videoFileHandle = await getVideoHandle(appDirHandle);
+            const file = await videoFileHandle.getFile();
+
+            await validateVideo(file);
+
+            //const videoHandle = await selectMoveVideoIntoProject(appDirHandle);
+            // const videoFile = await videoHandle.getFile()
+
+            //confirmVideo(videoHandle);
+        } catch (error) {
+            console.log(error);
+            /*if (error.message.includes("valid")) {
+                setSourceState(sourceStates.error);
+            } else {
+                setSourceState(sourceStates.start);
+            }*/
+        }
+    }
+
+    const handleDrop = async (event) => {
+        event.preventDefault();
+
+        try {
+            if (event.dataTransfer.items.length > 1) {
+                setSourceState(sourceStates.multiple);
+                throw new Error("Please add just one video file");
+            }
+
+            const item = event.dataTransfer.items[0];
+
+            if (!item.type.includes("video")) {
+                setSourceState(sourceStates.error);
+                throw new Error("This is not a valid video file");
+            }
+
+            const handle = await item.getAsFileSystemHandle();
+            confirmVideo(handle);
+        } catch (error) {
+        }
+    };
+
+    // Validate input for number of files
+    const handleDragOver = (event) => {
+        event.preventDefault();
+        setSourceState(sourceStates.dragged);
+    }
+
+    const handleDragLeave = (event) => {
+        event.preventDefault();
+        setSourceState(sourceStates.start);
+    }
+
+    const validateVideo = async (videoFile) => {
+        videoRef.current.src = URL.createObjectURL(videoFile);
+        console.log(videoFile);
+        console.log(videoRef.current.src);
+
+        const validationPromise = () =>
+            new Promise(
+                (res, rej) => {
+                    videoRef.current.onloadeddata = () => { res() };
+                    videoRef.current.onerror = () => { rej() };
+                    videoRef.current.load();
+                });
+
+        try {
+            await validationPromise();
+            setSourceState(sourceStates.copying);
+        } catch (error) {
+            setSourceState(sourceStates.error);
+        } finally {
+            URL.revokeObjectURL(videoRef.current.src);
+        }
+
+    };
+
 
     const confirmVideo = async (handle) => {
         projectDispatch({
@@ -51,76 +145,14 @@ export default function VideoSource(props) {
         });
     }
 
-    const handleClick = async () => {
-        try {
-            setDragState("primary");
-            const parentDir = await get('parentDir');
-
-            //            const handle = await getVideoHandle(parentDir);
-            //          const file = await handle.getFile();
-            console.log("COPYING");
-            const videoHandle = selectMoveVideoIntoProject(parentDir)
-            const videoFile = await videoHandle.getFile()
-
-            if (!videoFile.type.includes("video")) {
-                throw new Error("This is not a valid video file");
-            }
-
-            confirmVideo(videoHandle);
-        } catch (error) {
-            if (error.message.includes("valid")) {
-                setDragState("warning");
-                setMessage(error.message);
-            } else {
-                setDragState("none");
-                setMessage("Plase add a video file");
-            }
-        }
-    }
-
-    const handleDrop = async (event) => {
-        event.preventDefault();
-        const item = event.dataTransfer.items[0];
-        console.log(item);
-        try {
-            if (!item.type.includes("video")) {
-                throw new Error("This is not a valid video file");
-            }
-
-            const handle = await item.getAsFileSystemHandle();
-            confirmVideo(handle);
-        } catch (error) {
-            setDragState("warning");
-            setMessage(error.message);
-        }
-    };
-
-    // Validate input for number of files
-    const handleDragOver = (event) => {
-        event.preventDefault();
-        console.log(event.dataTransfer.types[0]);
-        if (event.dataTransfer.items.length > 1) {
-            setDragState("warning");
-            setMessage("Please add just one video file.");
-        } else {
-            setDragState("primary")
-        }
-    }
-
-    const handleDragLeave = (event) => {
-        event.preventDefault();
-        setDragState("");
-        setMessage("Add a video file to get started...");
-    }
-
-    const setHiddenClass = () => {
-        return hidden ? " hidden" : "";
-    }
-
-    // FIZME Hidden class is a bit messy
     return (
         <div
-            className={["video-container player-video-source-content", dragState, setHiddenClass()].join(" ")}
+            className={[
+                "video-container player-video-source-content",
+                sourceState.intent,
+                hidden ? "hidden" : ""
+            ].join(" ")}
+
             onClick={handleClick}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
@@ -130,7 +162,10 @@ export default function VideoSource(props) {
                 icon="add"
                 iconSize={160}
                 color={Colors.DARK_GRAY1} />
-            <p>{message}</p>
+            <p>{sourceState.message}</p>
+            <video
+                ref={videoRef}
+                hidden={true} />
         </ div >
     );
 }
