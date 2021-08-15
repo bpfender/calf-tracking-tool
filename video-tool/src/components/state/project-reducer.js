@@ -10,7 +10,7 @@ export function projectReducer(state, action) {
             }
         case 'LOAD_PROJECT':
             {
-                return;
+                return payload.project;
             }
         case 'ADD_TASK':
             {

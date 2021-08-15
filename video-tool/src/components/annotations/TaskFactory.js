@@ -22,9 +22,10 @@ export function TaskFactory(videoHandle) {
                 this.selected,
                 this.tracks,
                 this.reviewed,
-                this.keyFrames]
+                this.keyFrames
+            ];
         }
-    }
+    };
 }
 
 export function loadTask(parsedTask) {
@@ -95,7 +96,6 @@ export function getBoundingBoxes(task, frame) {
         .filter(([key, track]) => track.visible)
         .map(([key, track]) => {
             const label = getLabel(track, frame);
-            console.log(label);
             return new BoundingBox(
                 key,
                 track.colour,
@@ -107,34 +107,4 @@ export function getBoundingBoxes(task, frame) {
                 label.rotation,
             );
         });
-}
-
-export const generateJSON = (task) => {
-    const output = {
-        tracks: task.tracks.toJS(),
-        totalFrames: task.totalFrames,
-        reviewed: task.reviewed.toJS(),
-        selected: task.selected
-    };
-    console.log(output);
-    return output;
-}
-
-
-export const readJSON = (task) => {
-    const output = {
-        tracks: fromJS(task.tracks, reviver),
-        totalFrames: task.totalFrames,
-        reviewed: fromJS(task.reviewed),
-        selected: task.selected,
-    }
-
-    return output;
-}
-
-function reviver(key, value) {
-    if (key === "") {
-        return value.toMap();
-    }
-    return isKeyed(value) ? value.toObject() : value.toList()
 }

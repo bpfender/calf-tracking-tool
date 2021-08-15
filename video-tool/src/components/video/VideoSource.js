@@ -2,8 +2,6 @@
 // https://stackoverflow.com/questions/33420306/drag-drop-datatransfer-object
 //https://web.dev/datatransfer/
 
-
-//FIXME this needs some cleaning!
 import { Colors, Icon } from '@blueprintjs/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { fileAlreadyInFolder, fileExists, getVideoHandle, moveFileIntoFolder } from '../storage/file-access';
@@ -18,9 +16,14 @@ const sourceStates = {
     error: { intent: "warning", message: "Could not load this file." },
     copying: { intent: "primary", message: "Copying video to VAT videos folder." },
     success: { intent: "success", message: "Loading video..." },
+    notFound: function (filename) {
+        return {
+            intent: "warning",
+            message: "Can't find video ../VAT Projects/videos/" + filename,
+        }
+    },
 };
 
-// FIXME pull validation out into separate function
 export default function VideoSource(props) {
     const { src, playerDispatch, hidden, projectDispatch } = props;
 
@@ -45,6 +48,8 @@ export default function VideoSource(props) {
     useEffect(() => {
         if (src) {
             setSourceState(sourceStates.success);
+        } else {
+            setSourceState(sourceStates.start);
         }
     }, [src]);
 
@@ -142,7 +147,10 @@ export default function VideoSource(props) {
         // TODO move this into effect in player?
         playerDispatch({
             type: 'SRC_CHANGE',
-            payload: { src: URL.createObjectURL(file) }
+            payload: {
+                src: URL.createObjectURL(file),
+                filename: file.name,
+            }
         });
     }
 

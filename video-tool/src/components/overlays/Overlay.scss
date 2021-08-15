@@ -3,11 +3,15 @@
 .overlay{
     display: flex;
     justify-content: flex-start;
-    width:400px ;
+    width: 400px;
     position: absolute;
     top: 20vh;
     left:50vw;
     transform: translate(-50%);
+}
+
+.overlay.files{
+    width:auto;
 }
 
 .overlay-buttons{

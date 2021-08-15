@@ -41,9 +41,6 @@ function Player(props) {
         }
     }, [playerState.framerate]);
 
-
-
-
     return (
         <div className={props.className}>
             <div className="video-content">

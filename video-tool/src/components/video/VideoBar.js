@@ -13,9 +13,9 @@ export function VideoBar(props) {
         if (!src) {
             return;
         } else if (!framerate || !videoHeight || !videoWidth) {
-            return <Spinner size={20} />
+            return <Spinner className="center" size={20} />
         } else {
-            return <text>{framerate} fps | {videoWidth} x {videoHeight}</text>
+            return <text className="center">{framerate} fps | {videoWidth} x {videoHeight}</text>
         }
     }
 

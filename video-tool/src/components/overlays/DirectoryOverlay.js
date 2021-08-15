@@ -62,7 +62,5 @@ export function DirectoryOverlay(props) {
                 </div>
             </Card >
         </Overlay >
-
-
-    )
+    );
 }

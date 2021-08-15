@@ -1,13 +1,13 @@
 import { Button, ButtonGroup, Divider, } from '@blueprintjs/core';
-import React, { useEffect, useRef, useState } from 'react';
-import { get, set } from 'idb-keyval';
+import React, { useEffect, useState } from 'react';
 import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
 import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-access';
 import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
 import { saveFailed, saveProgress, saveSuccess, AppToaster } from '../overlays/toaster';
 import { StartupOverlay } from '../overlays/StartupOverlay';
-import { getHandle, loadProject } from '../annotations/ProjectFactory';
-import { retrieveAppDirHandle } from '../storage/indexedDB';
+import { getHandle, loadProject, verifyVideoFiles } from '../annotations/ProjectFactory';
+import { retrieveAppDirHandle, retrieveVideoDirHandle, storeRecentProjectHandle } from '../storage/indexedDB';
+import { FindFilesOverlay } from '../overlays/FindFilesOverlay';
 
 export function Header(props) {
     const { projectDispatch, playerDispatch, project } = props;
@@ -44,13 +44,17 @@ export function Header(props) {
     const handleSaveProject = async () => {
         // FIXME where to store filehandle reference?
         const fileHandle = getHandle(project);
+        console.log(project);
+
+        let progToast = null;
         try {
             await verifyPermission(fileHandle);
-            const progToast = AppToaster.show(saveProgress);
+            progToast = AppToaster.show(saveProgress);
             await writeFile(fileHandle, JSON.stringify(project));
             AppToaster.dismiss(progToast);
             AppToaster.show(saveSuccess);
         } catch (error) {
+            AppToaster.dismiss(progToast);
             AppToaster.show(saveFailed);
             console.log(error);
         }
@@ -58,16 +62,26 @@ export function Header(props) {
 
     const handleOpenProject = async () => {
         try {
-            const dirHandle = await get('parentDir');
-            const projectHandle = await getProjectHandle(dirHandle);
+            const appDirHandle = await retrieveAppDirHandle();
+            const videoDirHandle = await retrieveVideoDirHandle();
+
+            const projectHandle = await getProjectHandle(appDirHandle);
             const projectFile = await projectHandle.getFile();
             const projectJSON = await projectFile.text();
 
             const project = loadProject(projectJSON);
             project.fileHandle = projectHandle;
 
+            const checkFiles = await verifyVideoFiles(project, videoDirHandle);
 
-            await set('projectFile', projectHandle);
+            await storeRecentProjectHandle(projectHandle);
+
+            console.log(project);
+
+            projectDispatch({
+                type: 'LOAD_PROJECT',
+                payload: { project: project },
+            });
 
         } catch (error) {
             console.log(error);

@@ -19,9 +19,9 @@ export function ProjectFactory() {
                 this.selectedTask,
                 this.tasks,
                 this.labels,
-            ]
+            ];
         }
-    }
+    };
 }
 
 export function loadProject(projectJSON) {
@@ -89,11 +89,6 @@ export function getTask(project, key) {
 
 export function getCurrentTask(project) {
     return project.tasks.get(project.selectedTask);
-}
-
-
-export function readProjectJSON(project) {
-
 }
 
 export async function verifyVideoFiles(project, videoDirHandle) {

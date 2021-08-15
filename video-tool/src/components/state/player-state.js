@@ -1,4 +1,4 @@
-import { getFramesAsTime, getTimeAsFrames } from "../video/video-functions";
+import { getTimeAsFrames } from "../video/video-functions";
 
 export const defaultPlayerState = {
     // requestVideoFrameCallback() metadata
@@ -27,6 +27,7 @@ export const defaultPlayerState = {
     videoHeight: 0,
 
     // Extra states
+    filename: "",
     framerate: 0,
     currentFrame: 0,
     totalFrames: 0,
@@ -164,6 +165,7 @@ export function playerReducer(state, action) {
                 ...defaultPlayerState,
                 framerate: 0,
                 src: payload.src,
+                filename: payload.filename,
             };
         case 'SET_FRAMERATE':
             return {

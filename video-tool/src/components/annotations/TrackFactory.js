@@ -13,14 +13,16 @@ export function TrackFactory(totalFrames) {
         predicted: List(),
 
         toJSON: function () {
-            return [this.name,
-            this.colour,
-            this.visible,
-            this.labels,
-            this.anchors,
-            this.predicted];
+            return [
+                this.name,
+                this.colour,
+                this.visible,
+                this.labels,
+                this.anchors,
+                this.predicted
+            ];
         }
-    }
+    };
 }
 
 export function loadTrack(parsedTrack) {

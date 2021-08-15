@@ -1,5 +1,7 @@
 //https://web.dev/file-system-access/
 
+import { retrieveVideoDirHandle } from "./indexedDB";
+
 export async function getParentDirectory() {
     const dirHandle = await window.showDirectoryPicker({ startIn: 'documents' });
     return dirHandle;
