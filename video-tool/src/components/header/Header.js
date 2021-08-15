@@ -65,6 +65,8 @@ export function Header(props) {
             const appDirHandle = await retrieveAppDirHandle();
             const videoDirHandle = await retrieveVideoDirHandle();
 
+            await verifyPermission(appDirHandle);
+
             const projectHandle = await getProjectHandle(appDirHandle);
             const projectFile = await projectHandle.getFile();
             const projectJSON = await projectFile.text();
@@ -72,11 +74,9 @@ export function Header(props) {
             const project = loadProject(projectJSON);
             project.fileHandle = projectHandle;
 
-            const checkFiles = await verifyVideoFiles(project, videoDirHandle);
+            await verifyVideoFiles(project, videoDirHandle);
 
             await storeRecentProjectHandle(projectHandle);
-
-            console.log(project);
 
             projectDispatch({
                 type: 'LOAD_PROJECT',

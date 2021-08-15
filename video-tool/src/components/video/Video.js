@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { defaultPlayerState } from '../state/player-state';
+import { defaultPlayerState } from '../state/player-reducer';
 import { HAVE_ENOUGH_DATA } from './video-constants';
 import { calculateFramerate } from './video-functions';
 import "./Video.scss";

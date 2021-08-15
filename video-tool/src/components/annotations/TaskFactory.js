@@ -1,14 +1,12 @@
-import { fromJS, isKeyed, List, Map, setIn } from "immutable";
+import { List, Map, setIn } from "immutable";
 import BoundingBox from "../canvas/BoundingBox";
+import { retrieveVideoDirHandle } from "../storage/indexedDB";
 import { getLabel, loadTrack, TrackFactory } from "./TrackFactory";
 
 // TODO add videoname key
 export function TaskFactory(videoHandle) {
     return {
         videoHandle: videoHandle,
-        framerate: null,
-        size: null,
-
         totalFrames: null,
         selected: null,
         tracks: Map(),
@@ -30,7 +28,7 @@ export function TaskFactory(videoHandle) {
 
 export function loadTask(parsedTask) {
     const task = TaskFactory();
-    task.videoHandle = null;
+    task.videoHandle = parsedTask[0];
     task.totalFrames = parsedTask[1];
     task.select = parsedTask[2];
     task.tracks = Map(Object.entries(parsedTask[3]).map(entry => [entry[0], loadTrack(entry[1])]));
@@ -38,6 +36,11 @@ export function loadTask(parsedTask) {
     task.keyFrames = List(parsedTask[5]);
 
     return task;
+}
+
+async function findVideoHandle(filename) {
+    const videoDirHandle = await retrieveVideoDirHandle();
+
 }
 
 // TODO Video name and handle can be combined
@@ -51,6 +54,7 @@ export function setVideoHandle(task, handle) {
 
 export function setTotalFrames(task, frames) {
     const newTask = setIn(task, ['totalFrames'], frames);
+    // FIXME this might reset on load
     newTask.reviewed = List(Array(frames).fill(0));
     return newTask;
 }

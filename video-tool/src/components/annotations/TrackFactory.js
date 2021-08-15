@@ -10,7 +10,6 @@ export function TrackFactory(totalFrames) {
         visible: true,
         labels: List(Array(totalFrames).fill(LabelFactory())),
         anchors: List(),
-        predicted: List(),
 
         toJSON: function () {
             return [
@@ -19,7 +18,6 @@ export function TrackFactory(totalFrames) {
                 this.visible,
                 this.labels,
                 this.anchors,
-                this.predicted
             ];
         }
     };
@@ -32,7 +30,6 @@ export function loadTrack(parsedTrack) {
     track.visible = parsedTrack[2];
     track.labels = List(parsedTrack[3].map(label => loadLabel(label)));
     track.anchors = List(parsedTrack[4]);
-    track.predicted = List(parsedTrack[5]);
 
     return track;
 }
@@ -91,7 +88,6 @@ export function setLabel(track, frame, label) {
     return setIn(trackNewAnchors, ['labels'], newLabels);
 }
 
-// FIXME rotation interpolation probably needs fixing
 // QUESTION performance of withmutations vs other methods?
 // Need to work with mutableList as we depend on mutated values
 function interpolateLabels(mutableList, startFrame, endFrame) {

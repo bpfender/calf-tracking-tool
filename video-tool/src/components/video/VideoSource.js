@@ -145,13 +145,12 @@ export default function VideoSource(props) {
         });
 
         // TODO move this into effect in player?
-        playerDispatch({
-            type: 'SRC_CHANGE',
+        /*    type: 'SRC_CHANGE',
             payload: {
                 src: URL.createObjectURL(file),
                 filename: file.name,
             }
-        });
+        });*/
     }
 
     return (

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { H5, Button, Tree } from '@blueprintjs/core';
+import React, { useEffect, useState } from 'react';
+import { H5, Button } from '@blueprintjs/core';
 import { v4 as uuidv4 } from 'uuid';
 import "./RightSidebar.scss"
 import IdPanel from './IdPanel';
@@ -9,14 +9,17 @@ export default function RightSidebar(props) {
     const [idsList, setIdsList] = useState([]);
     const { annotations, annotationDispatch } = props;
 
-    // QUESTION can i iterate colours with generator?
+    useEffect(() => {
+        setIdsList([...annotations.tracks.keys()]);
+    }, [annotations.tracks])
+
     const handleAddClick = () => {
         const key = uuidv4();
         annotationDispatch({
             type: "ADD_TRACK",
             payload: { key: key }
         });
-        setIdsList(idsList.concat(key));
+        // setIdsList(idsList.concat(key));
     }
 
     const removeListComponent = (filterKey) => {
@@ -24,7 +27,7 @@ export default function RightSidebar(props) {
             type: 'DELETE_TRACK',
             payload: { key: filterKey }
         });
-        setIdsList(idsList.filter(key => key !== filterKey));
+        // setIdsList(idsList.filter(key => key !== filterKey));
     }
 
     // FIXME not sure about getTrack calls way to optimise?

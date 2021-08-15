@@ -1,23 +1,22 @@
 import React, { useEffect, useReducer } from 'react';
 import './App.scss';
-import { defaultPlayerState, playerReducer } from './components/state/player-state.js';
-import { annotationReducer } from './components/state/annotation-state';
+import { defaultPlayerState, playerReducer } from './components/state/player-reducer.js';
+import { annotationReducer } from './components/state/annotation-reducer';
 import Player from './components/video/Player';
 import RightSidebar from './components/right-sidebar/RightSidebar';
 import LeftSidebar from './components/left-sidebar/LeftSidebar';
 import { Header } from './components/header/Header';
 import { projectReducer } from './components/state/project-reducer';
-import { getCurrentTask, ProjectFactory } from './components/annotations/ProjectFactory';
+import { getCurrentTask, getTask, ProjectFactory } from './components/annotations/ProjectFactory';
+import { TaskFactory } from './components/annotations/TaskFactory';
 
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
-// QUESTION do i need to pass down whole state?
 //FIXME whole tree updates all the time
 // TODO https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/hidden
 export default function App(props) {
   const [project, projectDispatch] = useReducer(projectReducer, ProjectFactory());
-  const [annotations, annotationDispatch] = useReducer(annotationReducer, null);
-
+  const [annotations, annotationDispatch] = useReducer(annotationReducer, TaskFactory());
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 
   // Check whether VAT directory has been set before
@@ -61,6 +60,26 @@ export default function App(props) {
       });
     }
   }, [annotations])
+
+  useEffect(() => {
+    if (annotations.videoHandle && typeof (annotations.videoHandle) !== 'string') {
+      (async function () {
+        console.log(annotations.videoHandle);
+        const video = await annotations.videoHandle.getFile();
+
+        playerDispatch({
+          type: 'SRC_CHANGE',
+          payload: {
+            src: URL.createObjectURL(video),
+            filename: video.name,
+          }
+        })
+
+      })();
+    }
+
+  }, [annotations.videoHandle])
+
 
   return (
     <div className="App bp3-dark">

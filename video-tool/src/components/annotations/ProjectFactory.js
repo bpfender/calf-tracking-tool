@@ -92,18 +92,17 @@ export function getCurrentTask(project) {
 }
 
 export async function verifyVideoFiles(project, videoDirHandle) {
-    const failed = [];
     const tasks = project.tasks;
 
     for (const task of tasks.values()) {
         try {
-            const videoHandle = await videoDirHandle.getFileHandle(task.fileHandle);
+            console.log(task.videoHandle);
+            console.log(videoDirHandle);
+            const videoHandle = await videoDirHandle.getFileHandle(task.videoHandle);
             task.videoHandle = videoHandle;
+            console.log(videoHandle);
         } catch (error) {
-            failed.push(task);
+            console.log(error);
         }
     }
-
-    return failed ? failed : null;
 }
-
