@@ -1,3 +1,4 @@
+import { Icon } from '@blueprintjs/core';
 import React from 'react';
 import { Labels } from './Labels';
 

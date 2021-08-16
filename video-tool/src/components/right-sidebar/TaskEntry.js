@@ -25,7 +25,6 @@ export function TaskEntry(props) {
                     </ButtonGroup>
                 </div>}
             active={selected === name ? true : false}
-            intent={selected === name ? "none" : "none"}
             text={
                 <Text
                     ellipsize={true} >
