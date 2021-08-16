@@ -37,18 +37,21 @@ export default function IdPanel(props) {
     // FIXME divider not showing up at the moment
     return (
         <div className="id-panel">
-            <Icon
-                icon="dot"
-                intent={selectedId === id ? "primary" : "none"}
-                onClick={handleSelectClick}
-            ></Icon>
-            <EditableText
-                placeholder="Click to edit..."
-                onEdit={handleSelectClick}
-                onConfirm={handleTextConfirm}
-                maxLength={16}
-                selectAllOnFocus={true}
-            ></EditableText>
+            <div>
+                <Icon
+                    icon="dot"
+                    intent={selectedId === id ? "primary" : "none"}
+                    onClick={handleSelectClick}
+                ></Icon>
+                <EditableText
+                    placeholder="Click to edit..."
+                    onEdit={handleSelectClick}
+                    onConfirm={handleTextConfirm}
+                    maxLength={16}
+                    selectAllOnFocus={true}
+                ></EditableText>
+            </div>
+
             <Divider></Divider>
             <ButtonGroup
                 minimal={true}>

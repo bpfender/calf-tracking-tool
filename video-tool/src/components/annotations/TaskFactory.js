@@ -38,11 +38,6 @@ export function loadTask(parsedTask) {
     return task;
 }
 
-async function findVideoHandle(filename) {
-    const videoDirHandle = await retrieveVideoDirHandle();
-
-}
-
 // TODO Video name and handle can be combined
 export function setVideoName(task, name) {
     return setIn(task, ['videoName'], name);

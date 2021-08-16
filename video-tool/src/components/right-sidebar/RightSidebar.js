@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { H5, Button } from '@blueprintjs/core';
+import { H5, Button, Card, Tree, TreeNode, Tag, Icon, Divider, MenuDivider } from '@blueprintjs/core';
 import { v4 as uuidv4 } from 'uuid';
 import "./RightSidebar.scss"
 import IdPanel from './IdPanel';
 import { getTrack } from '../annotations/TaskFactory';
+import { Tags } from './Tags';
+import { Tasks } from './Tasks';
+import { Labels } from './Labels';
+import { LabelStack } from './LabelStack';
+
 
 export default function RightSidebar(props) {
+    const labels = ["cow", "farmer", "truck"];
+
     const [idsList, setIdsList] = useState([]);
     const { annotations, annotationDispatch } = props;
 
@@ -33,7 +40,7 @@ export default function RightSidebar(props) {
     // FIXME not sure about getTrack calls way to optimise?
     return (
         <div className={props.className}>
-            <div className="right-panel">
+            <Card className="right-panel">
                 <H5>Sidebar Right</H5>
                 <Button icon="add"
                     onClick={handleAddClick}
@@ -49,7 +56,14 @@ export default function RightSidebar(props) {
                         removeListComponent={() => { removeListComponent(key) }}
                     ></IdPanel>
                 ))}
-            </div>
+            </Card>
+            <Tasks></Tasks>
+            <Tags></Tags>
+            <MenuDivider></MenuDivider>
+            <LabelStack></LabelStack>
+
+
+
         </div >
     );
 }

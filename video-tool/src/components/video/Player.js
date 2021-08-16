@@ -41,6 +41,13 @@ function Player(props) {
         }
     }, [playerState.framerate]);
 
+    useEffect(() => {
+        if (typeof (annotations.videoHandle) === 'string') {
+            setHidden(false);
+            videoContainerRef.current.hidden = true;
+        }
+    }, [annotations.videoHandle])
+
     return (
         <div className={props.className}>
             <div className="video-content">
@@ -54,6 +61,7 @@ function Player(props) {
                 <VideoSource
                     src={playerState.src}
                     hidden={hidden}
+                    videoHandle={annotations.videoHandle}
                     annotationDispatch={annotationDispatch}
                     playerDispatch={playerDispatch}
                     projectDispatch={projectDispatch} />

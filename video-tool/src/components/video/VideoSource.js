@@ -25,7 +25,7 @@ const sourceStates = {
 };
 
 export default function VideoSource(props) {
-    const { src, playerDispatch, hidden, projectDispatch } = props;
+    const { src, videoHandle, playerDispatch, hidden, projectDispatch } = props;
 
     const [sourceState, setSourceState] = useState(sourceStates.start);
 
@@ -52,6 +52,12 @@ export default function VideoSource(props) {
             setSourceState(sourceStates.start);
         }
     }, [src]);
+
+    useEffect(() => {
+        if (typeof (videoHandle) === "string") {
+            setSourceState(sourceStates.notFound(videoHandle));
+        }
+    }, [videoHandle])
 
     const handleClick = async () => {
         try {
