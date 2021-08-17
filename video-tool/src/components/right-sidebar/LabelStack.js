@@ -1,13 +1,20 @@
-import { Icon } from '@blueprintjs/core';
 import React from 'react';
 import { Labels } from './Labels';
 
 export function LabelStack(props) {
-    const tags = ["cow", "farmer", "trough"];
+    const { annotationDispatch, annotations, labels } = props;
+
+    console.log(annotations);
 
     return (
         <div>
-            {tags.map(val => <Labels name={val} />)}
+            {labels.map(tag =>
+                <Labels
+                    key={tag}
+                    tag={tag}
+                    annotations={annotations}
+                    annotationDispatch={annotationDispatch} />
+            )}
         </div>
     )
 }

@@ -5,9 +5,9 @@ import { SidebarPanel } from './SidebarPanel';
 // FIXME auto focus on new tag text input
 
 export function Tags(props) {
-    const [editableTag, setEditableTag] = useState(null);
+    const { projectDispatch, labels } = props;
 
-    const labels = ["cow", "farmer", "truck"];
+    const [editableTag, setEditableTag] = useState(null);
 
     const tag = (content) => {
         return (
@@ -38,11 +38,15 @@ export function Tags(props) {
     };
 
     const handleConfirm = (input) => {
-        if (!input) {
-            resetEditable();
-        } else {
-            // ADD TAG DISPATCH
+        // TODO check if tag already exists        
+        if (input) {
+            projectDispatch({
+                type: 'ADD_TAG',
+                payload: { label: input },
+            });
         }
+
+        resetEditable();
     };
 
     const handleRemove = (key) => {

@@ -1,6 +1,5 @@
 import { List, Map, setIn } from "immutable";
 import BoundingBox from "../canvas/BoundingBox";
-import { retrieveVideoDirHandle } from "../storage/indexedDB";
 import { getLabel, loadTrack, TrackFactory } from "./TrackFactory";
 
 // TODO add videoname key
@@ -12,6 +11,8 @@ export function TaskFactory(videoHandle) {
         tracks: Map(),
         reviewed: List(),
         keyFrames: List(),
+
+        tags: Map(), // add ids that belong to which tag
 
         toJSON: function () {
             return [
@@ -34,6 +35,8 @@ export function loadTask(parsedTask) {
     task.tracks = Map(Object.entries(parsedTask[3]).map(entry => [entry[0], loadTrack(entry[1])]));
     task.reviewed = List(parsedTask[4]);
     task.keyFrames = List(parsedTask[5]);
+
+    task.tags = Map();
 
     return task;
 }
@@ -67,9 +70,22 @@ export function setTrack(task, key, newTrack) {
     return setTrackMap(task, key, newMap);
 }
 
-export function addTrack(task, key) {
+export function addTrack(task, key, tag) {
     const track = TrackFactory(task.totalFrames);
-    return setTrack(task, key, track);
+    const newTask = setTrack(task, key, track);
+
+    const tags = newTask.tags;
+    let newTags = null;
+
+    if (tags.has(tag)) {
+        newTags = tags.updateIn([tag], (list) => list.push(key));
+    } else {
+        newTags = tags.set(tag, List([key]));
+    }
+
+    newTask.tags = newTags;
+
+    return newTask;
 }
 
 export function deleteTrack(task, key) {

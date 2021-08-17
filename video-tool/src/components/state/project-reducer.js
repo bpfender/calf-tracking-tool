@@ -24,9 +24,13 @@ export function projectReducer(state, action) {
             {
                 return setSelectedKey(state, payload.key);
             }
-        case 'ADD_LABEL':
+        case 'ADD_TAG':
             {
                 return addLabel(state, payload.label);
+            }
+        case 'REMOVE_LABEL':
+            {
+                return;
             }
         default:
             throw new Error(`Unexpected project reducer case ${action.type}`);

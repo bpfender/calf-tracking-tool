@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { H5, Button, Card, Tree, TreeNode, Tag, Icon, Divider, MenuDivider } from '@blueprintjs/core';
+import { H5, Button, Card, MenuDivider } from '@blueprintjs/core';
 import { v4 as uuidv4 } from 'uuid';
 import "./RightSidebar.scss"
 import IdPanel from './IdPanel';
 import { getTrack } from '../annotations/TaskFactory';
 import { Tags } from './Tags';
 import { Tasks } from './Tasks';
-import { Labels } from './Labels';
 import { LabelStack } from './LabelStack';
 
 
 export default function RightSidebar(props) {
-    const labels = ["cow", "farmer", "truck"];
+    //const labels = ["cow", "farmer", "truck"];
 
     const [idsList, setIdsList] = useState([]);
-    const { annotations, annotationDispatch } = props;
+    const { annotations, annotationDispatch, projectDispatch, labels } = props;
 
     useEffect(() => {
         setIdsList([...annotations.tracks.keys()]);
@@ -40,6 +39,17 @@ export default function RightSidebar(props) {
     // FIXME not sure about getTrack calls way to optimise?
     return (
         <div className={props.className}>
+            <Tasks></Tasks>
+            <Tags
+                projectDispatch={projectDispatch}
+                labels={labels} />
+            <MenuDivider></MenuDivider>
+            <LabelStack
+                annotationDispatch={annotationDispatch}
+                annotations={annotations}
+                labels={labels} />
+
+
             <Card className="right-panel">
                 <H5>Sidebar Right</H5>
                 <Button icon="add"
@@ -57,10 +67,7 @@ export default function RightSidebar(props) {
                     ></IdPanel>
                 ))}
             </Card>
-            <Tasks></Tasks>
-            <Tags></Tags>
-            <MenuDivider></MenuDivider>
-            <LabelStack></LabelStack>
+
 
 
 

@@ -14,8 +14,8 @@ export function annotationReducer(state, action) {
             return payload.task;
         }
         case 'ADD_TRACK': {
-            const { key } = payload;
-            return addTrack(state, key);
+            const { key, tag } = payload;
+            return addTrack(state, key, tag);
         }
         case 'DELETE_TRACK': {
             const { key } = payload;

@@ -101,7 +101,10 @@ export default function App(props) {
         className="right-sidebar"
         playerState={playerState}
         annotations={annotations}
-        annotationDispatch={annotationDispatch} />
+        annotationDispatch={annotationDispatch}
+        projectDispatch={projectDispatch}
+        labels={project.labels}
+      />
       <footer className="footer" />
     </div >
   );
