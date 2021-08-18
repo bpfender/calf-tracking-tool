@@ -1,4 +1,4 @@
-import { addLabel, addTask, initialiseProject, setSelectedKey, updateTask } from "../annotations/ProjectFactory";
+import { addLabel, addTask, initialiseProject, removeLabel, setSelectedKey, updateTask } from "../annotations/ProjectFactory";
 
 export function projectReducer(state, action) {
     console.log("PROJECT: ", action.type);
@@ -28,9 +28,9 @@ export function projectReducer(state, action) {
             {
                 return addLabel(state, payload.label);
             }
-        case 'REMOVE_LABEL':
+        case 'REMOVE_TAG':
             {
-                return;
+                return removeLabel(state, payload.label);
             }
         default:
             throw new Error(`Unexpected project reducer case ${action.type}`);

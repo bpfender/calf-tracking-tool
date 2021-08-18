@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import ColourPalettePopover from './ColourPalette';
 
 export function LabelEntry(props) {
-    const { id, selected, track, annotationDispatch } = props;
+    const { id, tag, selected, track, annotationDispatch } = props;
 
     const [trashIntent, setTrashIntent] = useState("none");
     const [input, setInput] = useState(track.name)
@@ -40,7 +40,13 @@ export function LabelEntry(props) {
     };
 
     const handleDelete = () => {
-        // DELETE TRACK (needs to do it with tags)
+        annotationDispatch({
+            type: 'DELETE_TRACK',
+            payload: {
+                key: id,
+                tag: tag,
+            }
+        });
     };
 
     const visibleToggle = () => {
@@ -80,6 +86,7 @@ export function LabelEntry(props) {
                             intent={track.visible ? "primary" : "none"} />
                         <Button
                             icon="trash"
+                            onClick={handleDelete}
                             intent={trashIntent}
                             onMouseEnter={() => { setTrashIntent("danger") }}
                             onMouseLeave={() => { setTrashIntent("none") }} />

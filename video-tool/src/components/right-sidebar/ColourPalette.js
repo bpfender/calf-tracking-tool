@@ -10,7 +10,7 @@ export default function ColourPalettePopover(props) {
         <Popover2
             content={<ColourPalette handleColourClick={handleColourClick} />}
             interactionKind="click"
-            placement="bottom"
+            placement="left"
         >
             <Button
                 icon={<Icon icon="tint" color={colour}></Icon>}

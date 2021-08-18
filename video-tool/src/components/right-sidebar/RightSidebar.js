@@ -13,7 +13,7 @@ export default function RightSidebar(props) {
     //const labels = ["cow", "farmer", "truck"];
 
     const [idsList, setIdsList] = useState([]);
-    const { annotations, annotationDispatch, projectDispatch, labels } = props;
+    const { annotations, project, annotationDispatch, projectDispatch, labels } = props;
 
     useEffect(() => {
         setIdsList([...annotations.tracks.keys()]);
@@ -39,7 +39,10 @@ export default function RightSidebar(props) {
     // FIXME not sure about getTrack calls way to optimise?
     return (
         <div className={props.className}>
-            <Tasks></Tasks>
+            <Tasks
+                projectDispatch={projectDispatch}
+                tasks={project.tasks}
+                selected={project.selectedTask} />
             <Tags
                 projectDispatch={projectDispatch}
                 labels={labels} />

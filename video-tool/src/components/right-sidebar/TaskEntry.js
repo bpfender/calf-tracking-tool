@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 
 export function TaskEntry(props) {
     const [trashIntent, setTrashIntent] = useState("none");
+    const [openIntent, setOpenIntent] = useState("primary");
 
-    const { selected, name } = props;
+    const { selected, name, id } = props;
 
     return (
         <MenuItem
@@ -15,7 +16,9 @@ export function TaskEntry(props) {
                     <ButtonGroup minimal={true}>
                         <Button
                             icon="document-open"
-                            intent="primary" />
+                            intent={openIntent}
+                            onMouseEnter={() => { setOpenIntent("success") }}
+                            onMouseLeave={() => { setOpenIntent("primary") }} />
                         <Button
                             icon="trash"
                             intent={trashIntent}
@@ -24,7 +27,7 @@ export function TaskEntry(props) {
                         />
                     </ButtonGroup>
                 </div>}
-            active={selected === name ? true : false}
+            active={selected === id ? true : false}
             text={
                 <Text
                     ellipsize={true} >

@@ -39,6 +39,7 @@ export function Labels(props) {
                     {getTagIds().map(key =>
                         <LabelEntry
                             key={key}
+                            tag={tag}
                             id={key}
                             selected={annotations.selected}
                             track={getTrack(annotations, key)}

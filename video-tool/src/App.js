@@ -102,6 +102,7 @@ export default function App(props) {
         playerState={playerState}
         annotations={annotations}
         annotationDispatch={annotationDispatch}
+        project={project}
         projectDispatch={projectDispatch}
         labels={project.labels}
       />

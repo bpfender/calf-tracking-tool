@@ -71,6 +71,11 @@ export function addLabel(project, label) {
     return setIn(project, ['labels'], newLabels);
 }
 
+export function removeLabel(project, label) {
+    const newLabels = project.labels.delete(project.labels.findIndex(val => label === val))
+    return setIn(project, ['labels'], newLabels);
+}
+
 export function getName(project) {
     return project.name;
 }

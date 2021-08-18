@@ -10,31 +10,22 @@ export function Tags(props) {
 
     const [editableTag, setEditableTag] = useState(null);
 
-    const tag = (name) => {
-        return (
-            <Tag
-                interactive={false}
-                minimal={true}
-                className="label-tag"
-                icon="tag"
-                round={true}
-                onRemove={() => handleRemove(name)}>
-                {name}
-            </Tag>
-        );
-    };
-
     const handleAdd = (key) => {
         setEditableTag(
-            tag(
-                <EditableText
-                    className="label-tag-editable"
-                    onConfirm={handleConfirm}
-                    onCancel={resetEditable}
-                    confirmOnEnterKey={true}
-                    placeholder="Add tag..."
-                    maxLength={11}
-                    selectAllOnFocus={true} />)
+            <TagEntry
+                key="editable"
+                name={
+                    <EditableText
+                        className="label-tag-editable"
+                        onConfirm={handleConfirm}
+                        onCancel={resetEditable}
+                        confirmOnEnterKey={true}
+                        placeholder="Add tag..."
+                        maxLength={11}
+                        selectAllOnFocus={true} />
+                }
+                handleRemove={() => { setEditableTag(null) }}
+            />
         );
     };
 
@@ -49,7 +40,12 @@ export function Tags(props) {
         resetEditable();
     };
 
+    // FIXME doesn't yet remove tag ids from tasks
     const handleRemove = (label) => {
+        projectDispatch({
+            type: 'REMOVE_TAG',
+            payload: { label: label }
+        });
         // REMOVE TAG DISPATCH
     };
 
