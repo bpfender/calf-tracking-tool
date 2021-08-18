@@ -1,6 +1,6 @@
 
 import { v4 as uuidv4 } from 'uuid';
-import { List, Map, setIn } from "immutable";
+import { List, Map, setIn, updateIn } from "immutable";
 import { loadTask, TaskFactory } from "./TaskFactory";
 
 export function ProjectFactory() {
@@ -20,6 +20,45 @@ export function ProjectFactory() {
                 this.tasks,
                 this.labels,
             ];
+        },
+
+        initialiseProject: function (fileHandle) {
+            return setIn(this, ['fileHandle'], fileHandle);
+        },
+
+        setSelectedTask: function (key) {
+            return setIn(this, ['selectedTask'], key);
+        },
+
+        addTask: function (videoHandle) {
+            const key = uuidv4();
+            const newProject = updateIn(this, ['tasks'], tasks =>
+                tasks.set(key, TaskFactory(videoHandle)));
+            newProject.selectedTask = key;
+            console.log(newProject)
+            return newProject;
+        },
+
+        deleteTask: function (key) {
+            const newProject = updateIn(this, ['tasks'], tasks => {
+                tasks.delete(key);
+            })
+
+            if (newProject.selectedTask === key) {
+                newProject.selectedTask = newProject.tasks.keys().next();
+            }
+
+            return newProject;
+        },
+
+        addLabel: function (label) {
+            return updateIn(this, ['labels'], labels =>
+                labels.push(label));
+        },
+
+        deleteLabel: function (label) {
+            return updateIn(this, ['labels'], labels =>
+                labels.delete(labels.findIndex(label)));
         }
     };
 }
@@ -42,6 +81,22 @@ export function initialiseProject(project, fileHandle) {
     const newProject = setIn(project, ['fileHandle'], fileHandle);
     newProject.name = fileHandle.name;
     return newProject;
+}
+
+export async function verifyVideoFiles(project, videoDirHandle) {
+    const tasks = project.tasks;
+
+    for (const task of tasks.values()) {
+        try {
+            console.log(task.videoHandle);
+            console.log(videoDirHandle);
+            const videoHandle = await videoDirHandle.getFileHandle(task.videoHandle);
+            task.videoHandle = videoHandle;
+            console.log(videoHandle);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 export function setHandle(project, handle) {
@@ -96,18 +151,4 @@ export function getCurrentTask(project) {
     return project.tasks.get(project.selectedTask);
 }
 
-export async function verifyVideoFiles(project, videoDirHandle) {
-    const tasks = project.tasks;
 
-    for (const task of tasks.values()) {
-        try {
-            console.log(task.videoHandle);
-            console.log(videoDirHandle);
-            const videoHandle = await videoDirHandle.getFileHandle(task.videoHandle);
-            task.videoHandle = videoHandle;
-            console.log(videoHandle);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-}

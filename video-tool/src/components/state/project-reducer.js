@@ -6,7 +6,8 @@ export function projectReducer(state, action) {
     switch (action.type) {
         case 'NEW_PROJECT':
             {
-                return initialiseProject(state, payload.fileHandle);
+                return state.initialiseProject(payload.fileHandle)
+                //return initialiseProject(state, payload.fileHandle);
             }
         case 'LOAD_PROJECT':
             {
@@ -14,7 +15,12 @@ export function projectReducer(state, action) {
             }
         case 'ADD_TASK':
             {
-                return addTask(state, payload.videoHandle, payload.videoName);
+                return state.addTask(payload.videoHandle);
+                //return addTask(state, payload.videoHandle, payload.videoName);
+            }
+        case 'REMOVE_TASK':
+            {
+                return state.deleteTask(payload.key);
             }
         case 'UPDATE_TASK':
             {
@@ -22,15 +28,18 @@ export function projectReducer(state, action) {
             }
         case 'SET_SELECTED_TASK':
             {
-                return setSelectedKey(state, payload.key);
+                return state.setSelectedTask(payload.key);
+                //return setSelectedKey(state, payload.key);
             }
         case 'ADD_TAG':
             {
-                return addLabel(state, payload.label);
+                return state.addLabel(payload.label);
+                //return addLabel(state, payload.label);
             }
         case 'REMOVE_TAG':
             {
-                return removeLabel(state, payload.label);
+                return state.deleteLabel(payload.label);
+                //return removeLabel(state, payload.label);
             }
         default:
             throw new Error(`Unexpected project reducer case ${action.type}`);
