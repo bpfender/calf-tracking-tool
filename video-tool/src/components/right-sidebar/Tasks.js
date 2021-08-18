@@ -6,8 +6,8 @@ import { TaskEntry } from './TaskEntry';
 export function Tasks(props) {
     const { projectDispatch, tasks, selected } = props;
 
-    console.log(selected);
-    const videos = ["video1", "video2", "video3"];
+    console.log(tasks);
+
 
     const handleAdd = () => {
         projectDispatch({
@@ -21,21 +21,15 @@ export function Tasks(props) {
             content={
                 <div>
                     <Menu>
-                        {videos.map(video => <TaskEntry
-                            key={video}
-                            selected={selected}
-                            name={video} />)}
-                    </Menu>
-                    <Menu>
                         {tasks
-                            .map((value, key) =>
+                            .entrySeq()
+                            .map(([key, value]) =>
                                 <TaskEntry
                                     key={key}
                                     id={key}
                                     selected={selected}
                                     name={value.videoHandle.name} />
                             )
-                            .concat([])
                         }
                     </Menu>
                 </div>
@@ -44,3 +38,13 @@ export function Tasks(props) {
         />
     );
 }
+
+/*
+const videos = ["video1", "video2", "video3"];
+
+<Menu>
+{videos.map(video => <TaskEntry
+    key={video}
+    selected={selected}
+    name={video} />)}
+</Menu>*/
