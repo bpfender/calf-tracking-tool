@@ -25,7 +25,7 @@ export default function RightSidebar(props) {
             type: "ADD_TRACK",
             payload: { key: key }
         });
-        // setIdsList(idsList.concat(key));
+        setIdsList(idsList.concat(key));
     }
 
     const removeListComponent = (filterKey) => {
@@ -33,7 +33,7 @@ export default function RightSidebar(props) {
             type: 'DELETE_TRACK',
             payload: { key: filterKey }
         });
-        // setIdsList(idsList.filter(key => key !== filterKey));
+        setIdsList(idsList.filter(key => key !== filterKey));
     }
 
     // FIXME not sure about getTrack calls way to optimise?
@@ -48,31 +48,27 @@ export default function RightSidebar(props) {
                 annotationDispatch={annotationDispatch}
                 annotations={annotations}
                 labels={labels} />
-
-
-            <Card className="right-panel">
-                <H5>Sidebar Right</H5>
-                <Button icon="add"
-                    onClick={handleAddClick}
-                ></Button>
-                {idsList.map(key => (
-                    <IdPanel
-                        key={key}
-                        id={key}
-                        annotationDispatch={annotationDispatch}
-                        selectedId={annotations.selected}
-                        visible={getTrack(annotations, key).visible}
-                        colour={getTrack(annotations, key).colour}
-                        removeListComponent={() => { removeListComponent(key) }}
-                    ></IdPanel>
-                ))}
-            </Card>
-
-
-
-
         </div >
     );
 }
 
 
+/*
+<Card className="right-panel">
+<H5>Sidebar Right</H5>
+<Button icon="add"
+    onClick={handleAddClick}
+></Button>
+{idsList.map(key => (
+    <IdPanel
+        key={key}
+        id={key}
+        annotationDispatch={annotationDispatch}
+        selectedId={annotations.selected}
+        visible={getTrack(annotations, key).visible}
+        colour={getTrack(annotations, key).colour}
+        removeListComponent={() => { removeListComponent(key) }}
+    ></IdPanel>
+))}
+</Card>
+*/

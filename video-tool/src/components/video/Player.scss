@@ -33,6 +33,10 @@
     display:none;
 }
 
+.player-video-source-content.none p{
+    color: $pt-intent-primary;    
+}
+
 .player-video-source-content.primary{
     border: 1px solid $pt-intent-primary;
 }
