@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { EditableText, InputGroup, Tag } from '@blueprintjs/core';
 import { SidebarPanel } from './SidebarPanel';
+import { TagEntry } from './TagEntry';
 
 // FIXME auto focus on new tag text input
 
@@ -9,7 +10,7 @@ export function Tags(props) {
 
     const [editableTag, setEditableTag] = useState(null);
 
-    const tag = (content) => {
+    const tag = (name) => {
         return (
             <Tag
                 interactive={false}
@@ -17,8 +18,8 @@ export function Tags(props) {
                 className="label-tag"
                 icon="tag"
                 round={true}
-                onRemove={() => handleRemove(content)}>
-                {content}
+                onRemove={() => handleRemove(name)}>
+                {name}
             </Tag>
         );
     };
@@ -38,8 +39,7 @@ export function Tags(props) {
     };
 
     const handleConfirm = (input) => {
-        // TODO check if tag already exists        
-        if (input) {
+        if (input && !labels.includes(input)) {
             projectDispatch({
                 type: 'ADD_TAG',
                 payload: { label: input },
@@ -49,7 +49,7 @@ export function Tags(props) {
         resetEditable();
     };
 
-    const handleRemove = (key) => {
+    const handleRemove = (label) => {
         // REMOVE TAG DISPATCH
     };
 
@@ -60,7 +60,12 @@ export function Tags(props) {
             name="Tags"
             content={
                 labels
-                    .map((label) => tag(label))
+                    .map((label) =>
+                        <TagEntry
+                            key={label}
+                            name={label}
+                            handleRemove={() => { handleRemove(label) }} />
+                    )
                     .concat(editableTag)
             }
             handleAdd={handleAdd} />
