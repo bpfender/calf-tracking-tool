@@ -56,8 +56,7 @@ function Player(props) {
                     src={playerState.src}
                     framerate={playerState.framerate}
                     videoWidth={playerState.videoWidth}
-                    videoHeight={playerState.videoHeight}
-                />
+                    videoHeight={playerState.videoHeight} />
                 <VideoSource
                     src={playerState.src}
                     hidden={hidden}

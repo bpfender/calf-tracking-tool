@@ -1,4 +1,4 @@
-import { List, Map, setIn } from "immutable";
+import { List, Map, setIn, updateIn } from "immutable";
 import BoundingBox from "../canvas/BoundingBox";
 import { getLabel, loadTrack, TrackFactory } from "./TrackFactory";
 
@@ -23,7 +23,82 @@ export function TaskFactory(videoHandle) {
                 this.reviewed,
                 this.keyFrames
             ];
-        }
+        },
+
+        setVideoHandle: function (handle) {
+            return setIn(this, ['videoHandle'], handle);
+        },
+
+        setTotalFrames: function (frames) {
+            const newTask = setIn(this, ['totalFrames'], frames);
+            newTask.reviewed = List(Array(frames).fill(0));
+            return newTask;
+        },
+
+        setSelected: function (key) {
+            return setIn(this, ['selected'], key);
+        },
+
+        addTrack: function (key, tag) {
+            const track = TrackFactory(this.totalFrames);
+            const newTask = updateIn(this, ['tracks'], tracks =>
+                tracks.set(key, track));
+
+            let newTags = null;
+            if (this.tags.has(tag)) {
+                newTags = this.tags.updateIn([tag], (list) => list.push(key));
+            } else {
+                newTags = this.tags.set(tag, List([key]));
+            }
+            // Effectively withMutations(), just on plain JS obj
+            newTask.tags = newTags;
+
+            return newTask;
+        },
+
+        deleteTrack: function (key, tag) {
+            const newTask = updateIn(this, ['tracks'], tracks =>
+                tracks.delete(key));
+
+            const newTags = newTask.tags.updateIn([tag], (list) =>
+                list.delete(list.findIndex(val => val === key)));
+
+            newTask.tags = newTags;
+            return newTask;
+        },
+
+        setTrackName: function (key, name) {
+            return updateIn(this, ['tracks', key], track =>
+                track.setName(name));
+        },
+
+        setTrackColour: function (key, colour) {
+            return updateIn(this, ['tracks', key], track =>
+                track.setColour(colour));
+        },
+
+        toggleTrackVisible: function (key) {
+            return updateIn(this, ['tracks', key], track =>
+                track.toggleVisible());
+        },
+
+        getBoundingBoxes: function (frame) {
+            return [...this.tracks.entries()]
+                .filter(([key, track]) => track.visible)
+                .map(([key, track]) => {
+                    const label = getLabel(track, frame);
+                    return new BoundingBox(
+                        key,
+                        track.colour,
+                        key === this.selected,
+                        label.x,
+                        label.y,
+                        label.w,
+                        label.h,
+                        label.rotation,
+                    );
+                });
+        },
     };
 }
 

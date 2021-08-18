@@ -16,6 +16,8 @@ import { TaskFactory } from './components/annotations/TaskFactory';
 // TODO https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/hidden
 export default function App(props) {
   const [project, projectDispatch] = useReducer(projectReducer, ProjectFactory());
+
+
   const [annotations, annotationDispatch] = useReducer(annotationReducer, TaskFactory());
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 

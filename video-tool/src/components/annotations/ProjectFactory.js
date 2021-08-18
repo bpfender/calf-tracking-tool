@@ -4,12 +4,14 @@ import { List, Map, setIn, updateIn } from "immutable";
 import { loadTask, TaskFactory } from "./TaskFactory";
 
 export function ProjectFactory() {
+    const key = uuidv4();
+
     return {
         //FIXME name probably not needed
         name: "",
         fileHandle: null,
-        selectedTask: null,
-        tasks: Map(),
+        selectedTask: key,
+        tasks: Map([[key, TaskFactory()]]),
         labels: List(),
 
         toJSON: function () {
@@ -59,7 +61,12 @@ export function ProjectFactory() {
         deleteLabel: function (label) {
             return updateIn(this, ['labels'], labels =>
                 labels.delete(labels.findIndex(val => label === val)));
-        }
+        },
+
+        updateSelectedTask: function (updater, args) {
+            return updateIn(this, ['tasks', this.selectedTask], task =>
+                task[updater]([...args]));
+        },
     };
 }
 

@@ -19,7 +19,24 @@ export function TrackFactory(totalFrames) {
                 this.labels,
                 this.anchors,
             ];
+        },
+
+        setName: function (name) {
+            return setIn(this, ['name'], name);
+        },
+
+        setColour: function (colour) {
+            return setIn(this, ['colour'], colour);
+        },
+
+        toggleVisible: function () {
+            return setIn(this, ['visible'], !this.visible);
         }
+
+
+
+
+
     };
 }
 
