@@ -29,10 +29,11 @@ function ColourPalette(props) {
         "#2EE6D6", "#62D96B", "#FFC940"]
 
     return (
-        <Card class="colour-palette">
+        <Card className="colour-palette">
             {colours.map((colour) => {
                 return (
                     <Button
+                        key={colour}
                         onClick={() => { props.handleColourClick(colour) }}
                         icon={<Icon icon="symbol-square" color={colour}></Icon>}
                         minimal={true}
