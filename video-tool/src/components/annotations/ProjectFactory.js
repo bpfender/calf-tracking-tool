@@ -58,7 +58,7 @@ export function ProjectFactory() {
 
         deleteLabel: function (label) {
             return updateIn(this, ['labels'], labels =>
-                labels.delete(labels.findIndex(label)));
+                labels.delete(labels.findIndex(val => label === val)));
         }
     };
 }
