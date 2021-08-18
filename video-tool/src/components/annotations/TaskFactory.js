@@ -88,9 +88,15 @@ export function addTrack(task, key, tag) {
     return newTask;
 }
 
-export function deleteTrack(task, key) {
+export function deleteTrack(task, key, tag) {
     const newMap = task.tracks.delete(key);
-    return setTrackMap(task, key, newMap);
+    const newTask = setTrackMap(task, key, newMap);
+
+    const newTags = newTask.tags.updateIn([tag], (list) =>
+        list.delete(list.findIndex(val => val === key)));
+
+    newTask.tags = newTags;
+    return newTask;
 }
 
 export function getTrack(task, key) {
