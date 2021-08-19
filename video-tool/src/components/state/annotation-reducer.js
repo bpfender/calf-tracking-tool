@@ -65,9 +65,8 @@ export function annotationReducer(state, action) {
             //      const { totalFrames } = payload;
             //    return setTotalFrames(state, totalFrames);
         }
-        case 'SET_VIDEO': {
-            return state.setVideoHandle(payload.handle);
-
+        case 'SET_VIDEO_HANDLE': {
+            return state.setVideoHandle(payload.videoHandle);
             //const { handle } = payload;
             //    return setVideoHandle(state, handle);
         }

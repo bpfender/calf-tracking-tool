@@ -11,7 +11,7 @@ export function ProjectFactory() {
         name: "",
         fileHandle: null,
         selectedTask: key,
-        tasks: Map([[key, TaskFactory()]]),
+        tasks: Map([[key, TaskFactory()]]),//Map(),
         labels: List(),
 
         toJSON: function () {
@@ -32,6 +32,7 @@ export function ProjectFactory() {
             return setIn(this, ['selectedTask'], key);
         },
 
+        // TODO probably remove handle
         addTask: function (videoHandle) {
             const key = uuidv4();
             const newProject = updateIn(this, ['tasks'], tasks =>
@@ -42,12 +43,13 @@ export function ProjectFactory() {
         },
 
         deleteTask: function (key) {
-            const newProject = updateIn(this, ['tasks'], tasks => {
-                tasks.delete(key);
-            })
+            const newProject = updateIn(this, ['tasks'], tasks =>
+                tasks.delete(key)
+            )
 
+            console.log(key === newProject.selectedTask)
             if (newProject.selectedTask === key) {
-                newProject.selectedTask = newProject.tasks.keys().next();
+                newProject.selectedTask = newProject.tasks.keys().next().value;
             }
 
             return newProject;
@@ -95,11 +97,9 @@ export async function verifyVideoFiles(project, videoDirHandle) {
 
     for (const task of tasks.values()) {
         try {
-            console.log(task.videoHandle);
-            console.log(videoDirHandle);
             const videoHandle = await videoDirHandle.getFileHandle(task.videoHandle);
             task.videoHandle = videoHandle;
-            console.log(videoHandle);
+
         } catch (error) {
             console.log(error);
         }

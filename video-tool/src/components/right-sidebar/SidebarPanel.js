@@ -5,6 +5,7 @@ export function SidebarPanel(props) {
     const { name, content, handleAdd } = props;
 
     const [expand, setExpand] = useState(true);
+    const [intent, setIntent] = useState("none");
 
     const handleClick = () => {
         if (!expand) {
@@ -26,6 +27,9 @@ export function SidebarPanel(props) {
                 </h4>
                 <Button
                     icon="add"
+                    intent={intent}
+                    onMouseEnter={() => { setIntent("primary") }}
+                    onMouseLeave={() => { setIntent("none") }}
                     minimal={true}
                     onClick={handleClick} />
             </div>

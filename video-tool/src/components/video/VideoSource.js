@@ -25,7 +25,7 @@ const sourceStates = {
 };
 
 export default function VideoSource(props) {
-    const { src, videoHandle, playerDispatch, hidden, projectDispatch } = props;
+    const { src, videoHandle, playerDispatch, annotationDispatch, hidden, projectDispatch } = props;
 
     const [sourceState, setSourceState] = useState(sourceStates.start);
 
@@ -143,15 +143,17 @@ export default function VideoSource(props) {
     };
 
     const loadVideo = (file, handle) => {
-        projectDispatch({
-            type: 'ADD_TASK',
+        console.log(handle);
+        annotationDispatch({
+            type: 'SET_VIDEO_HANDLE',
             payload: {
                 videoHandle: handle,
             }
         });
 
         // TODO move this into effect in player?
-        /*    type: 'SRC_CHANGE',
+        /*playerDispatch({
+            type: 'SRC_CHANGE',
             payload: {
                 src: URL.createObjectURL(file),
                 filename: file.name,

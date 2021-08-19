@@ -1,4 +1,4 @@
-import { addLabel, addTask, initialiseProject, removeLabel, setSelectedKey, updateTask } from "../annotations/ProjectFactory";
+import { addLabel, addTask, initialiseProject, ProjectFactory, removeLabel, setSelectedKey, updateTask } from "../annotations/ProjectFactory";
 
 export function projectReducer(state, action) {
     console.log("PROJECT: ", action.type);
@@ -6,7 +6,7 @@ export function projectReducer(state, action) {
     switch (action.type) {
         case 'NEW_PROJECT':
             {
-                return state.initialiseProject(payload.fileHandle)
+                return ProjectFactory().initialiseProject(payload.fileHandle)
                 //return initialiseProject(state, payload.fileHandle);
             }
         case 'LOAD_PROJECT':
@@ -15,7 +15,7 @@ export function projectReducer(state, action) {
             }
         case 'ADD_TASK':
             {
-                return state.addTask(payload.videoHandle);
+                return state.addTask();
                 //return addTask(state, payload.videoHandle, payload.videoName);
             }
         case 'REMOVE_TASK':

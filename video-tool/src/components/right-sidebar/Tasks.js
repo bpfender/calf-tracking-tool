@@ -12,8 +12,22 @@ export function Tasks(props) {
     const handleAdd = () => {
         projectDispatch({
             type: 'ADD_TASK'
-        });
+        })
     };
+
+    const handleOpen = (key) => {
+        projectDispatch({
+            type: 'SET_SELECTED_TASK',
+            payload: { key: key },
+        });
+    }
+
+    const handleDelete = (key) => {
+        projectDispatch({
+            type: 'REMOVE_TASK',
+            payload: { key: key },
+        });
+    }
 
     return (
         <SidebarPanel
@@ -28,14 +42,15 @@ export function Tasks(props) {
                                     key={key}
                                     id={key}
                                     selected={selected}
-                                    name={value.videoHandle.name} />
+                                    handleOpen={() => { handleOpen(key) }}
+                                    handleDelete={() => { handleDelete(key) }}
+                                    videoHandle={value.videoHandle} />
                             )
                         }
                     </Menu>
                 </div>
             }
-            handleAdd={handleAdd}
-        />
+            handleAdd={handleAdd} />
     );
 }
 

@@ -17,8 +17,7 @@ import { TaskFactory } from './components/annotations/TaskFactory';
 export default function App(props) {
   const [project, projectDispatch] = useReducer(projectReducer, ProjectFactory());
 
-
-  const [annotations, annotationDispatch] = useReducer(annotationReducer, TaskFactory());
+  const [annotations, annotationDispatch] = useReducer(annotationReducer, getCurrentTask(project));
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 
   // Check whether VAT directory has been set before
@@ -32,6 +31,9 @@ export default function App(props) {
    }, [])*/
 
   // FIXME how to make sure annotations are persistent
+  useEffect(() => {
+    console.log(project);
+  }, [project])
 
   useEffect(() => {
     if (playerState.totalFrames) {
@@ -44,10 +46,16 @@ export default function App(props) {
 
   useEffect(() => {
     console.log("PROJECT SELECTED EFFECT");
+    console.log(project)
+    console.log(getCurrentTask(project));
     if (project.selectedTask) {
       annotationDispatch({
         type: 'LOAD_TASK',
         payload: { task: getCurrentTask(project) },
+      });
+
+      playerDispatch({
+        type: 'RESET',
       });
     }
   }, [project.selectedTask])
@@ -63,24 +71,26 @@ export default function App(props) {
     }
   }, [annotations])
 
+
   useEffect(() => {
-    if (annotations.videoHandle && typeof (annotations.videoHandle) !== 'string') {
+    if (annotations.videoHandle) {
       (async function () {
-        console.log(annotations.videoHandle);
-        const video = await annotations.videoHandle.getFile();
+        try {
+          const video = await annotations.videoHandle.getFile();
 
-        playerDispatch({
-          type: 'SRC_CHANGE',
-          payload: {
-            src: URL.createObjectURL(video),
-            filename: video.name,
-          }
-        })
-
+          playerDispatch({
+            type: 'SRC_CHANGE',
+            payload: {
+              src: URL.createObjectURL(video),
+              filename: video.name,
+            }
+          });
+        } catch (error) {
+          // No error handling, if can't getFile, then videoHandle isn't yet set
+        }
       })();
     }
-
-  }, [annotations.videoHandle])
+  }, [annotations.videoHandle]);
 
 
   return (

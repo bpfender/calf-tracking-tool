@@ -122,7 +122,7 @@ export function Header(props) {
                 <Button
                     icon="export" />
             </ButtonGroup>
-            <text>{project ? project.name : ""}</text>
+            <text>{project.fileHandle ? project.fileHandle.name : ""}</text>
             <ButtonGroup
                 minimal={true}>
                 <Button
