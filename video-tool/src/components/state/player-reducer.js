@@ -37,9 +37,6 @@ export const defaultPlayerState = {
 
 export function playerReducer(state, action) {
     const payload = action.payload;
-    if (action.type !== 'FRAME_CALLBACK') {
-        console.log("PLAYER: ", action.type);
-    }
 
     switch (action.type) {
         // FIXME Not sure about calculating this here

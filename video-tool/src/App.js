@@ -32,7 +32,7 @@ export default function App(props) {
 
   // FIXME how to make sure annotations are persistent
   useEffect(() => {
-    console.log(project);
+
   }, [project])
 
   useEffect(() => {
@@ -45,9 +45,6 @@ export default function App(props) {
   }, [playerState.totalFrames]);
 
   useEffect(() => {
-    console.log("PROJECT SELECTED EFFECT");
-    console.log(project)
-    console.log(getCurrentTask(project));
     if (project.selectedTask) {
       annotationDispatch({
         type: 'LOAD_TASK',
@@ -62,7 +59,6 @@ export default function App(props) {
 
   // When selected task updates, this also needs to be update in project state
   useEffect(() => {
-    console.log("UPDATE TASK EFFECT");
     if (project.selectedTask) {
       projectDispatch({
         type: 'UPDATE_TASK',
@@ -91,6 +87,7 @@ export default function App(props) {
       })();
     }
   }, [annotations.videoHandle]);
+
 
 
   return (

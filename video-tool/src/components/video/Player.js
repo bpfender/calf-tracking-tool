@@ -6,6 +6,8 @@ import Annotation from './Annotation.js';
 import "./Player.scss";
 import { VideoBar } from './VideoBar';
 import VideoSource from './VideoSource';
+import { nextFrame } from './video-functions';
+import { KeyFrames } from '../helpers/KeyFrames';
 
 //FIXME position of video isn't quite right yet. Not sure what's happen
 
@@ -47,6 +49,11 @@ function Player(props) {
             videoContainerRef.current.hidden = true;
         }
     }, [annotations.videoHandle])*/
+
+    useEffect(() => {
+        console.log(playerState.currentFrame);
+    }, [playerState.currentFrame])
+
 
     return (
         <div className={props.className}>
@@ -103,6 +110,10 @@ function Player(props) {
                 framesToSkip={playerState.framesToSkip}
                 vsync={playerState.vsync} />
             <Info videoState={playerState} />
+            <KeyFrames
+                framerate={playerState.framerate}
+                src={playerState.src}
+                duration={playerState.duration} />
         </div >
     );
 }

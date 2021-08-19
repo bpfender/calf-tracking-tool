@@ -6,9 +6,6 @@ import { TaskEntry } from './TaskEntry';
 export function Tasks(props) {
     const { projectDispatch, tasks, selected } = props;
 
-    console.log(tasks);
-
-
     const handleAdd = () => {
         projectDispatch({
             type: 'ADD_TASK'

@@ -89,7 +89,6 @@ class Video extends React.Component {
             })
             this.play();*/
             calculateFramerate(this.video).then(val => {
-                console.log(val);
                 this.props.playerDispatch({
                     type: 'SET_FRAMERATE',
                     payload: {
@@ -123,7 +122,6 @@ class Video extends React.Component {
                     framerate: fps / 1000,
                 }
             });
-            console.log("REWIND");
             this.rewind();
             this.video.requestVideoFrameCallback(this.handleVideoFrameCallback);
         } else {

@@ -16,13 +16,10 @@ export default function SourceSelector(props) {
     // FIXME, required input validation
     const handleInputChange = (inputFile) => {
         setFile(inputFile);
-        console.log(inputFile);
-        console.log(inputFile.type);
 
         storeCurrentVideoFile(inputFile);
 
         const url = URL.createObjectURL(inputFile);
-        console.log(url);
         playerDispatch({ type: 'SRC_CHANGE', payload: { src: url } });
     }
 
@@ -54,7 +51,7 @@ export default function SourceSelector(props) {
                 onClick={() => {
                     getLastVideoFile().then(async (val) => {
                         let state = await val.queryPermission();
-                        console.log(state);
+
                         await val.requestPermission();
                         handleInputChange(await val.getFile())
                     })

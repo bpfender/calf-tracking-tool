@@ -175,11 +175,8 @@ export const setLabel = (annotations, key, frame, label) => {
 
     const nextFrame = getNextLabelledFrame(newAnnotationTrackObj.labelledFrames, frame);
     const prevFrame = getPrevLabelledFrame(newAnnotationTrackObj.labelledFrames, frame);
-    console.log([...newAnnotationTrackObj.labelledFrames.values()]);
-    console.log(prevFrame, nextFrame);
 
     const interpolatedTrack = updateFrameTrack(newAnnotationTrackObj, frame, prevFrame, nextFrame);
-    console.log("INTER", [...interpolatedTrack]);
     const interpolatedObj = Immutable.setIn(newAnnotationTrackObj, ['frames'], interpolatedTrack);
 
     const map = annotations.tracks.set(key, interpolatedObj);
@@ -240,23 +237,16 @@ const updateFrameTrack = (track, frame, prevFrame, nextFrame) => {
     const prevInterpolated = interpolateLabels(track, prevIndex, index);
     const nextInterpolated = interpolateLabels(track, index, nextIndex);
 
-    console.log("TRACK", [...prevInterpolated.values()]);
-    console.log("TRACK", [...nextInterpolated.values()]);
-    console.log("SPLICE", prevIndex, index, nextIndex);
-
     return track.frames
         .splice(prevIndex, index - prevIndex, ...prevInterpolated.toArray())
         .splice(index, nextIndex - index, ...nextInterpolated.toArray());
 }
 
 const interpolateLabels = (track, startIndex, endIndex) => {
-    console.log("INTERP", startIndex, endIndex);
-    console.log(track);
     const startLabel = getLabel(track, startIndex + 1);
     const endLabel = getLabel(track, endIndex + 1);
     const deltaFrames = endIndex - startIndex;
 
-    console.log("LABELS", startLabel, endLabel);
     const diff = {
         x: (endLabel.x - startLabel.x) / deltaFrames,
         y: (endLabel.y - startLabel.y) / deltaFrames,
@@ -264,7 +254,7 @@ const interpolateLabels = (track, startIndex, endIndex) => {
         h: (endLabel.h - startLabel.h) / deltaFrames,
         rotation: (endLabel.rotation - startLabel.rotation) / deltaFrames,
     };
-    console.log("DIFF", diff);
+
     // FIXME probably remove labelled tag
     return track.frames
         .slice(startIndex, endIndex)
@@ -287,7 +277,6 @@ export const generateJSON = (annotations) => {
         reviewedFrames: annotations.reviewedFrames.toJS(),
         selected: annotations.selected
     };
-    console.log(output);
     return output;
 }
 

@@ -18,7 +18,7 @@ cap = cv.VideoCapture("./test.webm")
 
 prev_hash = None
 count = 0
-distance_threshold = 6
+distance_threshold = 7
 max_gap = 0
 min_gap = 100
 frame_Id = None
@@ -30,7 +30,7 @@ while cap.isOpened():
         print("Can't receive frame (stream end?). Exiting ...")
         break
 
-    curr_hash = cv.img_hash.pHash(frame)
+    curr_hash = cv.img_hash.blockMeanHash(frame)
 
     if prev_hash is not None:
         if (hamming_distance(prev_hash, curr_hash) > distance_threshold):
