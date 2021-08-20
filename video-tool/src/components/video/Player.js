@@ -109,11 +109,14 @@ function Player(props) {
                 framerate={playerState.framerate}
                 framesToSkip={playerState.framesToSkip}
                 vsync={playerState.vsync} />
-            <Info videoState={playerState} />
-            <KeyFrames
-                framerate={playerState.framerate}
-                src={playerState.src}
-                duration={playerState.duration} />
+
+            <div className="player-helpers">
+                <Info videoState={playerState} />
+                <KeyFrames
+                    framerate={playerState.framerate}
+                    src={playerState.src}
+                    duration={playerState.duration} />
+            </div>
         </div >
     );
 }

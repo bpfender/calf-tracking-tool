@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { defaultPlayerState } from '../state/player-reducer';
 import { HAVE_ENOUGH_DATA } from './video-constants';
-import { calculateFramerate } from './video-functions';
+import { calculateFramerate, VideoFunctions } from './video-functions';
 import "./Video.scss";
 
 export default function Video(props) {
@@ -11,14 +11,6 @@ export default function Video(props) {
         src,
         readyState,
         framerate } = props;
-
-    const canvasRef = useRef(null);
-    const contextRef = useRef(null);
-
-    // Setup canvas context when component mounts
-    useEffect(() => {
-        contextRef.current = canvasRef.current.getContext('2d');
-    }, []);
 
     useEffect(() => {
         videoRef.current.load();
@@ -147,9 +139,6 @@ export default function Video(props) {
                 onWaiting={() => { }}>
                 <p>ERROR: Video not supported</p>
             </video>
-            <canvas
-                className="video-canvas"
-                ref={canvasRef} />
         </div >
     );
 }

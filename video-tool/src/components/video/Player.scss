@@ -106,6 +106,17 @@
     transform: translate(-50%,-50%);
 }
 
+.player-helpers{
+    display: flex;
+    justify-content: space-between;
+}
+
+.keyframes{
+    display: flex;
+    align-items: center;
+    flex:1;
+}
+
 .annotation-overlay{
     z-index:10;
 }
