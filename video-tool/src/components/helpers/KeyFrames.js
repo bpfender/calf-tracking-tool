@@ -1,15 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { bmvbhash } from 'blockhash-core';
-import { ProgressBar, Slider } from '@blueprintjs/core';
+import { Button, ProgressBar } from '@blueprintjs/core';
+import { getTimeAsFrames } from '../video/video-functions';
+import { hammingDistance } from '../utils';
+import { keyframeButtonStates, keyframeProgressStates, keyframeReadyState } from './keyframeStates';
+
+//FIXME load video and remove?
+
+const HAMMING_THRESHOLD = 5;
+const FRAME_SKIP = 5;
 
 export function KeyFrames(props) {
   const { framerate, src, duration } = props;
 
+  const [readyState, setReadyState] = useState(keyframeReadyState.ready);
+  const [buttonState, setButtonState] = useState(keyframeButtonStates.waiting);
+  const [progressState, setProgressState] = useState(keyframeProgressStates.ready);
+
+
   const [videoTime, setVideoTime] = useState(0);
+  const [buttonText, setButtonText] = useState("Detect keyframes");
+
+  const rateAverage = useRef({ mean: 1, count: 0 });
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
+  const keyframesRef = useRef([]);
 
   const width = 400;
   const height = 300
@@ -27,29 +44,48 @@ export function KeyFrames(props) {
     }
   }, [src, framerate]);
 
+  const handleDetectClick = () => {
+    rateAverage.current = { mean: 1, count: 0 };
+    videoRef.current.play();
+  };
+
+  const handleEnded = () => {
+    setButtonState(keyframeButtonStates.done);
+    setProgressState(keyframeProgressStates.done);
+
+    videoRef.current.pause();
+    console.log(keyframesRef.current);
+  };
+
+  const handleTimeUpdate = () => {
+    setButtonState(keyframeButtonStates.processing());
+    setProgressState(keyframeProgressStates.processing());
+
+    setVideoTime(videoRef.current.currentTime);
+    setButtonText(formatTime(calculateTimeRemaining(videoRef.current.currentTime)))
+  };
 
   const hashingCallback = (metadata, prevHash = null, prevFrame = 1) => {
+    const currFrame = getTimeAsFrames(metadata.mediaTime, framerate);
+
     contextRef.current.drawImage(videoRef.current, 0, 0, width, height)
     const imageData = contextRef.current.getImageData(0, 0, width, height);
-
     const nextHash = bmvbhash(imageData, 16);
-    let hamming = null;
-    if (prevHash) {
-      hamming = hammingDistance(prevHash, nextHash);
-    }
 
-    const currFrame = metadata.mediaTime * framerate;
-    if (currFrame - prevFrame > 5) {
-      videoRef.current.playbackRate -= 0.2;
-    } else if (currFrame - prevFrame < 2) {
-      // Avoid error if rate set too high
-      if (videoRef.current.playbackRate !== 16) {
-        videoRef.current.playbackRate += 0.2;
+    if (prevHash) {
+      const hamming = hammingDistance(prevHash, nextHash);
+      if (hamming > HAMMING_THRESHOLD) {
+        keyframesRef.current.push(currFrame);
+        console.log(videoRef.current.playbackRate, currFrame, hamming);
       }
     }
 
-    if (hamming > 5) {
-      console.log(videoRef.current.playbackRate, currFrame, hamming);
+    if (currFrame - prevFrame > FRAME_SKIP &&
+      videoRef.current.playbackRate !== 0) {
+      videoRef.current.playbackRate -= 0.2;
+    } else if (currFrame - prevFrame < FRAME_SKIP &&
+      videoRef.current.playbackRate !== 16) {
+      videoRef.current.playbackRate += 0.2;
     }
 
     videoRef.current.requestVideoFrameCallback(
@@ -59,33 +95,76 @@ export function KeyFrames(props) {
   };
 
 
-  /* Calculate the hamming distance for two hashes in hex format */
-  // https://github.com/commonsmachinery/blockhash-js/blob/master/index.js
-  const hammingDistance = (hash1, hash2) => {
-    const one_bits = [0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4];
 
-    let d = 0;
+  const calculateTimeRemaining = (currentTime) => {
+    const remain = duration - currentTime;
 
-    if (hash1.length !== hash2.length) {
-      throw new Error("Can't compare hashes with different length");
-    }
+    const average = rateAverage.current.mean;
+    const count = rateAverage.current.count;
 
-    for (let i = 0; i < hash1.length; i++) {
-      let n1 = parseInt(hash1[i], 16);
-      let n2 = parseInt(hash2[i], 16);
-      d += one_bits[n1 ^ n2];
-    }
-    return d;
+    const newAverage = (average * count + videoRef.current.playbackRate) / (count + 1);
+
+    rateAverage.current.mean = newAverage;
+    rateAverage.current.count++;
+
+    return remain / newAverage;
   };
 
-  const calculateKeyframes = () => { };
+  const formatTime = (seconds) => {
+    const date = new Date(seconds * 1000);
+    const h = date.getUTCHours();
+    const m = date.getUTCMinutes() + h * 60;
+    const s = date.getUTCSeconds();
+
+    return [m, s]
+      .map(e => e < 10 ? `0${e}` : `${e}`)
+      .join(':');
+  };
+
+  const handleMouseEnter = () => {
+    switch (readyState) {
+      case keyframeReadyState.processing:
+        setButtonState(keyframeButtonStates.cancel);
+        break;
+      case keyframeReadyState.done:
+        setButtonState(keyframeButtonStates.reset);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleMouseLeave = () => {
+    switch (readyState) {
+      case keyframeReadyState.processing:
+        //TODO add
+        setButtonState(keyframeButtonStates.processing())
+        break;
+      case keyframeReadyState.done:
+        setButtonState(keyframeButtonStates.done);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
-    <div>
-      <ProgressBar
-        intent="primary"
-        value={videoTime / duration}
+    <div className="keyframes">
+      <Button
+        icon={buttonState.icon}
+        intent={buttonState.intent}
+        disabled={buttonState.disabled}
+        text={buttonState.text}
+        onClick={handleDetectClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       />
+      <ProgressBar
+        animate={progressState.animate}
+        intent={progressState.intent}
+        value={progressState.value} />
+
+
       <div
         hidden={true}>
         <video
@@ -93,15 +172,15 @@ export function KeyFrames(props) {
           height={height}
           ref={videoRef}
           src={src ? src : null}
-          onCanPlayThrough={() => { videoRef.current.play() }}
-          onTimeUpdate={() => { setVideoTime(videoRef.current.currentTime) }}
-          onEnded />
+          onCanPlayThrough={() => { }}
+          onTimeUpdate={handleTimeUpdate}
+          onEnded={handleEnded} />
         <canvas
           width={width}
           height={height}
           ref={canvasRef} />
       </div>
-    </div>
+    </div >
   );
 }
 

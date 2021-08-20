@@ -14,6 +14,7 @@ function* colourGenerator(colours) {
     }
 }
 
+export const colourGen = colourGenerator(colourPalette);
 
 //https://stackoverflow.com/questions/7193238/wait-until-a-condition-is-true/52652681#52652681
 //https://stackoverflow.com/questions/22125865/wait-until-flag-true?answertab=votes#tab-top
@@ -29,22 +30,21 @@ const until = async conditionFunction => {
     }
 }
 
-export const colourGen = colourGenerator(colourPalette);
+/* Calculate the hamming distance for two hashes in hex format */
+// https://github.com/commonsmachinery/blockhash-js/blob/master/index.js
+export function hammingDistance(hash1, hash2) {
+    const one_bits = [0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4];
 
-export function framerateCallback(metadata, video, prev = [0, 0, 0]) {
-    const frames = metadata.presentedFrames;
-    const time = metadata.mediaTime;
-    const [prevTime, prevFrames, prevFps] = prev;
+    let d = 0;
 
-    const fps = Math.round((frames - prevFrames) / (time - prevTime) * 1000);
-    console.log(fps, prevFps, frames, prevFrames, time, prevTime);
-
-    if (fps === prevFps) {
-        video.pause();
-        console.log("DISPATCH", fps);
-    } else {
-        video.requestVideoFrameCallback((now, metadata) => {
-            framerateCallback(metadata, video, [time, frames, fps])
-        })
+    if (hash1.length !== hash2.length) {
+        throw new Error("Can't compare hashes with different length");
     }
-}
+
+    for (let i = 0; i < hash1.length; i++) {
+        let n1 = parseInt(hash1[i], 16);
+        let n2 = parseInt(hash2[i], 16);
+        d += one_bits[n1 ^ n2];
+    }
+    return d;
+};
