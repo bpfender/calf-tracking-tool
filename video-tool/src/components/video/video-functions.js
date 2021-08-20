@@ -1,3 +1,101 @@
+export class VideoFunctions {
+    constructor(videoElem) {
+        this.video = videoElem;
+        this.framerate = null;
+    }
+
+    load() {
+        this.video.load();
+    }
+
+    setPlaybackRate(rate) {
+        this.video.playbackRate = rate;
+    }
+
+    async play() {
+        await this.video.play();
+    }
+
+    pause(vsync, mediaTime) {
+        this.video.pause();
+        // FIXME empirical value of 0.1us for vsync value
+        // https://web.dev/requestvideoframecallback-rvfc/
+        if (vsync < 0.1) {
+            this.seekTime(mediaTime);
+        }
+    }
+
+    seekTime(time) {
+        this.video.currentTime = time;
+    }
+
+    seekFrame(frame) {
+        this.seekTime(this.getFramesAsTime(frame) - this.getFrameOffset());
+    }
+
+    rewind() {
+        this.seekTime(0);
+    }
+
+    nextFrame(currFrame, n = 1) {
+        this.seekFrame(currFrame + n);
+    }
+
+    prevFrame(currFrame, n = 1) {
+        this.seekFrame(currFrame - n);
+    }
+
+    getFramesAsTime(n) {
+        return n / this.framerate;
+    }
+
+    getTimeAsFrames(time) {
+        return Math.round(time * this.framerate + 1)
+    }
+
+    getFrameOffset() {
+        return 1 / (this.framerate * 2);
+    }
+
+
+    async calculateFramerate() {
+        this.setPlaybackRate(0.25);
+        await this.play();
+
+        const framerate = await this.framerateCalcRecurse();
+
+        this.video.pause();
+        this.rewind();
+        this.setPlaybackRate(1);
+    }
+
+    async framerateCalcRecurse(prev = [0, 0, 0]) {
+        const metadata = await requestVideoFramePromise(this.video);
+
+        const frames = metadata.presentedFrames;
+        const time = metadata.mediaTime;
+        const [prevTime, prevFrames, prevFpsScaled] = prev;
+
+        const fpsScaled = Math.round((frames - prevFrames) / (time - prevTime) * 1000);
+
+        if (fpsScaled === prevFpsScaled) {
+            return fpsScaled / 1000;
+        } else {
+            return await this.framerateCalcRecurse([time, frames, fpsScaled]);
+        }
+    }
+
+
+    requestVideoFramePromise() {
+        return new Promise((resolve) => {
+            this.video.requestVideoFrameCallback((now, metadata) => {
+                resolve(metadata);
+            })
+        })
+    }
+
+}
+
 export function getFramesAsTime(n, fps) {
     return n / fps;
 }
