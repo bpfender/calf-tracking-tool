@@ -1,7 +1,10 @@
-export const keyframeReadyState = {
-    ready: 0,
-    processing: 1,
-    done: 2,
+export const keyframeState = {
+    waiting: 0,
+    ready: 1,
+    processing: 2,
+    cancel: 3,
+    done: 4,
+    reset: 5,
 };
 
 export const keyframeButtonStates = {
@@ -40,7 +43,7 @@ export const keyframeButtonStates = {
     reset: {
         icon: "reset",
         intent: "warning",
-        text: "Recalculate",
+        text: "Reset",
         disabled: false,
     },
 };

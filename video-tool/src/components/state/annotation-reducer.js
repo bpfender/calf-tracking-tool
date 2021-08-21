@@ -70,6 +70,9 @@ export function annotationReducer(state, action) {
             //const { handle } = payload;
             //    return setVideoHandle(state, handle);
         }
+        case 'SET_KEYFRAMES': {
+            return state.setKeyframes(payload.keyframes);
+        }
         default: {
             throw new Error(`Unknown action type: ${action.type}`);
         }

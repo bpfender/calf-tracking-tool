@@ -10,7 +10,7 @@ export function TaskFactory(videoHandle) {
         selected: null,
         tracks: Map(),
         reviewed: List(),
-        keyFrames: List(),
+        keyframes: null,
 
         tags: Map(), // add ids that belong to which tag
 
@@ -21,7 +21,7 @@ export function TaskFactory(videoHandle) {
                 this.selected,
                 this.tracks,
                 this.reviewed,
-                this.keyFrames
+                this.keyframes
             ];
         },
 
@@ -82,6 +82,11 @@ export function TaskFactory(videoHandle) {
                 track.toggleVisible());
         },
 
+
+        setKeyframes: function (keyframeArray) {
+            return setIn(this, ['keyframes'], List(keyframeArray));
+        },
+
         getBoundingBoxes: function (frame) {
             return [...this.tracks.entries()]
                 .filter(([key, track]) => track.visible)
@@ -109,7 +114,7 @@ export function loadTask(parsedTask) {
     task.select = parsedTask[2];
     task.tracks = Map(Object.entries(parsedTask[3]).map(entry => [entry[0], loadTrack(entry[1])]));
     task.reviewed = List(parsedTask[4]);
-    task.keyFrames = List(parsedTask[5]);
+    task.keyframes = List(parsedTask[5]);
 
     task.tags = Map();
 

@@ -115,7 +115,8 @@ function Player(props) {
                 <KeyFrames
                     framerate={playerState.framerate}
                     src={playerState.src}
-                    duration={playerState.duration} />
+                    duration={playerState.duration}
+                    annotationDispatch={annotationDispatch} />
             </div>
         </div >
     );

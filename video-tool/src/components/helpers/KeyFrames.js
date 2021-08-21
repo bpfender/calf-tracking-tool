@@ -3,25 +3,23 @@ import { bmvbhash } from 'blockhash-core';
 import { Button, ProgressBar } from '@blueprintjs/core';
 import { getTimeAsFrames } from '../video/video-functions';
 import { hammingDistance } from '../utils';
-import { keyframeButtonStates, keyframeProgressStates, keyframeReadyState } from './keyframeStates';
+import { keyframeButtonStates, keyframeProgressStates, keyframeState } from './keyframeStates';
 
 //FIXME load video and remove?
 
 const HAMMING_THRESHOLD = 5;
 const FRAME_SKIP = 5;
 
-export function KeyFrames(props) {
-  const { framerate, src, duration } = props;
+// TODO handle error
 
-  const [readyState, setReadyState] = useState(keyframeReadyState.ready);
+export function KeyFrames(props) {
+  const { framerate, src, annotationDispatch } = props;
+
+  const [state, setState] = useState(keyframeState.waiting);
   const [buttonState, setButtonState] = useState(keyframeButtonStates.waiting);
   const [progressState, setProgressState] = useState(keyframeProgressStates.ready);
 
-
-  const [videoTime, setVideoTime] = useState(0);
-  const [buttonText, setButtonText] = useState("Detect keyframes");
-
-  const rateAverage = useRef({ mean: 1, count: 0 });
+  const rateAverage = useRef(null);
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -36,33 +34,108 @@ export function KeyFrames(props) {
   }, [])
 
   useEffect(() => {
-    if (src && framerate > 0) {
-      console.log(framerate);
+    if (src && framerate) {
       videoRef.current.load();
       videoRef.current.requestVideoFrameCallback(
         (now, metadata) => { hashingCallback(metadata) })
     }
+
+    // Initialise these values
+    rateAverage.current = { mean: 1, count: 0 };
+
   }, [src, framerate]);
 
-  const handleDetectClick = () => {
-    rateAverage.current = { mean: 1, count: 0 };
-    videoRef.current.play();
+  useEffect(() => {
+    console.log(state);
+    switch (state) {
+      case keyframeState.waiting:
+        setButtonState(keyframeButtonStates.waiting);
+        setProgressState(keyframeProgressStates.ready);
+        break;
+      case keyframeState.ready:
+        setButtonState(keyframeButtonStates.ready);
+        setProgressState(keyframeProgressStates.ready);
+        break;
+      case keyframeState.processing:
+
+        break;
+      case keyframeState.cancel:
+        setButtonState(keyframeButtonStates.cancel);
+        break;
+      case keyframeState.done:
+        setButtonState(keyframeButtonStates.done);
+        setProgressState(keyframeProgressStates.done);
+        break;
+      case keyframeState.reset:
+        setButtonState(keyframeButtonStates.reset);
+        setProgressState(keyframeProgressStates.done);
+        break;
+
+      default:
+        throw new Error("Unrecognised keyframe state");
+    }
+  }, [state])
+
+  const handleClick = async () => {
+    if (state === keyframeState.ready) {
+      setState(keyframeState.processing);
+      await videoRef.current.play();
+    } else if (state === keyframeState.cancel ||
+      state === keyframeState.reset) {
+      videoRef.current.load();
+      setState(keyframeState.waiting);
+    }
   };
 
-  const handleEnded = () => {
-    setButtonState(keyframeButtonStates.done);
-    setProgressState(keyframeProgressStates.done);
+  const handleMouseEnter = () => {
+    if (state === keyframeState.processing) {
+      setState(keyframeState.cancel);
+    } else if (state === keyframeState.done) {
+      setState(keyframeState.reset);
+    }
+  };
 
-    videoRef.current.pause();
-    console.log(keyframesRef.current);
+  const handleMouseLeave = () => {
+    if (state === keyframeState.cancel) {
+      setState(keyframeState.processing);
+    } else if (state === keyframeState.reset) {
+      setState(keyframeState.done);
+    }
   };
 
   const handleTimeUpdate = () => {
-    setButtonState(keyframeButtonStates.processing());
-    setProgressState(keyframeProgressStates.processing());
+    switch (state) {
+      case keyframeState.waiting: {
+        setState(keyframeState.ready);
+        break;
+      }
+      case keyframeState.processing: {
+        const remaining = formatTime(getTimeRemaining());
+        const progress = getProgress();
+        setButtonState(keyframeButtonStates.processing(remaining));
+        setProgressState(keyframeProgressStates.processing(progress));
+        break;
+      }
+      case keyframeState.cancel: {
+        const progress = getProgress();
+        setProgressState(keyframeProgressStates.processing(progress));
+        break;
+      }
+      default: {
+        //throw new Error("Unknow keyframe state");
+      }
+    }
+  };
 
-    setVideoTime(videoRef.current.currentTime);
-    setButtonText(formatTime(calculateTimeRemaining(videoRef.current.currentTime)))
+  const handleEnded = () => {
+    setState(keyframeState.done);
+
+    annotationDispatch({
+      type: 'SET_KEYFRAMES',
+      payload: { keyframes: keyframesRef.current }
+    });
+
+    videoRef.current.pause();
   };
 
   const hashingCallback = (metadata, prevHash = null, prevFrame = 1) => {
@@ -81,10 +154,10 @@ export function KeyFrames(props) {
     }
 
     if (currFrame - prevFrame > FRAME_SKIP &&
-      videoRef.current.playbackRate !== 0) {
+      videoRef.current.playbackRate > 0.4) {
       videoRef.current.playbackRate -= 0.2;
     } else if (currFrame - prevFrame < FRAME_SKIP &&
-      videoRef.current.playbackRate !== 16) {
+      videoRef.current.playbackRate < 16) {
       videoRef.current.playbackRate += 0.2;
     }
 
@@ -94,10 +167,8 @@ export function KeyFrames(props) {
       })
   };
 
-
-
-  const calculateTimeRemaining = (currentTime) => {
-    const remain = duration - currentTime;
+  const getTimeRemaining = () => {
+    const remain = videoRef.current.duration - videoRef.current.currentTime;
 
     const average = rateAverage.current.mean;
     const count = rateAverage.current.count;
@@ -110,6 +181,10 @@ export function KeyFrames(props) {
     return remain / newAverage;
   };
 
+  const getProgress = () => {
+    return videoRef.current.currentTime / videoRef.current.duration;
+  }
+
   const formatTime = (seconds) => {
     const date = new Date(seconds * 1000);
     const h = date.getUTCHours();
@@ -121,32 +196,7 @@ export function KeyFrames(props) {
       .join(':');
   };
 
-  const handleMouseEnter = () => {
-    switch (readyState) {
-      case keyframeReadyState.processing:
-        setButtonState(keyframeButtonStates.cancel);
-        break;
-      case keyframeReadyState.done:
-        setButtonState(keyframeButtonStates.reset);
-        break;
-      default:
-        break;
-    }
-  };
 
-  const handleMouseLeave = () => {
-    switch (readyState) {
-      case keyframeReadyState.processing:
-        //TODO add
-        setButtonState(keyframeButtonStates.processing())
-        break;
-      case keyframeReadyState.done:
-        setButtonState(keyframeButtonStates.done);
-        break;
-      default:
-        break;
-    }
-  };
 
   return (
     <div className="keyframes">
@@ -155,7 +205,7 @@ export function KeyFrames(props) {
         intent={buttonState.intent}
         disabled={buttonState.disabled}
         text={buttonState.text}
-        onClick={handleDetectClick}
+        onClick={handleClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       />
@@ -172,7 +222,6 @@ export function KeyFrames(props) {
           height={height}
           ref={videoRef}
           src={src ? src : null}
-          onCanPlayThrough={() => { }}
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleEnded} />
         <canvas
