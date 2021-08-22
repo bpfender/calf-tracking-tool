@@ -9,7 +9,7 @@ export const keyframeState = {
 
 export const keyframeButtonStates = {
     waiting: {
-        icon: "search",
+        icon: "key",
         intent: "none",
         text: "Detect keyframes",
         disabled: true,

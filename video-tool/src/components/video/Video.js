@@ -111,34 +111,34 @@ export default function Video(props) {
     }
 
     return (
-        <div className={props.className}>
-            <video
-                className="video-element"
-                ref={videoRef}
-                src={src}
-                onAbort={() => { }}
-                onCanPlay={() => { }}
-                onCanPlayThrough={handleCanPlayThrough}
-                onDurationChange={handleDurationChange}
-                onEmptied={handleEmptied}
-                onEnded={() => { }}
-                onError={() => { console.log("Video Error") }}
-                onLoadedData={() => { }}
-                onLoadedMetadata={handleLoadedMetadata}
-                onLoadStart={() => { }}
-                onPause={handlePause}
-                onPlay={handlePlay}
-                onPlaying={handlePlaying}
-                onProgress={() => { }}
-                onRateChange={handleRateChange}
-                onSeeked={handleSeeked}
-                onSeeking={handleSeeking}
-                onStalled={() => { }}
-                onSuspend={() => { }}
-                onTimeUpdate={() => { }}
-                onWaiting={() => { }}>
-                <p>ERROR: Video not supported</p>
-            </video>
-        </div >
+
+        <video
+            className="video-window video-element"
+            ref={videoRef}
+            src={src}
+            onAbort={() => { }}
+            onCanPlay={() => { }}
+            onCanPlayThrough={handleCanPlayThrough}
+            onDurationChange={handleDurationChange}
+            onEmptied={handleEmptied}
+            onEnded={() => { }}
+            onError={() => { console.log("Video Error") }}
+            onLoadedData={() => { }}
+            onLoadedMetadata={handleLoadedMetadata}
+            onLoadStart={() => { }}
+            onPause={handlePause}
+            onPlay={handlePlay}
+            onPlaying={handlePlaying}
+            onProgress={() => { }}
+            onRateChange={handleRateChange}
+            onSeeked={handleSeeked}
+            onSeeking={handleSeeking}
+            onStalled={() => { }}
+            onSuspend={() => { }}
+            onTimeUpdate={() => { }}
+            onWaiting={() => { }}>
+            <p>ERROR: Video not supported</p>
+        </video>
+
     );
 }

@@ -6,7 +6,7 @@
 
 .App {
   display:grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr 0.2fr;
   grid-template-rows:auto 1fr auto;
   grid-template-areas:"header header settings"
                       "left-sidebar main right-sidebar"
@@ -40,6 +40,7 @@
 }
 
 .right-sidebar{
+  width:100%;
   overflow-y: auto;
   grid-area:right-sidebar;
   background-color: $dark-gray4;

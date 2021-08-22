@@ -23,7 +23,7 @@ function Player(props) {
 
     // TODO this needs to be set dynamically
     const style = {
-        height: playerState.videoHeight + "px"
+        height: 600 + "px"
     };
 
     // Initialise component with video elements hidden
@@ -75,9 +75,8 @@ function Player(props) {
                     ref={videoContainerRef}
                     className="video-container">
                     <div className="video-window-container"
-                        style={style}>
+                    >
                         <Video
-                            className="video-window"
                             videoRef={videoRef}
                             playerDispatch={playerDispatch}
                             src={playerState.src}
@@ -111,12 +110,16 @@ function Player(props) {
                 vsync={playerState.vsync} />
 
             <div className="player-helpers">
-                <Info videoState={playerState} />
+
                 <KeyFrames
                     framerate={playerState.framerate}
                     src={playerState.src}
                     duration={playerState.duration}
-                    annotationDispatch={annotationDispatch} />
+                    annotationDispatch={annotationDispatch}
+                    keyframes={annotations.keyframes}
+                    playerVidRef={videoRef}
+                    currentFrame={playerState.currentFrame}
+                />
             </div>
         </div >
     );
@@ -125,7 +128,7 @@ function Player(props) {
 export default Player;
 
 
-
+//<Info videoState={playerState} />
 
 /*
 <div className="video-container">

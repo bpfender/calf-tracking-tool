@@ -87,6 +87,14 @@ export function TaskFactory(videoHandle) {
             return setIn(this, ['keyframes'], List(keyframeArray));
         },
 
+        getTrack: function (key) {
+            return this.tracks.get(key);
+        },
+
+        getTagIds: function (tag) {
+            return this.tags.get(tag);
+        },
+
         getBoundingBoxes: function (frame) {
             return [...this.tracks.entries()]
                 .filter(([key, track]) => track.visible)

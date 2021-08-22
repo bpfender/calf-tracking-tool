@@ -31,12 +31,11 @@ export function TrackFactory(totalFrames) {
 
         toggleVisible: function () {
             return setIn(this, ['visible'], !this.visible);
+        },
+
+        getLabel: function (frame) {
+            return this.labels.get(frame - 1);
         }
-
-
-
-
-
     };
 }
 
