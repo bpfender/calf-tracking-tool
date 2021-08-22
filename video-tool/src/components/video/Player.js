@@ -8,6 +8,7 @@ import { VideoBar } from './VideoBar';
 import VideoSource from './VideoSource';
 import { nextFrame } from './video-functions';
 import { KeyFrames } from '../helpers/KeyFrames';
+import { useDimensions } from './useDimensions';
 
 //FIXME position of video isn't quite right yet. Not sure what's happen
 
@@ -20,11 +21,7 @@ function Player(props) {
 
     const videoRef = useRef(null);
     const videoContainerRef = useRef(null);
-
-    // TODO this needs to be set dynamically
-    const style = {
-        height: 600 + "px"
-    };
+    const videoDimensions = useDimensions(videoRef);
 
     // Initialise component with video elements hidden
     useEffect(() => {
@@ -87,6 +84,7 @@ function Player(props) {
                             vsync={playerState.vsync} />
                         <Annotation
                             className="video-window annotation-overlay"
+                            videoDimensions={videoDimensions}
                             currentFrame={playerState.currentFrame}
                             annotations={annotations}
                             annotationDispatch={annotationDispatch}

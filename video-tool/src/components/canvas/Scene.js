@@ -64,8 +64,7 @@ class Scene {
         if (!this.selected || !this.handle) {
             this.selected = this._hitTestBox(mouseX, mouseY);
         }
-        // TODO this redraw is superfluous sometimes
-        //this._redraw();
+
         return this.selected ? this.selected.key : null;
     }
 
@@ -74,11 +73,13 @@ class Scene {
         this.handle = null;
 
         if (this.updateFlag) {
+            const [canvasW, canvasH] = this._getCanvasDimensions();
+
             this.updateFlag = false;
-            const x = Math.round(this.selected.x);
-            const y = Math.round(this.selected.y);
-            const w = Math.round(this.selected.width);
-            const h = Math.round(this.selected.height);
+            const x = Math.round(this.selected.x) / canvasW;
+            const y = Math.round(this.selected.y) / canvasH;
+            const w = Math.round(this.selected.width) / canvasW;
+            const h = Math.round(this.selected.height) / canvasH;
             const rotation = Math.round(this.selected.rotation);
 
             return {
@@ -121,11 +122,14 @@ class Scene {
     }
 
     _clear() {
-        const w = this.context.canvas.width;
-        const h = this.context.canvas.height;
+        const [w, h] = this._getCanvasDimensions();
 
         this.context.setTransform(1, 0, 0, 1, 0, 0);
         this.context.clearRect(0, 0, w, h);
+    }
+
+    _getCanvasDimensions() {
+        return [this.context.canvas.width, this.context.canvas.height];
     }
 }
 

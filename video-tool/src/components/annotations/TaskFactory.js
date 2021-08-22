@@ -95,7 +95,7 @@ export function TaskFactory(videoHandle) {
             return this.tags.get(tag);
         },
 
-        getBoundingBoxes: function (frame) {
+        getBoundingBoxes: function (frame, width, height) {
             return [...this.tracks.entries()]
                 .filter(([key, track]) => track.visible)
                 .map(([key, track]) => {
@@ -104,10 +104,10 @@ export function TaskFactory(videoHandle) {
                         key,
                         track.colour,
                         key === this.selected,
-                        label.x,
-                        label.y,
-                        label.w,
-                        label.h,
+                        label.x * width,
+                        label.y * height,
+                        label.w * width,
+                        label.h * height,
                         label.rotation,
                     );
                 });

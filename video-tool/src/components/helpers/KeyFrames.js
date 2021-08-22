@@ -229,6 +229,7 @@ export function KeyFrames(props) {
         <video
           width={width}
           height={height}
+          muted={true}
           ref={videoRef}
           src={src ? src : null}
           onTimeUpdate={handleTimeUpdate}

@@ -4,20 +4,28 @@ import Scene from '../canvas/Scene';
 
 // FIXME canvas resizing and scaling
 function Annotation(props) {
-    const { annotations, annotationDispatch, currentFrame } = props;
+    const { annotations, annotationDispatch, currentFrame, videoDimensions } = props;
     const canvasRef = React.useRef();
     const sceneRef = React.useRef();
 
     useEffect(() => {
         sceneRef.current = new Scene(canvasRef.current.getContext('2d'))
-    }, [canvasRef]);
+    }, []);
 
     useEffect(() => {
         if (annotations) {
-            const BBoxes = getBoundingBoxes(annotations, currentFrame);
+            const BBoxes = annotations
+                .getBoundingBoxes(
+                    currentFrame,
+                    videoDimensions.width,
+                    videoDimensions.height);
+
             sceneRef.current.updateBoundingBoxes(BBoxes);
         }
-    }, [currentFrame, annotations]);
+
+        console.log(videoDimensions);
+    }, [currentFrame, annotations, videoDimensions]);
+
 
     const handleMouseMove = (event) => {
         sceneRef.current.handleMouseMove(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
@@ -44,7 +52,6 @@ function Annotation(props) {
         }
     };
 
-    //FIXME hardcoded values
     return (
         <canvas
             className={props.className}
@@ -52,8 +59,8 @@ function Annotation(props) {
             onMouseMove={handleMouseMove}
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
-            width="800px"
-            height="600px">
+            width={videoDimensions.width}
+            height={videoDimensions.height}>
         </canvas>
     );
 }

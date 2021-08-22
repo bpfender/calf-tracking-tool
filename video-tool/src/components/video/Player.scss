@@ -86,7 +86,7 @@
 
 .video-container{
     flex:1;
-    padding: 3*$pt-grid-size;
+    padding: 2*$pt-grid-size;
 }
 
 .video-content{
@@ -109,7 +109,8 @@
 }
 
 .video-element{
-    height: 100%;
+    height: fit-content;
+    max-height:100%;
     max-width: 100%;
 }
 
