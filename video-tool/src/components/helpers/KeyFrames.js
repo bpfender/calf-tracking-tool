@@ -1,19 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { bmvbhash } from 'blockhash-core';
-import { Button, ProgressBar } from '@blueprintjs/core';
+import { Button, ButtonGroup, ProgressBar } from '@blueprintjs/core';
 import { getTimeAsFrames } from '../video/video-functions';
 import { hammingDistance } from '../utils';
 import { keyframeButtonStates, keyframeProgressStates, keyframeState } from './keyframeStates';
+import { KeyframeNav } from './KeyframeNav';
 
 //FIXME load video and remove?
 
 const HAMMING_THRESHOLD = 5;
 const FRAME_SKIP = 5;
+const HASH_BITS = 16;
 
-// TODO handle error
+// TODO handle error, handle new files, remove video element
+// https://stackoverflow.com/questions/3258587/how-to-properly-unload-destroy-a-video-element?answertab=oldest#tab-top
 
 export function KeyFrames(props) {
-  const { framerate, src, annotationDispatch } = props;
+  const { framerate, src, annotationDispatch, keyframes, currentFrame, playerVidRef } = props;
 
   const [state, setState] = useState(keyframeState.waiting);
   const [buttonState, setButtonState] = useState(keyframeButtonStates.waiting);
@@ -129,7 +132,7 @@ export function KeyFrames(props) {
 
   const handleEnded = () => {
     setState(keyframeState.done);
-
+    console.log(keyframesRef.current);
     annotationDispatch({
       type: 'SET_KEYFRAMES',
       payload: { keyframes: keyframesRef.current }
@@ -143,7 +146,7 @@ export function KeyFrames(props) {
 
     contextRef.current.drawImage(videoRef.current, 0, 0, width, height)
     const imageData = contextRef.current.getImageData(0, 0, width, height);
-    const nextHash = bmvbhash(imageData, 16);
+    const nextHash = bmvbhash(imageData, HASH_BITS);
 
     if (prevHash) {
       const hamming = hammingDistance(prevHash, nextHash);
@@ -196,11 +199,17 @@ export function KeyFrames(props) {
       .join(':');
   };
 
-
-
   return (
     <div className="keyframes">
+      <KeyframeNav
+        disabled={state !== keyframeState.done}
+        keyframes={keyframes}
+        currentFrame={currentFrame}
+        videoRef={playerVidRef}
+        framerate={framerate} />
+
       <Button
+        small={true}
         icon={buttonState.icon}
         intent={buttonState.intent}
         disabled={buttonState.disabled}
