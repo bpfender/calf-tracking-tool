@@ -20,7 +20,7 @@
 
 .App-header {
   grid-area:header;
-  height:50px;
+  height:$pt-navbar-height;
   background-color: $dark-gray1;
   text-align: center;
   display: flex;

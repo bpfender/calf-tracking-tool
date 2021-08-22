@@ -96,7 +96,8 @@ export default function App(props) {
         className="App-header"
         project={project}
         projectDispatch={projectDispatch}
-        playerDispatch={playerDispatch} />
+        playerDispatch={playerDispatch}
+        annotations={annotations} />
       <LeftSidebar
         className="left-sidebar" />
       <Player

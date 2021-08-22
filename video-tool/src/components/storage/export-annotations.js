@@ -16,14 +16,15 @@ export function exportYOLOv5(task) {
                 const h = label.w * Math.cos(rotation) + label.h * Math.sin(rotation);
                 const w = label.w * Math.sin(rotation) + label.h * Math.cos(rotation);
 
-                s += `${tagIndex}, ${x}, ${y}, ${h}, ${w}\n`;
+                s += `${tagIndex} ${x} ${y} ${h} ${w}\n`;
             }
 
             tagIndex++;
         }
         fileArray.push(s);
     }
-    console.log(fileArray);
+    console.log(fileArray)
+    return fileArray;
 }
 
 export function exportYOLOv5Rotated(task) {
@@ -43,12 +44,12 @@ export function exportYOLOv5Rotated(task) {
                 const h = label.h;
                 const rotation = label.rotation;
 
-                s += `${tagIndex}, ${x}, ${y}, ${h}, ${w}, ${rotation}\n`;
+                s += `${tagIndex} ${x} ${y} ${h} ${w} ${rotation}\n`;
             }
 
             tagIndex++;
         }
         fileArray.push(s);
     }
-    console.log(fileArray);
+    return fileArray;
 }

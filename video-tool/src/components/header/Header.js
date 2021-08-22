@@ -8,9 +8,10 @@ import { StartupOverlay } from '../overlays/StartupOverlay';
 import { getHandle, loadProject, verifyVideoFiles } from '../annotations/ProjectFactory';
 import { retrieveAppDirHandle, retrieveVideoDirHandle, storeRecentProjectHandle } from '../storage/indexedDB';
 import { FindFilesOverlay } from '../overlays/FindFilesOverlay';
+import { ExportPopover } from './Export';
 
 export function Header(props) {
-    const { projectDispatch, playerDispatch, project } = props;
+    const { projectDispatch, playerDispatch, project, annotations } = props;
 
     const [dirFlag, setDirFlag] = useState(false);
     const [projectFlag, setProjectFlag] = useState(false);
@@ -121,6 +122,8 @@ export function Header(props) {
                     icon="import" />
                 <Button
                     icon="export" />
+                <Divider />
+                <ExportPopover task={annotations} />
             </ButtonGroup>
             <text>{project.fileHandle ? project.fileHandle.name : ""}</text>
             <ButtonGroup

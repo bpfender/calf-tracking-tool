@@ -1,7 +1,5 @@
 //https://web.dev/file-system-access/
 
-import { retrieveVideoDirHandle } from "./indexedDB";
-
 export async function getParentDirectory() {
     const dirHandle = await window.showDirectoryPicker({ startIn: 'documents' });
     return dirHandle;
@@ -84,8 +82,16 @@ export async function getVideoDirHandle(parentDir) {
     return await parentDir.getDirectoryHandle("videos", { create: true });
 }
 
+export async function getCreateDirHandle(parentDir, name) {
+    return await parentDir.getDirectoryHandle(name, { create: true });
+}
 
-export async function selectMoveVideoIntoProject(dirHandle) {
+export async function getCreateFileHandle(parentDir, name) {
+    return await parentDir.getFileHandle(name, { create: true });
+}
+
+/*
+async function selectMoveVideoIntoProject(dirHandle) {
     const videoSrcHandle = await getVideoHandle(dirHandle);
     const videoDirHandle = await getVideoDirHandle(dirHandle);
     const videoDestHandle = await videoDirHandle.getFileHandle(videoSrcHandle.name, { create: true })
@@ -97,11 +103,7 @@ export async function selectMoveVideoIntoProject(dirHandle) {
     await videoSrcStream.pipeTo(videoDestStream);
 
     return videoDestHandle;
-}
-
-
-
-
+}*/
 
 export async function fileExists(file, destDirHandle) {
     for await (const filename of destDirHandle.keys()) {
