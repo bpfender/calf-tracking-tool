@@ -11,7 +11,7 @@ export function ProjectFactory() {
         name: "",
         fileHandle: null,
         selectedTask: key,
-        tasks: Map([[key, TaskFactory()]]),//Map(),
+        tasks: Map([[key, TaskFactory()]]),
         labels: List(),
 
         toJSON: function () {

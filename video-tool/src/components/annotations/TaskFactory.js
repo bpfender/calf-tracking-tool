@@ -10,6 +10,8 @@ export function TaskFactory(videoHandle) {
         selected: null,
         tracks: Map(),
         reviewed: List(),
+        //FIXME potentially make keyframes mutable array that remains the same
+        // once caluclated, persistent and ignored in undo/redo
         keyframes: null,
 
         tags: Map(), // add ids that belong to which tag

@@ -13,6 +13,10 @@ export function projectReducer(state, action) {
             {
                 return payload.project;
             }
+        case 'UNDO_REDO':
+            {
+                return payload.project;
+            }
         case 'ADD_TASK':
             {
                 return state.addTask();

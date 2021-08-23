@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { getBoundingBoxes } from '../annotations/TaskFactory';
 import Scene from '../canvas/Scene';
 
-// FIXME canvas resizing and scaling
+// FIXME initial size of bounding box?
 function Annotation(props) {
     const { annotations, annotationDispatch, currentFrame, videoDimensions } = props;
     const canvasRef = React.useRef();

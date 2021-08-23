@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Divider, } from '@blueprintjs/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
 import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-access';
 import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
@@ -7,18 +7,20 @@ import { saveFailed, saveProgress, saveSuccess, AppToaster } from '../overlays/t
 import { StartupOverlay } from '../overlays/StartupOverlay';
 import { getHandle, loadProject, verifyVideoFiles } from '../annotations/ProjectFactory';
 import { retrieveAppDirHandle, retrieveVideoDirHandle, storeRecentProjectHandle } from '../storage/indexedDB';
-import { FindFilesOverlay } from '../overlays/FindFilesOverlay';
 import { ExportPopover } from './Export';
+import { History } from './History';
 
 export function Header(props) {
     const { projectDispatch, playerDispatch, project, annotations } = props;
 
+    const [saved, setSaved] = useState(false);
     const [dirFlag, setDirFlag] = useState(false);
     const [projectFlag, setProjectFlag] = useState(false);
     const [openIcon, setOpenIcon] = useState("folder-close");
 
     // FIXME this requires some form of timeout
     useEffect(() => {
+        setSaved(false);
         /*console.log("AUTOSAVE");
         const autoSave = async () => {
             await set('autoSave', {
@@ -54,6 +56,7 @@ export function Header(props) {
             await writeFile(fileHandle, JSON.stringify(project));
             AppToaster.dismiss(progToast);
             AppToaster.show(saveSuccess);
+            setSaved(true);
         } catch (error) {
             AppToaster.dismiss(progToast);
             AppToaster.show(saveFailed);
@@ -87,6 +90,17 @@ export function Header(props) {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const getTitle = (fileHandle) => {
+        if (fileHandle) {
+            const title = fileHandle.name.replace(".vat", "");
+            if (!saved) {
+                return title + " *";
+            }
+            return title;
+        }
+        return "";
     }
 
     return (
@@ -125,13 +139,13 @@ export function Header(props) {
                 <Divider />
                 <ExportPopover task={annotations} />
             </ButtonGroup>
-            <text>{project.fileHandle ? project.fileHandle.name : ""}</text>
+            <text>{getTitle(project.fileHandle)}</text>
+            <History
+                project={project}
+                projectDispatch={projectDispatch} />
             <ButtonGroup
                 minimal={true}>
-                <Button
-                    icon="undo" />
-                <Button
-                    icon="redo" />
+
                 <Divider />
                 <Button icon="help" />
             </ButtonGroup>
