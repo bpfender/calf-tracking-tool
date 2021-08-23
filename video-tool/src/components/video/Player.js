@@ -14,8 +14,8 @@ import { useDimensions } from './useDimensions';
 
 function Player(props) {
     const {
-        annotations, annotationDispatch,
-        playerState, playerDispatch, projectDispatch } = props;
+        annotations, projectDispatch,
+        playerState, playerDispatch } = props;
 
     const [hidden, setHidden] = useState(false);
 
@@ -65,7 +65,7 @@ function Player(props) {
                     src={playerState.src}
                     hidden={hidden}
                     videoHandle={annotations.videoHandle}
-                    annotationDispatch={annotationDispatch}
+                    projectDispatch={projectDispatch}
                     playerDispatch={playerDispatch}
                     projectDispatch={projectDispatch} />
                 <div
@@ -87,7 +87,7 @@ function Player(props) {
                             videoDimensions={videoDimensions}
                             currentFrame={playerState.currentFrame}
                             annotations={annotations}
-                            annotationDispatch={annotationDispatch}
+                            projectDispatch={projectDispatch}
                             pauseVideo={() => { videoRef.current.pause() }} />
                     </div>
                 </div>
@@ -113,7 +113,7 @@ function Player(props) {
                     framerate={playerState.framerate}
                     src={playerState.src}
                     duration={playerState.duration}
-                    annotationDispatch={annotationDispatch}
+                    projectDispatch={projectDispatch}
                     keyframes={annotations.keyframes}
                     playerVidRef={videoRef}
                     currentFrame={playerState.currentFrame}
@@ -143,7 +143,7 @@ style={style}>
     className="video-window annotation-overlay"
     currentFrame={playerState.currentFrame}
     annotations={annotations}
-    annotationDispatch={annotationDispatch}
+    projectDispatch={projectDispatch}
     pauseVideo={() => { videoRef.current.pause() }} />
 </div>
 </div>

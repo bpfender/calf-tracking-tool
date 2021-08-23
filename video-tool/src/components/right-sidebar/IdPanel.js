@@ -4,31 +4,31 @@ import ColourPalettePopover from "./ColourPalette";
 
 // FIXME possible to move annotation state here?
 export default function IdPanel(props) {
-    const { annotationDispatch, id, colour, visible, selectedId } = props;
+    const { projectDispatch, id, colour, visible, selectedId } = props;
 
     const handleSelectClick = () => {
-        annotationDispatch({
+        projectDispatch({
             type: "SET_SELECTED",
             payload: { key: id }
         })
     }
 
     const handleTextConfirm = (text) => {
-        annotationDispatch({
+        projectDispatch({
             type: 'SET_TRACK_NAME',
             payload: { key: id, name: text }
         });
     }
 
     const handleColourClick = (colour) => {
-        annotationDispatch({
+        projectDispatch({
             type: 'SET_TRACK_COLOUR',
             payload: { key: id, colour: colour }
         })
     }
 
     const handleVisibleToggle = () => {
-        annotationDispatch({
+        projectDispatch({
             type: 'TOGGLE_VISIBLE',
             payload: { key: id }
         });

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import './App.scss';
 import { defaultPlayerState, playerReducer } from './components/state/player-reducer.js';
 import { annotationReducer } from './components/state/annotation-reducer';
@@ -17,7 +17,7 @@ import { TaskFactory } from './components/annotations/TaskFactory';
 export default function App(props) {
   const [project, projectDispatch] = useReducer(projectReducer, ProjectFactory());
 
-  const [annotations, annotationDispatch] = useReducer(annotationReducer, getCurrentTask(project));
+  //const [annotations, projectDispatch] = useReducer(annotationReducer, getCurrentTask(project));
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 
   // Check whether VAT directory has been set before
@@ -37,7 +37,7 @@ export default function App(props) {
 
   useEffect(() => {
     if (playerState.totalFrames) {
-      annotationDispatch({
+      projectDispatch({
         type: 'SET_TOTAL_FRAME_COUNT',
         payload: { totalFrames: playerState.totalFrames }
       });
@@ -46,10 +46,10 @@ export default function App(props) {
 
   useEffect(() => {
     if (project.selectedTask) {
-      annotationDispatch({
+      /*projectDispatch({
         type: 'LOAD_TASK',
-        payload: { task: getCurrentTask(project) },
-      });
+        payload: { task: project.getCurrentTask() },
+      });*/
 
       playerDispatch({
         type: 'RESET',
@@ -58,21 +58,22 @@ export default function App(props) {
   }, [project.selectedTask])
 
   // When selected task updates, this also needs to be update in project state
-  useEffect(() => {
-    if (project.selectedTask) {
-      projectDispatch({
-        type: 'UPDATE_TASK',
-        payload: { task: annotations }
-      });
-    }
-  }, [annotations])
+  /* useEffect(() => {
+     if (project.selectedTask) {
+       projectDispatch({
+         type: 'UPDATE_TASK',
+         payload: { task: annotations }
+       });
+     }
+   }, [annotations])*/
 
+  const currentVideoHandle = project.getSelectedTask().videoHandle;
 
   useEffect(() => {
-    if (annotations.videoHandle) {
+    if (currentVideoHandle) {
       (async function () {
         try {
-          const video = await annotations.videoHandle.getFile();
+          const video = await currentVideoHandle.getFile();
 
           playerDispatch({
             type: 'SRC_CHANGE',
@@ -86,7 +87,7 @@ export default function App(props) {
         }
       })();
     }
-  }, [annotations.videoHandle]);
+  }, [currentVideoHandle]);
 
 
 
@@ -97,23 +98,21 @@ export default function App(props) {
         project={project}
         projectDispatch={projectDispatch}
         playerDispatch={playerDispatch}
-        annotations={annotations} />
+        annotations={project.getSelectedTask()} />
       <LeftSidebar
         className="left-sidebar" />
       <Player
         className="main-content"
         playerState={playerState}
         playerDispatch={playerDispatch}
-        annotations={annotations}
-        annotationDispatch={annotationDispatch}
+        annotations={project.getSelectedTask()}
         projectDispatch={projectDispatch} />
       <RightSidebar
         className="right-sidebar"
         playerState={playerState}
-        annotations={annotations}
-        annotationDispatch={annotationDispatch}
-        project={project}
+        annotations={project.getSelectedTask()}
         projectDispatch={projectDispatch}
+        project={project}
         labels={project.labels}
       />
       <footer className="footer" />

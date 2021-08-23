@@ -50,6 +50,6 @@ export function projectReducer(state, action) {
             const newTask = annotationReducer(state.getSelectedTask(), action);
             return state.updateSelected(newTask);
 
-            throw new Error(`Unexpected project reducer case ${action.type}`);
+        //throw new Error(`Unexpected project reducer case ${action.type}`);
     }
 }

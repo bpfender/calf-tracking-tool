@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import ColourPalettePopover from './ColourPalette';
 
 export function LabelEntry(props) {
-    const { id, tag, selected, track, annotationDispatch } = props;
+    const { id, tag, selected, track, projectDispatch } = props;
 
     const [trashIntent, setTrashIntent] = useState("none");
     const [input, setInput] = useState(track.name)
@@ -13,14 +13,14 @@ export function LabelEntry(props) {
     }, [track.name])
 
     const handleSelect = () => {
-        annotationDispatch({
+        projectDispatch({
             type: 'SET_SELECTED',
             payload: { key: id }
         });
     };
 
     const handleIdConfirm = (name) => {
-        annotationDispatch({
+        projectDispatch({
             type: 'SET_TRACK_NAME',
             payload: {
                 key: id,
@@ -30,7 +30,7 @@ export function LabelEntry(props) {
     };
 
     const handleColourSelect = (colour) => {
-        annotationDispatch({
+        projectDispatch({
             type: 'SET_TRACK_COLOUR',
             payload: {
                 key: id,
@@ -40,7 +40,7 @@ export function LabelEntry(props) {
     };
 
     const handleDelete = () => {
-        annotationDispatch({
+        projectDispatch({
             type: 'DELETE_TRACK',
             payload: {
                 key: id,
@@ -50,7 +50,7 @@ export function LabelEntry(props) {
     };
 
     const visibleToggle = () => {
-        annotationDispatch({
+        projectDispatch({
             type: 'TOGGLE_VISIBLE',
             payload: { key: id },
         });

@@ -7,7 +7,7 @@ import { getTrack } from '../annotations/TaskFactory';
 
 export function Labels(props) {
     // TEMPORARY STATES
-    const { tag, annotations, annotationDispatch } = props;
+    const { tag, annotations, projectDispatch } = props;
     const ids = ["1", "2", "3", "4"];
 
     const getTagIds = () => {
@@ -17,7 +17,7 @@ export function Labels(props) {
 
     const handleAdd = () => {
         const key = uuidv4();
-        annotationDispatch({
+        projectDispatch({
             type: 'ADD_TRACK',
             payload: {
                 key: key,
@@ -38,7 +38,7 @@ export function Labels(props) {
                             id={key}
                             selected={annotations.selected}
                             track={getTrack(annotations, key)}
-                            annotationDispatch={annotationDispatch} />
+                            projectDispatch={projectDispatch} />
                     )}
                 </Menu>
             }

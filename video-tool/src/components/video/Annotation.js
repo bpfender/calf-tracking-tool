@@ -3,7 +3,7 @@ import Scene from '../canvas/Scene';
 
 // FIXME initial size of bounding box?
 function Annotation(props) {
-    const { annotations, annotationDispatch, currentFrame, videoDimensions } = props;
+    const { annotations, projectDispatch, currentFrame, videoDimensions } = props;
     const canvasRef = React.useRef();
     const sceneRef = React.useRef();
 
@@ -33,7 +33,7 @@ function Annotation(props) {
         props.pauseVideo();
         const selectID = sceneRef.current.handleMouseDown(event.nativeEvent.offsetX, event.nativeEvent.offsetY);
 
-        annotationDispatch({
+        projectDispatch({
             type: 'SET_SELECTED',
             payload: { key: selectID }
         })
@@ -43,7 +43,7 @@ function Annotation(props) {
         const update = sceneRef.current.handleMouseUp();
 
         if (update) {
-            annotationDispatch({
+            projectDispatch({
                 type: 'SET_FRAME_LABEL',
                 payload: { key: update.key, frame: currentFrame, label: update.label }
             });

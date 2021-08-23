@@ -13,7 +13,7 @@ export default function RightSidebar(props) {
     //const labels = ["cow", "farmer", "truck"];
 
     const [idsList, setIdsList] = useState([]);
-    const { annotations, project, annotationDispatch, projectDispatch, labels } = props;
+    const { annotations, project, projectDispatch, labels } = props;
 
     useEffect(() => {
         setIdsList([...annotations.tracks.keys()]);
@@ -21,7 +21,7 @@ export default function RightSidebar(props) {
 
     const handleAddClick = () => {
         const key = uuidv4();
-        annotationDispatch({
+        projectDispatch({
             type: "ADD_TRACK",
             payload: { key: key }
         });
@@ -29,7 +29,7 @@ export default function RightSidebar(props) {
     }
 
     const removeListComponent = (filterKey) => {
-        annotationDispatch({
+        projectDispatch({
             type: 'DELETE_TRACK',
             payload: { key: filterKey }
         });
@@ -48,7 +48,7 @@ export default function RightSidebar(props) {
                 labels={labels} />
             <MenuDivider></MenuDivider>
             <LabelStack
-                annotationDispatch={annotationDispatch}
+                projectDispatch={projectDispatch}
                 annotations={annotations}
                 labels={labels} />
         </div >
@@ -66,7 +66,7 @@ export default function RightSidebar(props) {
     <IdPanel
         key={key}
         id={key}
-        annotationDispatch={annotationDispatch}
+        projectDispatch={projectDispatch}
         selectedId={annotations.selected}
         visible={getTrack(annotations, key).visible}
         colour={getTrack(annotations, key).colour}

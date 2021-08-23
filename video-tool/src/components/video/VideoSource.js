@@ -25,7 +25,7 @@ const sourceStates = {
 };
 
 export default function VideoSource(props) {
-    const { src, videoHandle, playerDispatch, annotationDispatch, hidden, projectDispatch } = props;
+    const { src, videoHandle, playerDispatch, projectDispatch, hidden } = props;
 
     const [sourceState, setSourceState] = useState(sourceStates.start);
 
@@ -144,7 +144,7 @@ export default function VideoSource(props) {
 
     const loadVideo = (file, handle) => {
         console.log(handle);
-        annotationDispatch({
+        projectDispatch({
             type: 'SET_VIDEO_HANDLE',
             payload: {
                 videoHandle: handle,

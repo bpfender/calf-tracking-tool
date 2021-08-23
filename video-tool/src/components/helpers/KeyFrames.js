@@ -16,7 +16,7 @@ const HASH_BITS = 16;
 // https://stackoverflow.com/questions/3258587/how-to-properly-unload-destroy-a-video-element?answertab=oldest#tab-top
 
 export function KeyFrames(props) {
-  const { framerate, src, annotationDispatch, keyframes, currentFrame, playerVidRef } = props;
+  const { framerate, src, projectDispatch, keyframes, currentFrame, playerVidRef } = props;
 
   const [state, setState] = useState(keyframeState.waiting);
   const [buttonState, setButtonState] = useState(keyframeButtonStates.waiting);
@@ -133,7 +133,7 @@ export function KeyFrames(props) {
   const handleEnded = () => {
     setState(keyframeState.done);
     console.log(keyframesRef.current);
-    annotationDispatch({
+    projectDispatch({
       type: 'SET_KEYFRAMES',
       payload: { keyframes: keyframesRef.current }
     });
