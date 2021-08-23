@@ -33,6 +33,82 @@ export function TrackFactory(totalFrames) {
             return setIn(this, ['visible'], !this.visible);
         },
 
+        setLabel: function (frame, label) {
+            const prevFrame = getPrevAnchor(this.anchors, frame);
+            const nextFrame = getNextAnchor(this.anchors, frame);
+            let newLabels = null;
+
+            console.log(frame, label);
+            if (prevFrame === -1 && nextFrame === -1) {
+                newLabels = List(Array(this.labels.size).fill(label));
+
+            } else if (prevFrame === -1) {
+                newLabels = this.labels.withMutations(list => {
+                    for (let i = 0; i < frame; i++) {
+                        list.set(i, label);
+                    }
+                    this.interpolateLabels(list, frame, nextFrame);
+                });
+            } else if (nextFrame === -1) {
+                newLabels = this.labels.withMutations(list => {
+                    for (let i = frame - 1; i < this.labels.size; i++) {
+                        list.set(i, label);
+                    }
+                    this.interpolateLabels(list, prevFrame, frame);
+                });
+            } else {
+                newLabels = this.labels.withMutations(list => {
+                    list.set(frame - 1, label);
+                    this.interpolateLabels(list, prevFrame, frame);
+                    this.interpolateLabels(list, frame, nextFrame);
+                });
+            }
+
+            const newAnchors = setAnchorFrame(this.anchors, frame);
+            const trackNewAnchors = setIn(this, ['anchors'], newAnchors);
+
+            return setIn(trackNewAnchors, ['labels'], newLabels);
+        },
+
+        // QUESTION performance of withmutations vs other methods?
+        // Need to work with mutableList as we depend on mutated values
+        interpolateLabels: function (mutableList, startFrame, endFrame) {
+            const startLabel = mutableList.get(startFrame - 1);
+            const endLabel = mutableList.get(endFrame - 1);
+            const frameCount = endFrame - startFrame;
+            const keys = ['x', 'y', 'w', 'h', 'rotation'];
+
+            const frameDelta = Object.fromEntries(keys.map(key => {
+                const val = [
+                    key,
+                    (endLabel[key] - startLabel[key]) / frameCount
+                ];
+                console.log(val);
+                return val;
+            }))
+
+            for (let i = startFrame; i < endFrame - 1; i++) {
+                const newVals = Object.fromEntries(keys.map(key => {
+                    const val = ([
+                        key,
+                        startLabel[key] + frameDelta[key] * (i - (startFrame - 1))
+                    ]);
+
+                    return val;
+                }))
+
+                const label = LabelFactory(
+                    newVals.x,
+                    newVals.y,
+                    newVals.w,
+                    newVals.h,
+                    newVals.rotation,
+                );
+                console.log(label);
+                mutableList.set(i, label);
+            }
+        },
+
         getLabel: function (frame) {
             return this.labels.get(frame - 1);
         }
@@ -49,6 +125,14 @@ export function loadTrack(parsedTrack) {
 
     return track;
 }
+
+
+
+
+
+
+
+
 
 
 export function setName(track, name) {
@@ -110,7 +194,16 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
     const startLabel = mutableList.get(startFrame - 1);
     const endLabel = mutableList.get(endFrame - 1);
     const frameCount = endFrame - startFrame;
-    const keys = Object.keys(startLabel);
+    const keys = ['x', 'y', 'w', 'h', 'rotation'];
+
+
+    /*const frameDelta = {
+        x: (endLabel.x - startLabel.x) / frameCount,
+        y: (endLabel.y - startLabel.y) / frameCount,
+        w: (endLabel.w - startLabel.w) / frameCount,
+        h: (endLabel.h - startLabel.h) / frameCount,
+        rotation: (endLabel.rotation - startLabel.rotation) / frameCount,
+    }*/
 
     const frameDelta = Object.fromEntries(keys.map(key => {
         const val = [
@@ -120,14 +213,22 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
         console.log(val);
         return val;
     }))
-    console.log(frameDelta);
+    console.log("FRAME_DELTA", frameDelta);
 
     for (let i = startFrame; i < endFrame - 1; i++) {
+
+        /* const newVals = {
+             x: startLabel.x + frameDelta.x * (i - (startFrame - 1)),
+             y: startLabel.y + frameDelta.y * (i - (startFrame - 1)),
+             w: startLabel.w + frameDelta.w * (i - (startFrame - 1)),
+             h: startLabel.h + frameDelta.h * (i - (startFrame - 1)),
+             rotation: startLabel.rotation + frameDelta.rotation * (i - (startFrame - 1)),
+         }*/
 
         const newVals = Object.fromEntries(keys.map(key => {
             const val = ([
                 key,
-                Math.round(startLabel[key] + frameDelta[key] * (i - (startFrame - 1)))
+                startLabel[key] + frameDelta[key] * (i - (startFrame - 1)),
             ]);
 
             return val;
@@ -140,7 +241,7 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
             newVals.h,
             newVals.rotation,
         );
-
+        console.log(label);
         mutableList.set(i, label);
     }
 }

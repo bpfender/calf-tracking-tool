@@ -84,6 +84,10 @@ export function TaskFactory(videoHandle) {
                 track.toggleVisible());
         },
 
+        setTrackLabel: function (key, frame, label) {
+            return updateIn(this, ['tracks', key], track =>
+                track.setLabel(frame, label));
+        },
 
         setKeyframes: function (keyframeArray) {
             return setIn(this, ['keyframes'], List(keyframeArray));
@@ -116,6 +120,10 @@ export function TaskFactory(videoHandle) {
         },
     };
 }
+
+
+
+
 
 export function loadTask(parsedTask) {
     const task = TaskFactory();

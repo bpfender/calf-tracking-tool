@@ -43,6 +43,7 @@ export function annotationReducer(state, action) {
             // return setTrack(state, key, newTrack);
         }
         case 'SET_FRAME_LABEL': {
+            //return state.setTrackLabel(payload.key, payload.frame, payload.label);
             const { key, frame, label } = payload;
 
             const newTrack = setLabel(getTrack(state, key), frame, label);
@@ -56,8 +57,7 @@ export function annotationReducer(state, action) {
             // return setTrack(state, key, newTrack);
         }
         case 'SET_SELECTED': {
-            const { key } = payload;
-            return setSelected(state, key);
+            return state.setSelected(payload.key);
         }
         case 'SET_TOTAL_FRAME_COUNT': {
             return state.setTotalFrames(payload.totalFrames);
