@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import './App.scss';
 import { defaultPlayerState, playerReducer } from './components/state/player-reducer.js';
-import { annotationReducer } from './components/state/annotation-reducer';
+import { annotationReducer } from './components/state/task-reducer';
 import Player from './components/video/Player';
 import RightSidebar from './components/right-sidebar/RightSidebar';
 import LeftSidebar from './components/left-sidebar/LeftSidebar';

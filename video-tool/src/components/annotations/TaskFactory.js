@@ -69,6 +69,10 @@ export function TaskFactory() {
             return newTask;
         },
 
+        updateTrack: function (key, track) {
+            return setIn(this, ['tracks', key], track);
+        },
+
         setTrackName: function (key, name) {
             return updateIn(this, ['tracks', key], track =>
                 track.setName(name));
