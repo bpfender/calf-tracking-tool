@@ -22,7 +22,6 @@ function Annotation(props) {
             sceneRef.current.updateBoundingBoxes(BBoxes);
         }
 
-        console.log(videoDimensions);
     }, [currentFrame, annotations, videoDimensions]);
 
 

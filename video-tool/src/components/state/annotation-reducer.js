@@ -43,11 +43,11 @@ export function annotationReducer(state, action) {
             // return setTrack(state, key, newTrack);
         }
         case 'SET_FRAME_LABEL': {
-            //return state.setTrackLabel(payload.key, payload.frame, payload.label);
-            const { key, frame, label } = payload;
+            return state.setTrackLabel(payload.key, payload.frame, payload.label);
+            /*const { key, frame, label } = payload;
 
             const newTrack = setLabel(getTrack(state, key), frame, label);
-            return setTrack(state, key, newTrack);
+            return setTrack(state, key, newTrack);*/
         }
         case 'TOGGLE_VISIBLE': {
             //     const { key } = payload;

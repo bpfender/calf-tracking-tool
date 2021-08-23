@@ -21,6 +21,6 @@ export const useDimensions = (ref) => {
             observer.unobserve(element);
         }
     }, [observerRef, ref]);
-    console.log("USE", dimensions);
+
     return dimensions;
 }

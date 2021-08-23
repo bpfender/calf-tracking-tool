@@ -95,7 +95,7 @@ export function TrackFactory(totalFrames) {
                     ]);
 
                     return val;
-                }))
+                }));
 
                 const label = LabelFactory(
                     newVals.x,
@@ -112,6 +112,7 @@ export function TrackFactory(totalFrames) {
         getLabel: function (frame) {
             return this.labels.get(frame - 1);
         }
+
     };
 }
 

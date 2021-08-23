@@ -15,11 +15,6 @@ export function Labels(props) {
         return ids ? [...ids] : [];
     };
 
-    useEffect(() => {
-        console.log("hello");
-        console.log("HELLO", annotations.tags);
-    })
-
     const handleAdd = () => {
         const key = uuidv4();
         annotationDispatch({

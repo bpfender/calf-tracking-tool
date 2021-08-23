@@ -14,7 +14,7 @@ export function TaskFactory(videoHandle) {
         // once caluclated, persistent and ignored in undo/redo
         keyframes: null,
 
-        tags: Map(), // add ids that belong to which tag
+        tags: Map(), // add ids for tag association
 
         toJSON: function () {
             return [

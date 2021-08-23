@@ -32,6 +32,10 @@ export function ProjectFactory() {
             return setIn(this, ['selectedTask'], key);
         },
 
+        getSelectedTask: function () {
+            return this.tasks.get(this.selectedTask);
+        },
+
         // TODO probably remove handle
         addTask: function (videoHandle) {
             const key = uuidv4();
@@ -65,10 +69,9 @@ export function ProjectFactory() {
                 labels.delete(labels.findIndex(val => label === val)));
         },
 
-        updateSelectedTask: function (updater, args) {
-            return updateIn(this, ['tasks', this.selectedTask], task =>
-                task[updater]([...args]));
-        },
+        updateSelected: function (task) {
+            return setIn(this, ['tasks', this.selectedTask], task);
+        }
     };
 }
 
