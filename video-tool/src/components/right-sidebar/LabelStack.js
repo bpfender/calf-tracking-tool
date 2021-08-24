@@ -2,7 +2,7 @@ import React from 'react';
 import { Labels } from './Labels';
 
 export function LabelStack(props) {
-    const { projectDispatch, annotations, labels } = props;
+    const { projectDispatch, annotations, labels, currentFrame } = props;
 
     return (
         <div>
@@ -11,7 +11,8 @@ export function LabelStack(props) {
                     key={tag}
                     tag={tag}
                     annotations={annotations}
-                    projectDispatch={projectDispatch} />
+                    projectDispatch={projectDispatch}
+                    currentFrame={currentFrame} />
             )}
         </div>
     )

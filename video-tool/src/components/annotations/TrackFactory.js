@@ -1,3 +1,4 @@
+import { LAYER } from "@blueprintjs/icons/lib/esm/generated/iconContents";
 import { List, setIn } from "immutable";
 import { colourGen } from "../utils";
 import { getNextAnchor, getPrevAnchor, setAnchorFrame } from "./Anchor";
@@ -78,41 +79,94 @@ export function TrackFactory(totalFrames) {
             const frameCount = endFrame - startFrame;
             const keys = ['x', 'y', 'w', 'h', 'rotation'];
 
-            const frameDelta = Object.fromEntries(keys.map(key => {
-                const val = [
-                    key,
-                    (endLabel[key] - startLabel[key]) / frameCount
-                ];
-                console.log(val);
-                return val;
-            }))
-
-            for (let i = startFrame; i < endFrame - 1; i++) {
-                const newVals = Object.fromEntries(keys.map(key => {
-                    const val = ([
+            if (!endLabel) {
+                for (let i = startFrame; i < endFrame - 1; i++) {
+                    mutableList.set(i, startLabel);
+                }
+            } else {
+                const frameDelta = Object.fromEntries(keys.map(key => {
+                    const val = [
                         key,
-                        startLabel[key] + frameDelta[key] * (i - (startFrame - 1))
-                    ]);
-
+                        (endLabel[key] - startLabel[key]) / frameCount
+                    ];
                     return val;
-                }));
+                }))
 
-                const label = LabelFactory(
-                    newVals.x,
-                    newVals.y,
-                    newVals.w,
-                    newVals.h,
-                    newVals.rotation,
-                );
-                console.log(label);
-                mutableList.set(i, label);
+                for (let i = startFrame; i < endFrame - 1; i++) {
+                    const newVals = Object.fromEntries(keys.map(key => {
+                        const val = ([
+                            key,
+                            startLabel[key] + frameDelta[key] * (i - (startFrame - 1))
+                        ]);
+
+                        return val;
+                    }));
+
+                    const label = LabelFactory(
+                        newVals.x,
+                        newVals.y,
+                        newVals.w,
+                        newVals.h,
+                        newVals.rotation,
+                    );
+                    mutableList.set(i, label);
+                }
             }
         },
 
         getLabel: function (frame) {
             return this.labels.get(frame - 1);
-        }
+        },
 
+        cutLabel: function (frame) {
+            let nextFrame = getNextAnchor(this.anchors, frame);
+            if (nextFrame === -1) {
+                nextFrame = this.labels.size;
+            }
+
+            const newLabels = this.labels.withMutations(list => {
+                for (let i = frame - 1; i < nextFrame - 1; i++) {
+                    list.set(i, null);
+                }
+            });
+
+            const newAnchors = setAnchorFrame(this.anchors, frame);
+            const trackNewAnchors = setIn(this, ['anchors'], newAnchors);
+
+            return setIn(trackNewAnchors, ['labels'], newLabels);
+        },
+
+        insertLabel: function (frame) {
+            const nextFrame = getNextAnchor(this.anchors, frame);
+            const prevFrame = getPrevAnchor(this.anchors, frame);
+            console.log(prevFrame, nextFrame);
+            //Get last label before cut
+            let prevLabel = null;
+            if (prevFrame === -1) {
+                prevLabel = LabelFactory();
+            } else {
+                prevLabel = this.getLabel(prevFrame - 1);
+            }
+
+            let newLabels = null;
+            if (nextFrame === -1) {
+                newLabels = this.labels.withMutations(list => {
+                    for (let i = frame - 1; i < this.labels.size; i++) {
+                        list.set(i, prevLabel);
+                    }
+                });
+            } else {
+                newLabels = this.labels.withMutations(list => {
+                    list.set(frame - 1, prevLabel);
+                    this.interpolateLabels(list, frame, nextFrame);
+                });
+            }
+
+            const newAnchors = setAnchorFrame(this.anchors, frame);
+            const trackNewAnchors = setIn(this, ['anchors'], newAnchors);
+
+            return setIn(trackNewAnchors, ['labels'], newLabels);
+        }
     };
 }
 

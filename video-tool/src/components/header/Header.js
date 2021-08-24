@@ -131,11 +131,7 @@ export function Header(props) {
                 <Button
                     icon="floppy-disk"
                     onClick={handleSaveProject} />
-                <Divider />
-                <Button
-                    icon="import" />
-                <Button
-                    icon="export" />
+
                 <Divider />
                 <ExportPopover task={annotations} />
             </ButtonGroup>

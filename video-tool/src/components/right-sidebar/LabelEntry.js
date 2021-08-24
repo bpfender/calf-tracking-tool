@@ -1,12 +1,14 @@
-import { Button, ButtonGroup, Classes, EditableText, Icon, InputGroup, MenuItem } from '@blueprintjs/core';
+import { Button, ButtonGroup, Classes, Divider, EditableText, Icon, InputGroup, MenuItem } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import ColourPalettePopover from './ColourPalette';
 
 export function LabelEntry(props) {
-    const { id, tag, selected, track, projectDispatch } = props;
+    const { id, tag, selected, track, projectDispatch, currentFrame } = props;
 
     const [trashIntent, setTrashIntent] = useState("none");
     const [input, setInput] = useState(track.name)
+
+    const labelCut = !track.getLabel(currentFrame);
 
     useEffect(() => {
         setInput(track.name);
@@ -28,6 +30,26 @@ export function LabelEntry(props) {
             }
         });
     };
+
+    const handleCut = () => {
+        if (labelCut) {
+            projectDispatch({
+                type: 'INSERT_LABEL',
+                payload: {
+                    key: id,
+                    frame: currentFrame,
+                }
+            });
+        } else {
+            projectDispatch({
+                type: 'CUT_LABEL',
+                payload: {
+                    key: id,
+                    frame: currentFrame,
+                }
+            })
+        }
+    }
 
     const handleColourSelect = (colour) => {
         projectDispatch({
@@ -76,6 +98,12 @@ export function LabelEntry(props) {
                 <div>
                     <ButtonGroup
                         minimal={true}>
+                        <Button
+                            icon="cut"
+                            onClick={handleCut}
+                            intent={labelCut ? "primary" : "none"}
+                        />
+                        <Divider />
                         <ColourPalettePopover
                             colour={track.colour}
                             handleColourClick={handleColourSelect}

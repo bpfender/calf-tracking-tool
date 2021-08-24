@@ -13,7 +13,7 @@ export default function RightSidebar(props) {
     //const labels = ["cow", "farmer", "truck"];
 
     const [idsList, setIdsList] = useState([]);
-    const { annotations, project, projectDispatch, labels } = props;
+    const { annotations, project, projectDispatch, labels, currentFrame } = props;
 
     useEffect(() => {
         setIdsList([...annotations.tracks.keys()]);
@@ -50,7 +50,8 @@ export default function RightSidebar(props) {
             <LabelStack
                 projectDispatch={projectDispatch}
                 annotations={annotations}
-                labels={labels} />
+                labels={labels}
+                currentFrame={currentFrame} />
         </div >
     );
 }

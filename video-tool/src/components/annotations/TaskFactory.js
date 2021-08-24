@@ -107,6 +107,7 @@ export function TaskFactory() {
 
         getBoundingBoxes: function (frame, width, height) {
             return [...this.tracks.entries()]
+                .filter(([key, track]) => getLabel(track, frame)) //filter nulls(cut)
                 .filter(([key, track]) => track.visible)
                 .map(([key, track]) => {
                     const label = getLabel(track, frame);

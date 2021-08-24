@@ -13,7 +13,6 @@ import { TaskFactory } from './components/annotations/TaskFactory';
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
 //FIXME whole tree updates all the time
-// TODO https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/hidden
 export default function App(props) {
   const [project, projectDispatch] = useReducer(projectReducer, ProjectFactory());
 
@@ -114,6 +113,7 @@ export default function App(props) {
         projectDispatch={projectDispatch}
         project={project}
         labels={project.labels}
+        currentFrame={playerState.currentFrame}
       />
       <footer className="footer" />
     </div >

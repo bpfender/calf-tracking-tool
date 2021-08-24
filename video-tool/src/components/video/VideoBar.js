@@ -19,6 +19,11 @@ export function VideoBar(props) {
         }
     }
 
+    const handleConfirm = () => { };
+
+    const handleReject = () => { };
+
+
     return (
         <div className="video-bar bp3-text-small">
             <text>{filename}</text>
@@ -30,10 +35,12 @@ export function VideoBar(props) {
                 minimal={true}>
                 <Button
                     icon="tick"
-                    intent="success" />
+                    intent="success"
+                    onClick={handleConfirm} />
                 <Button
                     icon="cross"
-                    intent="warning" />
+                    intent="warning"
+                    onClick={handleReject} />
             </ButtonGroup >
         </div >
     );

@@ -27,10 +27,10 @@ export function projectReducer(state, action) {
             {
                 return state.deleteTask(payload.key);
             }
-        case 'UPDATE_TASK':
-            {
-                return updateTask(state, payload.task);
-            }
+        /*   case 'UPDATE_TASK':
+               {
+                   return updateTask(state, payload.task);
+               }*/
         case 'SET_SELECTED_TASK':
             {
                 return state.setSelectedTask(payload.key);
