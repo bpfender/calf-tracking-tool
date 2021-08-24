@@ -74,6 +74,12 @@ export function taskReducer(state, action) {
         case 'SET_KEYFRAMES': {
             return state.setKeyframes(payload.keyframes);
         }
+        case 'CONFIRM_FRAME': {
+            return state.setReviewed(payload.frame);
+        }
+        case 'REJECT_FRAME': {
+            return state.unsetReviewed(payload.frame);
+        }
         default: {
             const newTrack = trackReducer(state.getTrack(payload.key), action);
             return state.updateTrack(payload.key, newTrack);

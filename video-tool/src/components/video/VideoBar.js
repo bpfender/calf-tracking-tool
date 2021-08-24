@@ -1,5 +1,6 @@
-import { Button, ButtonGroup, Spinner } from '@blueprintjs/core';
-import React from 'react';
+import { Button, ButtonGroup, Classes, Spinner } from '@blueprintjs/core';
+import React, { useEffect, useRef, useState } from 'react';
+import { getNextReviewed, getPrevReviewed } from '../annotations/TaskFactory';
 
 //FIXME spinner not centred properly
 export function VideoBar(props) {
@@ -7,7 +8,10 @@ export function VideoBar(props) {
         filename,
         framerate,
         videoWidth,
-        videoHeight } = props;
+        videoHeight,
+        projectDispatch,
+        currentFrame,
+        isReviewed } = props;
 
     const setVideoInfo = () => {
         if (!src) {
@@ -19,13 +23,22 @@ export function VideoBar(props) {
         }
     }
 
-    const handleConfirm = () => { };
+    const handleConfirm = () => {
+        projectDispatch({
+            type: 'CONFIRM_FRAME',
+            payload: { frame: currentFrame }
+        })
+    };
 
-    const handleReject = () => { };
-
+    const handleReject = () => {
+        projectDispatch({
+            type: 'REJECT_FRAME',
+            payload: { frame: currentFrame }
+        });
+    };
 
     return (
-        <div className="video-bar bp3-text-small">
+        <div className="video-bar">
             <text>{filename}</text>
             <div className="video-bar-key-info">
                 {setVideoInfo()}
@@ -36,12 +49,13 @@ export function VideoBar(props) {
                 <Button
                     icon="tick"
                     intent="success"
+                    active={isReviewed}
                     onClick={handleConfirm} />
                 <Button
                     icon="cross"
                     intent="warning"
                     onClick={handleReject} />
             </ButtonGroup >
-        </div >
+        </ div >
     );
 }

@@ -33,7 +33,7 @@ export function TaskFactory() {
 
         setTotalFrames: function (frames) {
             const newTask = setIn(this, ['totalFrames'], frames);
-            newTask.reviewed = List(Array(frames).fill(0));
+            //   newTask.reviewed = List(Array(frames).fill(0));
             return newTask;
         },
 
@@ -123,12 +123,43 @@ export function TaskFactory() {
                     );
                 });
         },
+
+        setReviewed: function (frame) {
+            const i = this.reviewed.findIndex(val => frame <= val);
+            if (i === -1) {
+                console.log("NO INDEX");
+                return updateIn(this, ['reviewed'], list =>
+                    list.push(frame)
+                );
+            }
+            else if (this.reviewed.get(i) === frame) {
+                console.log("EXISTS");
+                return this;
+            } else {
+                console.log("NEW");
+                return updateIn(this, ['reviewed'], list =>
+                    list.insert(i, frame)
+                );
+            }
+        },
+
+        unsetReviewed: function (frame) {
+            const i = this.reviewed.findIndex(val => val === frame);
+
+            if (i === -1) {
+                return this;
+            } else {
+                return updateIn(this, ['reviewed'], list =>
+                    list.delete(i)
+                );
+            }
+        },
+
+        isReviewed: function (frame) {
+            return this.reviewed.includes(frame)
+        }
     };
 }
-
-
-
-
 
 export function loadTask(parsedTask) {
     const task = TaskFactory();

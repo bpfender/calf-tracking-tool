@@ -51,6 +51,12 @@ function Player(props) {
         console.log(playerState.currentFrame);
     }, [playerState.currentFrame])
 
+    const isReviewed = () => {
+        if (playerState.playing) {
+            return false;
+        }
+        return annotations.isReviewed(playerState.currentFrame);
+    };
 
     return (
         <div className={props.className}>
@@ -60,14 +66,17 @@ function Player(props) {
                     src={playerState.src}
                     framerate={playerState.framerate}
                     videoWidth={playerState.videoWidth}
-                    videoHeight={playerState.videoHeight} />
+                    videoHeight={playerState.videoHeight}
+                    projectDispatch={projectDispatch}
+                    isReviewed={isReviewed()}
+                    currentFrame={playerState.currentFrame}
+                />
                 <VideoSource
                     src={playerState.src}
                     hidden={hidden}
                     videoHandle={annotations.videoHandle}
                     projectDispatch={projectDispatch}
-                    playerDispatch={playerDispatch}
-                    projectDispatch={projectDispatch} />
+                    playerDispatch={playerDispatch} />
                 <div
                     ref={videoContainerRef}
                     className="video-container">

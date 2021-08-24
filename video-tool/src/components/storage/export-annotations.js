@@ -10,13 +10,15 @@ export function exportYOLOv5(task) {
             const keys = task.getTagIds(tag);
             for (const key of keys) {
                 const label = task.getTrack(key).getLabel(frame);
-                const rotation = label.rotation;
-                const x = label.x;
-                const y = label.y;
-                const h = label.w * Math.cos(rotation) + label.h * Math.sin(rotation);
-                const w = label.w * Math.sin(rotation) + label.h * Math.cos(rotation);
+                if (label) {
+                    const rotation = label.rotation;
+                    const x = label.x;
+                    const y = label.y;
+                    const h = label.w * Math.cos(rotation) + label.h * Math.sin(rotation);
+                    const w = label.w * Math.sin(rotation) + label.h * Math.cos(rotation);
 
-                s += `${tagIndex} ${x} ${y} ${w} ${h}\n`;
+                    s += `${tagIndex} ${x} ${y} ${w} ${h}\n`;
+                }
             }
 
             tagIndex++;
@@ -38,13 +40,15 @@ export function exportYOLOv5Rotated(task) {
             const keys = task.getTagIds(tag);
             for (const key of keys) {
                 const label = task.getTrack(key).getLabel(frame);
-                const x = label.x;
-                const y = label.y;
-                const w = label.w;
-                const h = label.h;
-                const rotation = label.rotation;
+                if (label) {
+                    const x = label.x;
+                    const y = label.y;
+                    const w = label.w;
+                    const h = label.h;
+                    const rotation = label.rotation;
 
-                s += `${tagIndex} ${x} ${y} ${w} ${h} ${rotation}\n`;
+                    s += `${tagIndex} ${x} ${y} ${w} ${h} ${rotation}\n`;
+                }
             }
 
             tagIndex++;

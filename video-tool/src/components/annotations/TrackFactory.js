@@ -118,6 +118,7 @@ export function TrackFactory(totalFrames) {
             return this.labels.get(frame - 1);
         },
 
+        // FIXME not sure about naming of interpolation function
         cutLabel: function (frame) {
             let nextFrame = getNextAnchor(this.anchors, frame);
             if (nextFrame === -1) {

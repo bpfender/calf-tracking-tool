@@ -101,7 +101,7 @@ export function LabelEntry(props) {
                         <Button
                             icon="cut"
                             onClick={handleCut}
-                            intent={labelCut ? "primary" : "none"}
+                            intent={labelCut ? "danger" : "none"}
                         />
                         <Divider />
                         <ColourPalettePopover
