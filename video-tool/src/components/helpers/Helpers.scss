@@ -1,21 +1,52 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 
+.helpers{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.helper-tab{
+    flex:1;
+}
+
 .helper-panel{
+    height:100%;
     display: flex;
     align-items:baseline;
     justify-content: space-between;
 }
 
 .helper-panel-left{
+    height: inherit;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
     flex:2;
 }
 
 .helper-panel-right{
+    height: inherit;
     display:flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: flex-end;
     width: 30%;
+}
+
+.helper-panel-next-prev{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.helper-panel-frame-count{
+    width: fit-content;
+}
+
+.helper-panel-frame-info{
+    margin-left: $pt-grid-size;
+    width: fit-content
 }
 
 .helper-keyframe-bar{
@@ -26,4 +57,31 @@
 
 .helper-keyframe-progress{
     margin:$pt-grid-size;
+}
+
+
+
+.helper-panel{
+    height:100%;
+    display:grid;
+    grid-template-columns: 0.7fr 0.3fr;
+    grid-template-rows: 0.5fr 0.5fr;
+    grid-template-areas: "tl tr"
+                         "bl br";
+}
+
+.helper-panel-top-left{
+    grid-area: tl;
+}
+
+.helper-panel-bottom-left{
+    grid-area: bl;
+}
+
+.helper-panel-top-right{
+    grid-area: tr;
+}
+
+.helper-panel-bottom-right{
+    grid-area: br;
 }

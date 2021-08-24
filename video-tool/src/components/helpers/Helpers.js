@@ -1,6 +1,6 @@
 import { Tab, Tabs } from '@blueprintjs/core';
 import React from 'react';
-import { KeyFrames } from './KeyFrames';
+import { Keyframes } from './Keyframes';
 import './Helpers.scss';
 
 export function Helpers(props) {
@@ -11,7 +11,8 @@ export function Helpers(props) {
         projectDispatch,
         keyframes,
         playerVidRef,
-        currentFrame } = props;
+        currentFrame,
+        paused } = props;
 
     return (
         <Tabs
@@ -19,7 +20,8 @@ export function Helpers(props) {
             <Tab
                 id="keyframes"
                 title="Keyframes"
-                panel={<KeyFrames
+                panelClassName="helper-tab"
+                panel={<Keyframes
                     framerate={framerate}
                     src={src}
                     duration={duration}
@@ -27,6 +29,7 @@ export function Helpers(props) {
                     keyframes={keyframes}
                     playerVidRef={playerVidRef}
                     currentFrame={currentFrame}
+                    paused={paused}
                 />} />
             <Tab
                 id="anchors"

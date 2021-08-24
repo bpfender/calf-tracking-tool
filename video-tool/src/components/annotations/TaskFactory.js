@@ -165,6 +165,10 @@ export function TaskFactory() {
 
         isKeyframe: function (frame) {
             return this.keyframes.includes(frame);
+        },
+
+        keyframeIndex: function (frame) {
+            return this.keyframes.indexOf(frame);
         }
     };
 }

@@ -116,7 +116,8 @@ export default function App(props) {
         projectDispatch={projectDispatch}
         keyframes={project.getSelectedTask().keyframes}
         playerVidRef={videoRef}
-        currentFrame={playerState.currentFrame} />
+        currentFrame={playerState.currentFrame}
+        paused={playerState.paused} />
 
       <RightSidebar
         className="right-sidebar"

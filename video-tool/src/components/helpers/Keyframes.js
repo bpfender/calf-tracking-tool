@@ -1,12 +1,38 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { bmvbhash } from 'blockhash-core';
-import { Button, ButtonGroup, ProgressBar } from '@blueprintjs/core';
-import { getTimeAsFrames } from '../video/video-functions';
-import { hammingDistance } from '../utils';
-import { keyframeButtonStates, keyframeProgressStates, keyframeState } from './keyframeStates';
-import { KeyframeNav } from './KeyframeNav';
+import React from 'react';
+import { HelperPanel } from './HelperPanel';
+import { KeyframeDetector } from './KeyframeDetector';
 
-//FIXME load video and remove?
+
+export function Keyframes(props) {
+  const {
+    paused,
+    framerate,
+    src,
+    projectDispatch,
+    keyframes,
+    currentFrame,
+    playerVidRef } = props;
+
+
+  const content =
+    <KeyframeDetector
+      src={src}
+      framerate={framerate}
+      projectDispatch={projectDispatch} />
+
+  return (
+    <HelperPanel
+      description={<text>BLABLAH</text>}
+      content={content}
+      frameList={keyframes}
+      currentFrame={currentFrame}
+      paused={paused}
+      videoRef={playerVidRef}
+      framerate={framerate} />
+  )
+}
+
+/*//FIXME load video and remove?
 
 const HAMMING_THRESHOLD = 5;
 const FRAME_SKIP = 5;
@@ -15,8 +41,8 @@ const HASH_BITS = 16;
 // TODO handle error, handle new files, remove video element
 // https://stackoverflow.com/questions/3258587/how-to-properly-unload-destroy-a-video-element?answertab=oldest#tab-top
 
-export function KeyFrames(props) {
-  const { framerate, src, projectDispatch, keyframes, currentFrame, playerVidRef } = props;
+export function Keyframes(props) {
+  const { paused, framerate, src, projectDispatch, keyframes, currentFrame, playerVidRef } = props;
 
   const [state, setState] = useState(keyframeState.waiting);
   const [buttonState, setButtonState] = useState(keyframeButtonStates.waiting);
@@ -199,13 +225,42 @@ export function KeyFrames(props) {
       .join(':');
   };
 
+  const keyframeNumber = () => {
+    if (!keyframes.size) {
+      return "- / -";
+    } else if (paused) {
+      const number = keyframes.indexOf(currentFrame);
+      if (number >= 0) {
+        return `${number} / ${keyframes.size}`;
+      }
+    }
+    return `- / ${keyframes.size}`;
+  };
+
+  const nextKeyframe = () => {
+    if (!paused || !keyframes.size) {
+      return "-"
+    } else {
+      return keyframes.find(val => val > currentFrame, this, "-");
+    }
+  }
+
+  const prevKeyframe = () => {
+    if (!paused || !keyframes.size) {
+      return "-"
+    } else {
+      return keyframes.findLast(val => val < currentFrame, this, "-");
+    }
+  }
 
   //FIXME use offscreen canvas
   return (
     <div className="helper-panel">
       <div className="helper-panel-left">
-        <p>Detect keyframes for suggested (important) frames to annotate.</p>
-        <p>This may take some time and take some processing power from your computer.</p>
+        <div>
+          <p>Detect keyframes for suggested (important) frames to annotate.</p>
+          <p>This may take some time and take some processing power from your computer.</p>
+        </div>
         <div className="helper-keyframe-bar">
           <Button
             small={true}
@@ -225,8 +280,12 @@ export function KeyFrames(props) {
       </div>
 
       <div className="helper-panel-right">
-        <text>number</text>
-        <text>frame</text>
+        <Callout className="helper-panel-frame-count"><text>{"Keyframe: " + keyframeNumber()}</text></Callout>
+        <div className="helper-panel-next-prev">
+          <Button className="helper-panel-frame-info"><text>{"Prev keyframe: " + prevKeyframe()}</text></Button>
+          <Button className="helper-panel-frame-info"><text>{"Next keyframe: " + nextKeyframe()}</text></Button>
+        </div>
+
         <KeyframeNav
           disabled={state !== keyframeState.done}
           keyframes={keyframes}

@@ -7,7 +7,7 @@ import "./Player.scss";
 import { VideoBar } from './VideoBar';
 import VideoSource from './VideoSource';
 import { nextFrame } from './video-functions';
-import { KeyFrames } from '../helpers/KeyFrames';
+
 import { useDimensions } from './useDimensions';
 import { Helpers } from '../helpers/Helpers';
 

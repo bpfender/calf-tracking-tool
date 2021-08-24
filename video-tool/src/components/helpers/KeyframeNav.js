@@ -37,7 +37,6 @@ export function KeyframeNav(props) {
                     text="Next"
                     onClick={handleNextClick} />
             </ButtonGroup>
-            <text>{keyframeIndex}/{keyframes ? keyframes.size : 0}</text>
         </div>
     )
 }

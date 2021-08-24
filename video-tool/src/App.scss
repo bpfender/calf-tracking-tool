@@ -32,12 +32,12 @@
 .main-content{
   display: flex;
   flex-direction: column;
-  margin: $pt-grid-size 2*$pt-grid-size;
+  padding: $pt-grid-size 2*$pt-grid-size;
   grid-area: main;
   }
 
 .helpers{
-  margin: $pt-grid-size 2*$pt-grid-size;
+  padding: $pt-grid-size 2*$pt-grid-size;
   grid-area:helpers;
 }
 
