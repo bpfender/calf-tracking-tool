@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import './App.scss';
 import { defaultPlayerState, playerReducer } from './components/state/player-reducer.js';
 import { annotationReducer } from './components/state/task-reducer';
@@ -9,6 +9,7 @@ import { Header } from './components/header/Header';
 import { projectReducer } from './components/state/project-reducer';
 import { getCurrentTask, getTask, ProjectFactory } from './components/annotations/ProjectFactory';
 import { TaskFactory } from './components/annotations/TaskFactory';
+import { TabbedPanel } from './components/helpers/TabbedPanel';
 
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
@@ -19,6 +20,7 @@ export default function App(props) {
   //const [annotations, projectDispatch] = useReducer(annotationReducer, getCurrentTask(project));
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 
+  const videoRef = useRef(null);
   // Check whether VAT directory has been set before
   /* useEffect(() => {
      (async function () {
@@ -98,14 +100,24 @@ export default function App(props) {
         projectDispatch={projectDispatch}
         playerDispatch={playerDispatch}
         annotations={project.getSelectedTask()} />
-      <LeftSidebar
-        className="left-sidebar" />
       <Player
         className="main-content"
+        videoRef={videoRef}
         playerState={playerState}
         playerDispatch={playerDispatch}
         annotations={project.getSelectedTask()}
         projectDispatch={projectDispatch} />
+
+      <TabbedPanel
+        className="helpers"
+        framerate={playerState.framerate}
+        src={playerState.src}
+        duration={playerState.duration}
+        projectDispatch={projectDispatch}
+        keyframes={project.getSelectedTask().keyframes}
+        playerVidRef={videoRef}
+        currentFrame={playerState.currentFrame} />
+
       <RightSidebar
         className="right-sidebar"
         playerState={playerState}
@@ -115,7 +127,6 @@ export default function App(props) {
         labels={project.labels}
         currentFrame={playerState.currentFrame}
       />
-      <footer className="footer" />
     </div >
   );
 }

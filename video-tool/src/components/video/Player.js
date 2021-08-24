@@ -16,11 +16,10 @@ import { TabbedPanel } from '../helpers/TabbedPanel';
 function Player(props) {
     const {
         annotations, projectDispatch,
-        playerState, playerDispatch } = props;
+        playerState, playerDispatch, videoRef } = props;
 
     const [hidden, setHidden] = useState(false);
 
-    const videoRef = useRef(null);
     const videoContainerRef = useRef(null);
     const videoDimensions = useDimensions(videoRef);
 
@@ -138,15 +137,6 @@ function Player(props) {
                 framesToSkip={playerState.framesToSkip}
                 vsync={playerState.vsync} />
 
-
-            <TabbedPanel
-                framerate={playerState.framerate}
-                src={playerState.src}
-                duration={playerState.duration}
-                projectDispatch={projectDispatch}
-                keyframes={annotations.keyframes}
-                playerVidRef={videoRef}
-                currentFrame={playerState.currentFrame} />
 
 
         </div >

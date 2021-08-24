@@ -6,11 +6,11 @@
 
 .App {
   display:grid;
-  grid-template-columns: auto 1fr 0.2fr;
-  grid-template-rows:auto 1fr auto;
-  grid-template-areas:"header header settings"
-                      "left-sidebar main right-sidebar"
-                      "footer footer footer";
+  grid-template-columns: 0.8fr 0.2fr;
+  grid-template-rows:auto 0.7fr 0.3fr;
+  grid-template-areas:"header settings"
+                      "main right-sidebar"
+                      "helpers right-sidebar";
 
 
   height:100vh;
@@ -30,13 +30,15 @@
 }
 
 .main-content{
+  display: flex;
+  flex-direction: column;
   margin: $pt-grid-size 2*$pt-grid-size;
   grid-area: main;
   }
 
-.left-sidebar{
-  grid-area: left-sidebar;
-  background-color: $dark-gray4;
+.helpers{
+  margin: $pt-grid-size 2*$pt-grid-size;
+  grid-area:helpers;
 }
 
 .right-sidebar{
@@ -60,12 +62,3 @@
   background-color: $dark-gray1;
   outline: 1px solid $dark-gray1;
 }
-
-.footer{
-  grid-area:footer;
-  background-color: $dark-gray1;
-  height:auto;
-}
-
-
-

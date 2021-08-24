@@ -13,7 +13,8 @@ export function TabbedPanel(props) {
         currentFrame } = props;
 
     return (
-        <Tabs>
+        <Tabs
+            className={props.className}>
             <Tab
                 id="keyframes"
                 title="Keyframes"
