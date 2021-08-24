@@ -1,8 +1,6 @@
-import { Button, ButtonGroup, Classes, Spinner } from '@blueprintjs/core';
+import { Button, ButtonGroup, Icon, Spinner } from '@blueprintjs/core';
 import React, { useEffect, useRef, useState } from 'react';
-import { getNextReviewed, getPrevReviewed } from '../annotations/TaskFactory';
 
-//FIXME spinner not centred properly
 export function VideoBar(props) {
     const { src,
         filename,
@@ -11,7 +9,9 @@ export function VideoBar(props) {
         videoHeight,
         projectDispatch,
         currentFrame,
-        isReviewed } = props;
+        isReviewed,
+        isKeyframe,
+        isAnchor } = props;
 
     const setVideoInfo = () => {
         if (!src) {
@@ -21,6 +21,29 @@ export function VideoBar(props) {
         } else {
             return <text className="center">{framerate} fps | {videoWidth} x {videoHeight}</text>
         }
+    }
+
+    const formatTitle = () => {
+        const title = [<text>{filename}</text>];
+
+        if (isKeyframe) {
+            title.push(
+                <Icon
+                    className="video-bar-icon"
+                    icon="key" />
+            );
+        }
+
+        if (isAnchor) {
+            title.push(
+                <Icon
+                    className="video-bar-icon"
+                    icon="paperclip"
+                    color={isAnchor} />
+            );
+        }
+        console.log(isKeyframe, isAnchor);
+        return title
     }
 
     const handleConfirm = () => {
@@ -37,9 +60,13 @@ export function VideoBar(props) {
         });
     };
 
+
+
     return (
         <div className="video-bar">
-            <text>{filename}</text>
+            <div className="video-bar-title">
+                {formatTitle()}
+            </div>
             <div className="video-bar-key-info">
                 {setVideoInfo()}
             </div>

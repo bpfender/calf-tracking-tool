@@ -167,6 +167,10 @@ export function TrackFactory(totalFrames) {
             const trackNewAnchors = setIn(this, ['anchors'], newAnchors);
 
             return setIn(trackNewAnchors, ['labels'], newLabels);
+        },
+
+        isAnchor: function (frame) {
+            return this.anchors.includes(frame);
         }
     };
 }

@@ -73,9 +73,12 @@
     background-color: $dark-gray1;
 }
 
-.video-bar text{
-    flex:1;
-    
+.video-bar-icon{
+    padding-left: $pt-grid-size;
+}
+
+.video-bar-title{
+    flex:1;    
 }
 
 .video-bar.center{

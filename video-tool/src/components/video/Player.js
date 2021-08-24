@@ -52,10 +52,29 @@ function Player(props) {
     }, [playerState.currentFrame])
 
     const isReviewed = () => {
-        if (playerState.playing) {
-            return false;
+        if (playerState.paused) {
+            return annotations.isReviewed(playerState.currentFrame);
         }
-        return annotations.isReviewed(playerState.currentFrame);
+
+        return false;
+    };
+
+    const isKeyframe = () => {
+        return playerState.paused ?
+            annotations.isKeyframe(playerState.currentFrame)
+            : false;
+    };
+
+    const anchor = () => {
+        if (playerState.paused) {
+            const track = annotations.getSelectedTrack();
+            if (track) {
+                if (track.isAnchor(playerState.currentFrame)) {
+                    return track.colour;
+                }
+            }
+        }
+        return null;
     };
 
     return (
@@ -69,6 +88,8 @@ function Player(props) {
                     videoHeight={playerState.videoHeight}
                     projectDispatch={projectDispatch}
                     isReviewed={isReviewed()}
+                    isKeyframe={isKeyframe()}
+                    isAnchor={anchor()}
                     currentFrame={playerState.currentFrame}
                 />
                 <VideoSource

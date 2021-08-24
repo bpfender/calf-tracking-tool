@@ -12,7 +12,7 @@ export function TaskFactory() {
         reviewed: List(),
         //FIXME potentially make keyframes mutable array that remains the same
         // once caluclated, persistent and ignored in undo/redo
-        keyframes: null,
+        keyframes: List(),
 
         tags: Map(), // add ids for tag association
 
@@ -101,6 +101,10 @@ export function TaskFactory() {
             return this.tracks.get(key);
         },
 
+        getSelectedTrack: function () {
+            return this.tracks.get(this.selected);
+        },
+
         getTagIds: function (tag) {
             return this.tags.get(tag);
         },
@@ -157,6 +161,10 @@ export function TaskFactory() {
 
         isReviewed: function (frame) {
             return this.reviewed.includes(frame)
+        },
+
+        isKeyframe: function (frame) {
+            return this.keyframes.includes(frame);
         }
     };
 }
