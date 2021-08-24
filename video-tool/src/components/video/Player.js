@@ -9,6 +9,7 @@ import VideoSource from './VideoSource';
 import { nextFrame } from './video-functions';
 import { KeyFrames } from '../helpers/KeyFrames';
 import { useDimensions } from './useDimensions';
+import { TabbedPanel } from '../helpers/TabbedPanel';
 
 //FIXME position of video isn't quite right yet. Not sure what's happen
 
@@ -137,23 +138,33 @@ function Player(props) {
                 framesToSkip={playerState.framesToSkip}
                 vsync={playerState.vsync} />
 
-            <div className="player-helpers">
 
-                <KeyFrames
-                    framerate={playerState.framerate}
-                    src={playerState.src}
-                    duration={playerState.duration}
-                    projectDispatch={projectDispatch}
-                    keyframes={annotations.keyframes}
-                    playerVidRef={videoRef}
-                    currentFrame={playerState.currentFrame}
-                />
-            </div>
+            <TabbedPanel
+                framerate={playerState.framerate}
+                src={playerState.src}
+                duration={playerState.duration}
+                projectDispatch={projectDispatch}
+                keyframes={annotations.keyframes}
+                playerVidRef={videoRef}
+                currentFrame={playerState.currentFrame} />
+
+
         </div >
     );
 }
 
 export default Player;
+
+/*<KeyFrames
+framerate={playerState.framerate}
+src={playerState.src}
+duration={playerState.duration}
+projectDispatch={projectDispatch}
+keyframes={annotations.keyframes}
+playerVidRef={videoRef}
+currentFrame={playerState.currentFrame}
+/>*/
+
 
 
 //<Info videoState={playerState} />

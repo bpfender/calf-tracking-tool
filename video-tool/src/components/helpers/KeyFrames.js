@@ -199,30 +199,41 @@ export function KeyFrames(props) {
       .join(':');
   };
 
+
+  //FIXME use offscreen canvas
   return (
-    <div className="keyframes">
-      <KeyframeNav
-        disabled={state !== keyframeState.done}
-        keyframes={keyframes}
-        currentFrame={currentFrame}
-        videoRef={playerVidRef}
-        framerate={framerate} />
+    <div className="helper-panel">
+      <div className="helper-panel-left">
+        <p>Detect keyframes for suggested (important) frames to annotate.</p>
+        <p>This may take some time and take some processing power from your computer.</p>
+        <div className="helper-keyframe-bar">
+          <Button
+            small={true}
+            icon={buttonState.icon}
+            intent={buttonState.intent}
+            disabled={buttonState.disabled}
+            text={buttonState.text}
+            onClick={handleClick}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave} />
+          <ProgressBar
+            className="helper-keyframe-progress"
+            animate={progressState.animate}
+            intent={progressState.intent}
+            value={progressState.value} />
+        </div>
+      </div>
 
-      <Button
-        small={true}
-        icon={buttonState.icon}
-        intent={buttonState.intent}
-        disabled={buttonState.disabled}
-        text={buttonState.text}
-        onClick={handleClick}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      />
-      <ProgressBar
-        animate={progressState.animate}
-        intent={progressState.intent}
-        value={progressState.value} />
-
+      <div className="helper-panel-right">
+        <text>number</text>
+        <text>frame</text>
+        <KeyframeNav
+          disabled={state !== keyframeState.done}
+          keyframes={keyframes}
+          currentFrame={currentFrame}
+          videoRef={playerVidRef}
+          framerate={framerate} />
+      </div>
 
       <div
         hidden={true}>
