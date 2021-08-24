@@ -1,8 +1,9 @@
 import { Tab, Tabs } from '@blueprintjs/core';
 import React from 'react';
 import { KeyFrames } from './KeyFrames';
+import './Helpers.scss';
 
-export function TabbedPanel(props) {
+export function Helpers(props) {
     const {
         framerate,
         src,

@@ -9,7 +9,8 @@ import { Header } from './components/header/Header';
 import { projectReducer } from './components/state/project-reducer';
 import { getCurrentTask, getTask, ProjectFactory } from './components/annotations/ProjectFactory';
 import { TaskFactory } from './components/annotations/TaskFactory';
-import { TabbedPanel } from './components/helpers/TabbedPanel';
+import { Helpers } from './components/helpers/Helpers';
+import { Divider } from '@blueprintjs/core';
 
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
@@ -107,8 +108,7 @@ export default function App(props) {
         playerDispatch={playerDispatch}
         annotations={project.getSelectedTask()}
         projectDispatch={projectDispatch} />
-
-      <TabbedPanel
+      <Helpers
         className="helpers"
         framerate={playerState.framerate}
         src={playerState.src}

@@ -1,0 +1,29 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.helper-panel{
+    display: flex;
+    align-items:baseline;
+    justify-content: space-between;
+}
+
+.helper-panel-left{
+    flex:2;
+}
+
+.helper-panel-right{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 30%;
+}
+
+.helper-keyframe-bar{
+    margin:2*$pt-grid-size;
+    display:flex;
+    align-items: center;
+}
+
+.helper-keyframe-progress{
+    margin:$pt-grid-size;
+}

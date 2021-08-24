@@ -9,7 +9,7 @@ import VideoSource from './VideoSource';
 import { nextFrame } from './video-functions';
 import { KeyFrames } from '../helpers/KeyFrames';
 import { useDimensions } from './useDimensions';
-import { TabbedPanel } from '../helpers/TabbedPanel';
+import { Helpers } from '../helpers/Helpers';
 
 //FIXME position of video isn't quite right yet. Not sure what's happen
 
