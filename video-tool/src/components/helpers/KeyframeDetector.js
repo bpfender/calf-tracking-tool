@@ -28,11 +28,21 @@ export function KeyframeDetector(props) {
     const contextRef = useRef(null);
     const keyframesRef = useRef([]);
 
-    const width = 400;
-    const height = 300;
+    const width = videoRef.current ? videoRef.current.videoWidth / 3 : 0;
+    const height = videoRef.current ? videoRef.current.videoHeight / 3 : 0;
 
     useEffect(() => {
         contextRef.current = canvasRef.current.getContext('2d');
+
+        const video = videoRef.current;
+        return (() => {
+            video.src = "";
+            video.load();
+        })
+    }, [])
+
+    useEffect(() => {
+
     }, [])
 
     useEffect(() => {
@@ -82,10 +92,10 @@ export function KeyframeDetector(props) {
     const handleClick = async () => {
         if (state === keyframeState.ready) {
             setState(keyframeState.processing);
+            keyframesRef.current = [];
             await videoRef.current.play();
         } else if (state === keyframeState.cancel ||
             state === keyframeState.reset) {
-            videoRef.current.src = "";
             videoRef.current.load();
             setState(keyframeState.waiting);
         }
@@ -203,6 +213,7 @@ export function KeyframeDetector(props) {
     return (
         <div className="helper-keyframe-bar">
             <Button
+                className="helper-keyframe-button"
                 small={true}
                 icon={buttonState.icon}
                 intent={buttonState.intent}

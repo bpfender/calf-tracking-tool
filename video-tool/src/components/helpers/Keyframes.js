@@ -18,10 +18,12 @@ export function Keyframes(props) {
     <KeyframeDetector
       src={src}
       framerate={framerate}
-      projectDispatch={projectDispatch} />
+      projectDispatch={projectDispatch}
+      keyframes={keyframes} />
 
   return (
     <HelperPanel
+      type={"Keyframe"}
       description={<text>BLABLAH</text>}
       content={content}
       frameList={keyframes}

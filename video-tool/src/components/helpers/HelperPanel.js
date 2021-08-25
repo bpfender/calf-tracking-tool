@@ -1,9 +1,9 @@
-import { Button, ButtonGroup, Callout } from '@blueprintjs/core';
+import { Button, ButtonGroup, Callout, H3, H4, H5 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import { seekFrame } from '../video/video-functions';
 
 export function HelperPanel(props) {
-    const { description, content, frameList, currentFrame, paused, videoRef, framerate } = props;
+    const { type, description, content, frameList, currentFrame, paused, videoRef, framerate } = props;
 
     const [frameListLength, setFrameListLength] = useState(frameList.size);
 
@@ -77,7 +77,7 @@ export function HelperPanel(props) {
 
             <div className="helper-panel-top-right">
                 <Callout className="helper-panel-frame-count">
-                    <text>{"Keyframe: " + formatKeyframeNumber()}</text>
+                    <H4>{`${type}: ${formatKeyframeNumber()}`}</H4>
                 </Callout>
             </div>
             <div className="helper-panel-bottom-right">
@@ -87,11 +87,15 @@ export function HelperPanel(props) {
                     <Button
                         className="helper-panel-frame-info"
                         onClick={handlePrevClick}
-                        text={"Prev keyframe: " + formatPrevFrame()} />
+                        intent="primary"
+                        outlined={true}
+                        text={`Prev ${type.toLowerCase()}: ${formatPrevFrame()}`} />
                     <Button
                         className="helper-panel-frame-info"
                         onClick={handleNextClick}
-                        text={"Next keyframe: " + formatNextFrame()} />
+                        intent="primary"
+                        outlined={true}
+                        text={`Next ${type.toLowerCase()}: ${formatNextFrame()}`} />
                 </ButtonGroup>
             </div>
         </div>

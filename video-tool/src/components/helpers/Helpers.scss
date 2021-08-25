@@ -41,12 +41,20 @@
 }
 
 .helper-panel-frame-count{
+    margin-left:auto;
+    margin-right: 0;
+    padding: 3*$pt-grid-size;
     width: fit-content;
 }
 
 .helper-panel-frame-info{
+    padding: 2*$pt-grid-size;
     margin-left: $pt-grid-size;
     width: fit-content
+}
+
+.helper-keyframe-button{
+    padding: 2*$pt-grid-size;
 }
 
 .helper-keyframe-bar{

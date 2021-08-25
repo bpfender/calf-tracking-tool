@@ -1,7 +1,9 @@
-import { Tab, Tabs } from '@blueprintjs/core';
+import { H4, Tab, Tabs } from '@blueprintjs/core';
 import React from 'react';
 import { Keyframes } from './Keyframes';
 import './Helpers.scss';
+import { Reviewed } from './Reviewed';
+import { Anchors } from './Anchors';
 
 export function Helpers(props) {
     const {
@@ -10,6 +12,8 @@ export function Helpers(props) {
         duration,
         projectDispatch,
         keyframes,
+        anchors,
+        reviewed,
         playerVidRef,
         currentFrame,
         paused } = props;
@@ -19,7 +23,7 @@ export function Helpers(props) {
             className={props.className}>
             <Tab
                 id="keyframes"
-                title="Keyframes"
+                title={<H4>Keyframes</H4>}
                 panelClassName="helper-tab"
                 panel={<Keyframes
                     framerate={framerate}
@@ -32,11 +36,27 @@ export function Helpers(props) {
                     paused={paused}
                 />} />
             <Tab
-                id="anchors"
-                title="Anchors" />
-            <Tab
                 id="reviewed"
-                title="Reviewed" />
+                title={<H4>Reviewed</H4>}
+                panelClassName="helper-tab"
+                panel={<Reviewed
+                    reviewed={reviewed}
+                    currentFrame={currentFrame}
+                    paused={paused}
+                    videoRef={playerVidRef}
+                    framerate={framerate} />} />
+            <Tab
+                id="anchors"
+                title={<H4>Anchors</H4>}
+                panelClassName="helper-tab"
+                panel={
+                    <Anchors
+                        anchors={reviewed}
+                        currentFrame={currentFrame}
+                        paused={paused}
+                        videoRef={playerVidRef}
+                        framerate={framerate} />
+                } />
         </Tabs>
     );
 }

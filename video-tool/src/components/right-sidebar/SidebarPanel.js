@@ -1,4 +1,4 @@
-import { Button, Collapse, Icon } from '@blueprintjs/core';
+import { Button, Collapse, H4, Icon } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
 export function SidebarPanel(props) {
@@ -18,13 +18,13 @@ export function SidebarPanel(props) {
     return (
         <div>
             <div className="sidebar-header">
-                <h4
+                <H4
                     onClick={() => { setExpand(!expand) }}>
                     <Icon
                         icon={expand ? "caret-down" : "caret-right"}
                     />
                     {name}
-                </h4>
+                </H4>
                 <Button
                     icon="add"
                     intent={intent}
