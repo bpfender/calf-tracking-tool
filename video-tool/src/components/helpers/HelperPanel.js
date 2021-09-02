@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Callout, H3, H4, H5 } from '@blueprintjs/core';
+import { Button, ButtonGroup, Callout, Card, H3, H4, H5 } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import { seekFrame } from '../video/video-functions';
 
@@ -67,7 +67,7 @@ export function HelperPanel(props) {
     };
 
     return (
-        <div className="helper-panel">
+        <Card className="helper-panel">
             <div className="helper-panel-top-left">
                 {description}
             </div>
@@ -98,6 +98,6 @@ export function HelperPanel(props) {
                         text={`Next ${type.toLowerCase()}: ${formatNextFrame()}`} />
                 </ButtonGroup>
             </div>
-        </div>
+        </Card>
     );
 }

@@ -3,7 +3,7 @@ import { FormGroup, HTMLSelect } from '@blueprintjs/core';
 import { setPlaybackRate } from '../video/video-functions';
 
 export default function PlaybackRateSelect(props) {
-    const { videoRef } = props;
+    const { videoRef, playbackRate } = props;
 
     const handleChange = (event) => {
         const rate = parseFloat(event.currentTarget.value);
@@ -12,11 +12,11 @@ export default function PlaybackRateSelect(props) {
 
     return (
         <FormGroup
-            label="Playback rate"
-            helperText="Playback rate"
+            label="Set playback rate"
             inline={true}>
             <HTMLSelect
-                onChange={handleChange}>
+                onChange={handleChange}
+                value={playbackRate}>
                 <option value="0.5">0.5x</option>
                 <option value="1">1x</option>
                 <option value="2">2x</option>

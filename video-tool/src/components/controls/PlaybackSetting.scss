@@ -1,7 +1,9 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
 .playback-setting-button{
     display:flex;
 }
 
 .playback-settings-menu{
-    background-color: black;
+    padding: $pt-grid-size;
 }

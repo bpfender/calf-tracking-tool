@@ -6,10 +6,9 @@ import Annotation from './Annotation.js';
 import "./Player.scss";
 import { VideoBar } from './VideoBar';
 import VideoSource from './VideoSource';
-import { nextFrame } from './video-functions';
+import { getFrameOffset, nextFrame } from './video-functions';
 
 import { useDimensions } from './useDimensions';
-import { Helpers } from '../helpers/Helpers';
 
 //FIXME position of video isn't quite right yet. Not sure what's happen
 
@@ -29,6 +28,12 @@ function Player(props) {
     }, [videoContainerRef]);
 
     useEffect(() => {
+        console.log("MEDIA TIME", playerState.mediaTime);
+        console.log("Seeked time", playerState.mediaTime + getFrameOffset(playerState.framerate))
+        console.log("Video current time", videoRef.current.currentTime);
+    }, [playerState.mediaTime])
+
+    useEffect(() => {
         if (playerState.framerate === 0) {
             videoContainerRef.current.hidden = true
             setHidden(false);
@@ -46,10 +51,6 @@ function Player(props) {
             videoContainerRef.current.hidden = true;
         }
     }, [annotations.videoHandle])*/
-
-    useEffect(() => {
-        console.log(playerState.currentFrame);
-    }, [playerState.currentFrame])
 
     const isReviewed = () => {
         if (playerState.paused) {
@@ -135,6 +136,7 @@ function Player(props) {
                 currentFrame={playerState.currentFrame}
                 framerate={playerState.framerate}
                 framesToSkip={playerState.framesToSkip}
+                playbackRate={playerState.playbackRate}
                 vsync={playerState.vsync} />
 
 

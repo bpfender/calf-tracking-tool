@@ -17,6 +17,7 @@ export default function Video(props) {
     }, [src, videoRef]);
 
     const handleVideoFrameCallback = useCallback((now, metadata) => {
+
         playerDispatch({
             type: 'FRAME_CALLBACK',
             payload: {

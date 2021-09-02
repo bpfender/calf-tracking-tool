@@ -14,7 +14,7 @@ export default function ControlBar(props) {
         videoRef, playerDispatch, totalFrames, duration,
         src, mediaTime, paused, seeking,
         currentFrame, framerate,
-        framesToSkip, vsync } = props;
+        framesToSkip, vsync, playbackRate } = props;
 
     const [selectedFrame, setSelectedFrame] = useState(1);
 
@@ -22,7 +22,6 @@ export default function ControlBar(props) {
         setSelectedFrame(currentFrame);
     }, [currentFrame]);
 
-    //FIXME video? syntax is shite slider time not directly needed for slider
     return (
         <div className="control-bar">
             <ButtonGroup
@@ -30,6 +29,8 @@ export default function ControlBar(props) {
                 <PlaybackSettings
                     videoRef={videoRef}
                     playerDispatch={playerDispatch}
+                    playbackRate={playbackRate}
+                    framesToSkip={framesToSkip}
                     disabled={src ? false : true} />
                 <Divider />
                 <Rewind

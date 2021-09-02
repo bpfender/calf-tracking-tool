@@ -1,9 +1,29 @@
-import { Button, ButtonGroup } from '@blueprintjs/core';
+import { Button, ButtonGroup, H5 } from '@blueprintjs/core';
 import React from 'react';
 import { HelperPanel } from './HelperPanel';
 
 export function Reviewed(props) {
-    const { reviewed, currentFrame, paused, videoRef, framerate } = props;
+    const { reviewed, currentFrame, paused, videoRef, framerate, projectDispatch } = props;
+
+    const handleConfirm = () => {
+        projectDispatch({
+            type: 'CONFIRM_FRAME',
+            payload: { frame: currentFrame },
+        });
+    };
+
+    const handleReject = () => {
+        projectDispatch({
+            type: 'REJECT_FRAME',
+            payload: { frame: currentFrame },
+        });
+    };
+
+    const description =
+        <div>
+            <H5>Reviewed frames have been confirmed as correct. </H5>
+            <p>Use this panel to reviwed your reviewed frames.</p>
+        </div>
 
     const content =
         <div>
@@ -13,20 +33,22 @@ export function Reviewed(props) {
                     icon="tick"
                     intent="success"
                     text="Confirm annotations"
-                    outlined={true} />
+                    outlined={true}
+                    onClick={handleConfirm} />
 
                 <Button
                     icon="cross"
                     intent="danger"
                     text="Reject annotations"
-                    outlined={true} />
+                    outlined={true}
+                    onClick={handleReject} />
             </ButtonGroup>
         </div>
 
     return (
         <HelperPanel
             type="Reviewed"
-            description={<text>reviewed</text>}
+            description={description}
             content={content}
             frameList={reviewed}
             currentFrame={currentFrame}

@@ -70,7 +70,7 @@ export class VideoFunctions {
     }
 
     async framerateCalcRecurse(prev = [0, 0, 0]) {
-        const metadata = await requestVideoFramePromise(this.video);
+        const metadata = await requestVideoFramePromise();
 
         const frames = metadata.presentedFrames;
         const time = metadata.mediaTime;
@@ -100,6 +100,7 @@ export function getFramesAsTime(n, fps) {
     return n / fps;
 }
 
+//FIXME not sure about rounding here
 export function getTimeAsFrames(time, fps) {
     return Math.round(time * fps + 1); // +1 starting frame offset
 }
@@ -110,25 +111,35 @@ export function getFrameOffset(fps) {
     return 1 / (fps * 2);
 }
 
-export async function calculateFramerate(video, prev = [0, 0, 0]) {
+export async function calculateFramerate(video, prev = [0, 0, 0, 0]) {
+    setPlaybackRate(video, 0.25);
+
     await video.play();
     const metadata = await requestVideoFramePromise(video)
     const fps = await framerateCalcCallback(video, metadata, prev);
     video.pause();
     video.currentTime = 0;
+    setPlaybackRate(video, 1);
     return fps;
 }
 
 async function framerateCalcCallback(video, metadata, prev) {
-    const frames = metadata.presentedFrames;
+    const frames = metadata.presentedFrames - 1;
     const time = metadata.mediaTime;
-    const [prevTime, prevFrames, prevFps] = prev;
+    const [prevTime, prevFrames, prevFps, prevAvgFps] = prev;
     const fps = Math.round((frames - prevFrames) / (time - prevTime) * 1000);
+    console.log(fps / 1000);
+    console.log("presented", frames, time);
 
-    if (fps === prevFps) {
-        return fps / 1000;
+    const avgFps = Math.floor(frames / time * 1000);
+    console.log(avgFps);
+    console.log(video.currentTime / frames);
+
+    console.log(avgFps)
+    if (avgFps === prevAvgFps) {
+        return avgFps / 1000;
     } else {
-        return await calculateFramerate(video, [time, frames, fps]);
+        return await calculateFramerate(video, [time, frames, fps, avgFps]);
     }
 }
 

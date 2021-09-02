@@ -1,4 +1,3 @@
-import { LAYER } from "@blueprintjs/icons/lib/esm/generated/iconContents";
 import { List, setIn } from "immutable";
 import { colourGen } from "../utils";
 import { getNextAnchor, getPrevAnchor, setAnchorFrame } from "./Anchor";
@@ -171,7 +170,22 @@ export function TrackFactory(totalFrames) {
 
         isAnchor: function (frame) {
             return this.anchors.includes(frame);
+        },
+
+        setAnchor: function (frame) {
+            const label = this.getLabel(frame);
+            if (label) {
+                return this.setLabel(frame, label);
+            } else {
+
+            }
+        },
+
+        unsetAnchor: function (frame) {
+
         }
+
+
     };
 }
 

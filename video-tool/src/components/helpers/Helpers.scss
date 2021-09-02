@@ -12,67 +12,8 @@
 
 .helper-panel{
     height:100%;
-    display: flex;
-    align-items:baseline;
-    justify-content: space-between;
-}
-
-.helper-panel-left{
-    height: inherit;
-    display:flex;
-    flex-direction: column;
-    justify-content: space-around;
-    flex:2;
-}
-
-.helper-panel-right{
-    height: inherit;
-    display:flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: flex-end;
-    width: 30%;
-}
-
-.helper-panel-next-prev{
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.helper-panel-frame-count{
-    margin-left:auto;
-    margin-right: 0;
-    padding: 3*$pt-grid-size;
-    width: fit-content;
-}
-
-.helper-panel-frame-info{
-    padding: 2*$pt-grid-size;
-    margin-left: $pt-grid-size;
-    width: fit-content
-}
-
-.helper-keyframe-button{
-    padding: 2*$pt-grid-size;
-}
-
-.helper-keyframe-bar{
-    margin:2*$pt-grid-size;
-    display:flex;
-    align-items: center;
-}
-
-.helper-keyframe-progress{
-    margin:$pt-grid-size;
-}
-
-
-
-.helper-panel{
-    height:100%;
     display:grid;
-    grid-template-columns: 0.7fr 0.3fr;
+    grid-template-columns: 0.6fr 0.4fr;
     grid-template-rows: 0.5fr 0.5fr;
     grid-template-areas: "tl tr"
                          "bl br";
@@ -84,6 +25,8 @@
 
 .helper-panel-bottom-left{
     grid-area: bl;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .helper-panel-top-right{
@@ -92,4 +35,40 @@
 
 .helper-panel-bottom-right{
     grid-area: br;
+    margin-top: auto;
+    margin-bottom: auto;
 }
+
+.helper-panel-next-prev{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.helper-panel-frame-count{
+    margin-left:auto;
+    margin-right: 0;
+    padding: $pt-grid-size;
+    width: fit-content;
+}
+
+.helper-panel-frame-info{
+    padding: 2*$pt-grid-size;
+    margin-left: $pt-grid-size;
+    width: fit-content
+}
+
+.helper-keyframe-bar{
+    display:flex;
+    align-items: center;
+}
+
+.helper-keyframe-button{
+    width: fit-content;
+    padding: 2*$pt-grid-size;
+}
+
+.helper-keyframe-progress{
+    margin:$pt-grid-size;
+}
+

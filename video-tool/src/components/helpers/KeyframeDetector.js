@@ -7,7 +7,7 @@ import { keyframeButtonStates, keyframeProgressStates, keyframeState } from './k
 
 //FIXME load video and remove?
 
-const HAMMING_THRESHOLD = 5;
+const HAMMING_THRESHOLD = 6;
 const FRAME_SKIP = 5;
 const HASH_BITS = 16;
 
@@ -35,10 +35,11 @@ export function KeyframeDetector(props) {
         contextRef.current = canvasRef.current.getContext('2d');
 
         const video = videoRef.current;
+
         return (() => {
             video.src = "";
             video.load();
-        })
+        });
     }, [])
 
     useEffect(() => {
@@ -214,7 +215,8 @@ export function KeyframeDetector(props) {
         <div className="helper-keyframe-bar">
             <Button
                 className="helper-keyframe-button"
-                small={true}
+                large={true}
+                outlined={true}
                 icon={buttonState.icon}
                 intent={buttonState.intent}
                 disabled={buttonState.disabled}

@@ -76,11 +76,11 @@ class Scene {
             const [canvasW, canvasH] = this._getCanvasDimensions();
 
             this.updateFlag = false;
-            const x = Math.round(this.selected.x) / canvasW;
-            const y = Math.round(this.selected.y) / canvasH;
-            const w = Math.round(this.selected.width) / canvasW;
-            const h = Math.round(this.selected.height) / canvasH;
-            const rotation = Math.round(this.selected.rotation);
+            const x = this.selected.x / canvasW;
+            const y = this.selected.y / canvasH;
+            const w = this.selected.width / canvasW;
+            const h = this.selected.height / canvasH;
+            const rotation = this.selected.rotation;
 
             return {
                 label: LabelFactory(x, y, w, h, rotation),

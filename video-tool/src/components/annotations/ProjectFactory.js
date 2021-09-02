@@ -8,7 +8,7 @@ export function ProjectFactory() {
 
     return {
         //FIXME name probably not needed
-        name: "",
+
         fileHandle: null,
         selectedTask: key,
         tasks: Map([[key, TaskFactory()]]),

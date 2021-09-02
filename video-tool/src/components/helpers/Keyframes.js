@@ -1,3 +1,4 @@
+import { H5 } from '@blueprintjs/core';
 import React from 'react';
 import { HelperPanel } from './HelperPanel';
 import { KeyframeDetector } from './KeyframeDetector';
@@ -13,6 +14,14 @@ export function Keyframes(props) {
     currentFrame,
     playerVidRef } = props;
 
+  const description =
+    <div>
+      <H5>Keyframe detection can identify important
+        frames in the video sequence to be labelled.</H5>
+      <p>This may take some time and require some
+        processing power to complete.</p>
+    </div>
+
 
   const content =
     <KeyframeDetector
@@ -24,7 +33,7 @@ export function Keyframes(props) {
   return (
     <HelperPanel
       type={"Keyframe"}
-      description={<text>BLABLAH</text>}
+      description={description}
       content={content}
       frameList={keyframes}
       currentFrame={currentFrame}
