@@ -7,20 +7,17 @@ export function ProjectFactory() {
     const key = uuidv4();
 
     return {
-        //FIXME name probably not needed
-
         fileHandle: null,
         selectedTask: key,
         tasks: Map([[key, TaskFactory()]]),
-        labels: List(),
+        tags: List(),
 
         toJSON: function () {
             return [
-                this.name,
                 this.fileHandle.name,
                 this.selectedTask,
                 this.tasks,
-                this.labels,
+                this.tags,
             ];
         },
 
@@ -59,14 +56,14 @@ export function ProjectFactory() {
             return newProject;
         },
 
-        addLabel: function (label) {
-            return updateIn(this, ['labels'], labels =>
-                labels.push(label));
+        addTag: function (tag) {
+            return updateIn(this, ['tags'], tags =>
+                tags.push(tag));
         },
 
-        deleteLabel: function (label) {
-            return updateIn(this, ['labels'], labels =>
-                labels.delete(labels.findIndex(val => label === val)));
+        deleteTag: function (tag) {
+            return updateIn(this, ['tags'], tags =>
+                tags.delete(tags.findIndex(val => tags === val)));
         },
 
         updateSelected: function (task) {
@@ -77,17 +74,22 @@ export function ProjectFactory() {
 
 export function loadProject(projectJSON) {
     const parsedProject = JSON.parse(projectJSON);
-    console.log(parsedProject);
 
     const project = ProjectFactory();
-    project.name = parsedProject[0];
-    project.fileHandle = parsedProject[1];
-    project.selectedTask = parsedProject[2];
-    project.tasks = Map(Object.entries(parsedProject[3]).map(([key, value]) => [key, loadTask(value)]));
-    project.labels = List(parsedProject[4]);
+    project.fileHandle = parsedProject[0];
+    project.selectedTask = parsedProject[1];
+    project.tasks = Map(Object.entries(parsedProject[2]).map(([key, value]) => [key, loadTask(value)]));
+    project.tags = List(parsedProject[3]);
 
     return project;
 }
+
+
+
+
+
+
+
 
 export function initialiseProject(project, fileHandle) {
     const newProject = setIn(project, ['fileHandle'], fileHandle);

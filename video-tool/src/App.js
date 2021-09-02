@@ -11,15 +11,21 @@ import { getCurrentTask, getTask, ProjectFactory } from './components/annotation
 import { TaskFactory } from './components/annotations/TaskFactory';
 import { Helpers } from './components/helpers/Helpers';
 import { Divider } from '@blueprintjs/core';
+import { useUndo } from './components/state/useUndo';
 
 // TODO check if React.Fragment is applicabe anywhere
 // FIXME https://reactjs.org/docs/hooks-faq.html#how-to-avoid-passing-callbacks-down
 //FIXME whole tree updates all the time
 export default function App(props) {
-  const [project, projectDispatch] = useReducer(projectReducer, ProjectFactory());
-
-  //const [annotations, projectDispatch] = useReducer(annotationReducer, getCurrentTask(project));
+  // const [project, projectDispatch] = useReducer(projectReducer, ProjectFactory());
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
+
+  const [undoableProject, projectDispatch] = useUndo(projectReducer, ProjectFactory());
+  const [project, setProject] = useState(undoableProject.current);
+
+  useEffect(() => {
+    setProject(undoableProject.current);
+  }, [undoableProject])
 
   const videoRef = useRef(null);
   // Check whether VAT directory has been set before
@@ -129,7 +135,7 @@ export default function App(props) {
         annotations={project.getSelectedTask()}
         projectDispatch={projectDispatch}
         project={project}
-        labels={project.labels}
+        labels={project.tags}
         currentFrame={playerState.currentFrame}
       />
     </div >

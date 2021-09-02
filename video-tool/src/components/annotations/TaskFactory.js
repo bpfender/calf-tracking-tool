@@ -10,6 +10,7 @@ export function TaskFactory() {
         selected: null,
         tracks: Map(),
         reviewed: List(),
+
         //FIXME potentially make keyframes mutable array that remains the same
         // once caluclated, persistent and ignored in undo/redo
         keyframes: List(),

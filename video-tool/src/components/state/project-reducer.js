@@ -38,12 +38,12 @@ export function projectReducer(state, action) {
             }
         case 'ADD_TAG':
             {
-                return state.addLabel(payload.label);
+                return state.addTag(payload.label);
                 //return addLabel(state, payload.label);
             }
         case 'REMOVE_TAG':
             {
-                return state.deleteLabel(payload.label);
+                return state.deleteTag(payload.label);
                 //return removeLabel(state, payload.label);
             }
         default:
