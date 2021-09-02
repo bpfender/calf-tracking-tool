@@ -4,45 +4,18 @@ import { usePrevious } from './usePrevious';
 
 
 export function History(props) {
-    const { project, projectDispatch } = props;
-
-    const history = useRef({ undoStack: [], redoStack: [] });
-    const addToHistory = useRef(true);
-    const prevState = usePrevious(project);
-
-    useEffect(() => {
-        if (prevState && addToHistory.current) {
-
-            history.current.undoStack.push(prevState);
-            history.current.redoStack = [];
-        }
-
-        addToHistory.current = true;
-    }, [prevState]);
+    const { project, projectDispatch, canUndo, canRedo } = props;
 
 
     const handleUndo = () => {
-        addToHistory.current = false;
-
-        history.current.redoStack.push(project);
-        const newState = history.current.undoStack.pop();
-
         projectDispatch({
-            type: 'UNDO_REDO',
-            payload: { project: newState },
+            type: 'UNDO',
         });
     };
 
     const handleRedo = () => {
-        addToHistory.current = false;
-
-
-        history.current.undoStack.push(project);
-        const newState = history.current.redoStack.pop();
-
         projectDispatch({
-            type: 'UNDO_REDO',
-            payload: { project: newState },
+            type: 'REDO',
         });
     };
 
@@ -51,11 +24,11 @@ export function History(props) {
             minimal={true}>
             <Button
                 icon="undo"
-                disabled={history.current.undoStack.length === 0}
+                disabled={!canUndo}
                 onClick={handleUndo} />
             <Button
                 icon="redo"
-                disabled={history.current.redoStack.length === 0}
+                disabled={!canRedo}
                 onClick={handleRedo} />
         </ButtonGroup>
     );

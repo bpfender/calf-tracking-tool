@@ -42,7 +42,6 @@ export function VideoBar(props) {
                     color={isAnchor} />
             );
         }
-        console.log(isKeyframe, isAnchor);
         return title
     }
 

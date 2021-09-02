@@ -19,7 +19,7 @@ export function TaskFactory() {
 
         toJSON: function () {
             return [
-                this.videoHandle.name,
+                this.videoHandle ? this.videoHandle.name : null,
                 this.totalFrames,
                 this.selected,
                 this.tracks,

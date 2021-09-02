@@ -11,7 +11,7 @@ import { ExportPopover } from './Export';
 import { History } from './History';
 
 export function Header(props) {
-    const { projectDispatch, playerDispatch, project, annotations } = props;
+    const { projectDispatch, playerDispatch, project, annotations, canUndo, canRedo } = props;
 
     const [saved, setSaved] = useState(false);
     const [dirFlag, setDirFlag] = useState(false);
@@ -138,7 +138,9 @@ export function Header(props) {
             <text>{getTitle(project.fileHandle)}</text>
             <History
                 project={project}
-                projectDispatch={projectDispatch} />
+                projectDispatch={projectDispatch}
+                canRedo={canRedo}
+                canUndo={canUndo} />
             <ButtonGroup
                 minimal={true}>
 

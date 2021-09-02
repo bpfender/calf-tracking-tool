@@ -3,8 +3,12 @@
 import { useReducer } from "react";
 
 export function useUndo(reducer, initialState) {
+    const [state, dispatch] = useReducer(historyReducer(reducer), defaultHistory(initialState));
 
-    return useReducer(historyReducer(reducer), defaultHistory(initialState));
+    const canUndo = state.undos.length > 0;
+    const canRedo = state.redos.length > 0;
+
+    return [state, dispatch, canUndo, canRedo];
 }
 
 function defaultHistory(initialState) {

@@ -20,7 +20,7 @@ export default function App(props) {
   // const [project, projectDispatch] = useReducer(projectReducer, ProjectFactory());
   const [playerState, playerDispatch] = useReducer(playerReducer, defaultPlayerState);
 
-  const [undoableProject, projectDispatch] = useUndo(projectReducer, ProjectFactory());
+  const [undoableProject, projectDispatch, canUndo, canRedo] = useUndo(projectReducer, ProjectFactory());
   const [project, setProject] = useState(undoableProject.current);
 
   useEffect(() => {
@@ -109,7 +109,9 @@ export default function App(props) {
         project={project}
         projectDispatch={projectDispatch}
         playerDispatch={playerDispatch}
-        annotations={project.getSelectedTask()} />
+        annotations={project.getSelectedTask()}
+        canUndo={canUndo}
+        canRedo={canRedo} />
       <Player
         className="main-content"
         videoRef={videoRef}
