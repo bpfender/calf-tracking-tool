@@ -1,5 +1,5 @@
 import { Menu } from '@blueprintjs/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LabelEntry } from './LabelEntry';
 import { SidebarPanel } from './SidebarPanel';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,12 +8,19 @@ import { getTrack } from '../annotations/TaskFactory';
 export function Labels(props) {
     // TEMPORARY STATES
     const { tag, annotations, projectDispatch, currentFrame } = props;
-    const ids = ["1", "2", "3", "4"];
+    //const ids = ["1", "2", "3", "4"];
+    const [tagIds, setTagIds] = useState([]);
 
-    const getTagIds = () => {
+    useEffect(() => {
         const ids = annotations.tags.get(tag);
-        return ids ? [...ids] : [];
-    };
+        setTagIds(ids ? [...ids] : []);
+
+    }, [annotations, tag])
+
+    /* const getTagIds = () => {
+         const ids = annotations.tags.get(tag);
+         return ids ? [...ids] : [];
+     };*/
 
     const handleAdd = () => {
         const key = uuidv4();
@@ -31,7 +38,7 @@ export function Labels(props) {
             name={tag}
             content={
                 <Menu>
-                    {getTagIds().map(key =>
+                    {tagIds.map(key =>
                         <LabelEntry
                             key={key}
                             tag={tag}

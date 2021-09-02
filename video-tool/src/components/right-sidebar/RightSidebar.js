@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { H5, Button, Card, MenuDivider } from '@blueprintjs/core';
+import { MenuDivider } from '@blueprintjs/core';
 import { v4 as uuidv4 } from 'uuid';
 import "./RightSidebar.scss"
-import IdPanel from './IdPanel';
-import { getTrack } from '../annotations/TaskFactory';
+
 import { Tags } from './Tags';
 import { Tasks } from './Tasks';
 import { LabelStack } from './LabelStack';
@@ -12,29 +11,29 @@ import { LabelStack } from './LabelStack';
 export default function RightSidebar(props) {
     //const labels = ["cow", "farmer", "truck"];
 
-    const [idsList, setIdsList] = useState([]);
+    //  const [idsList, setIdsList] = useState([]);
     const { annotations, project, projectDispatch, labels, currentFrame } = props;
 
-    useEffect(() => {
-        setIdsList([...annotations.tracks.keys()]);
-    }, [annotations.tracks])
-
-    const handleAddClick = () => {
-        const key = uuidv4();
-        projectDispatch({
-            type: "ADD_TRACK",
-            payload: { key: key }
-        });
-        setIdsList(idsList.concat(key));
-    }
-
-    const removeListComponent = (filterKey) => {
-        projectDispatch({
-            type: 'DELETE_TRACK',
-            payload: { key: filterKey }
-        });
-        setIdsList(idsList.filter(key => key !== filterKey));
-    }
+    /*  useEffect(() => {
+          setIdsList([...annotations.tracks.keys()]);
+      }, [annotations.tracks])
+  
+      const handleAddClick = () => {
+          const key = uuidv4();
+          projectDispatch({
+              type: "ADD_TRACK",
+              payload: { key: key }
+          });
+          setIdsList(idsList.concat(key));
+      }
+  
+      const removeListComponent = (filterKey) => {
+          projectDispatch({
+              type: 'DELETE_TRACK',
+              payload: { key: filterKey }
+          });
+          setIdsList(idsList.filter(key => key !== filterKey));
+      }*/
 
     // FIXME not sure about getTrack calls way to optimise?
     return (

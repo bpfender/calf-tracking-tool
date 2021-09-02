@@ -23,7 +23,8 @@ export function TaskFactory() {
                 this.selected,
                 this.tracks,
                 this.reviewed,
-                this.keyframes
+                this.keyframes,
+                this.tags,
             ];
         },
 
@@ -182,7 +183,7 @@ export function loadTask(parsedTask) {
     task.reviewed = List(parsedTask[4]);
     task.keyframes = List(parsedTask[5]);
 
-    task.tags = Map();
+    task.tags = Map(parsedTask[6]);
 
     return task;
 }

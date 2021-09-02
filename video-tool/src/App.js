@@ -57,6 +57,9 @@ export default function App(props) {
         type: 'RESET',
       });
     }
+
+    console.log(project.getSelectedTask());
+
   }, [project.selectedTask])
 
   // When selected task updates, this also needs to be update in project state
