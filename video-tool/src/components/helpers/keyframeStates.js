@@ -11,13 +11,13 @@ export const keyframeButtonStates = {
     waiting: {
         icon: "key",
         intent: "none",
-        text: "Detect keyframes",
+        text: "Detect",
         disabled: true,
     },
     ready: {
         icon: "search",
         intent: "none",
-        text: "Detect keyframes",
+        text: "Detect",
         disabled: false,
     },
     processing: function (remainingTime) {

@@ -27,8 +27,7 @@ export function Reviewed(props) {
 
     const content =
         <div>
-            <ButtonGroup
-                large={true}>
+            <ButtonGroup>
                 <Button
                     icon="tick"
                     intent="success"

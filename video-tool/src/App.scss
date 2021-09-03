@@ -7,15 +7,16 @@
 .App {
   display:grid;
   grid-template-columns: 0.8fr 0.2fr;
-  grid-template-rows:auto 0.7fr 0.3fr;
+  grid-template-rows:$pt-navbar-height auto 0.25fr;
   grid-template-areas:"header settings"
                       "main right-sidebar"
                       "helpers right-sidebar";
 
 
   height:100vh;
+  min-height: 650px;
+  min-width: 1000px;
   background-color: $pt-dark-app-background-color;
-
 }
 
 .App-header {
@@ -43,6 +44,7 @@
 
 .right-sidebar{
   width:100%;
+  padding:0;
   overflow-y: auto;
   grid-area:right-sidebar;
   background-color: $dark-gray4;

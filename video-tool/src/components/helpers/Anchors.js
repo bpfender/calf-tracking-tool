@@ -22,7 +22,6 @@ export function Anchors(props) {
             <Button
                 icon="paperclip"
                 text="Set anchor"
-                large={true}
                 outlined={true}
                 onClick={handleSetAnchor} />
         </div>

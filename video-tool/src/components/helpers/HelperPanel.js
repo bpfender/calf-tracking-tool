@@ -82,8 +82,7 @@ export function HelperPanel(props) {
             </div>
             <div className="helper-panel-bottom-right">
                 <ButtonGroup
-                    className="helper-panel-next-prev"
-                    large={true}>
+                    className="helper-panel-next-prev">
                     <Button
                         className="helper-panel-frame-info"
                         onClick={handlePrevClick}

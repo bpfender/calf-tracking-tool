@@ -1,6 +1,6 @@
 import { Button, ProgressBar } from '@blueprintjs/core';
 import { bmvbhash } from 'blockhash-core';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { hammingDistance } from '../utils';
 import { getTimeAsFrames } from '../video/video-functions';
 import { keyframeButtonStates, keyframeProgressStates, keyframeState } from './keyframeStates';
@@ -8,12 +8,13 @@ import { keyframeButtonStates, keyframeProgressStates, keyframeState } from './k
 const HAMMING_THRESHOLD = 6;
 const FRAME_SKIP = 5;
 const HASH_BITS = 16;
+const VIDEO_SCALING = 3;
 
 // TODO handle error, handle new files
 export function KeyframeDetector(props) {
     const { src, framerate, projectDispatch, keyframes } = props;
 
-    const [triggerUpdate, setTriggerUpdate] = useState(0);
+    const [forceUpdate, setTriggerUpdate] = useState(0);
 
     const [state, setState] = useState(keyframeState.waiting);
     const [buttonState, setButtonState] = useState(keyframeButtonStates.waiting);
@@ -24,50 +25,87 @@ export function KeyframeDetector(props) {
     const contextRef = useRef(null);
 
     const rateAverage = useRef(null);
-    const keyframesRef = useRef([]);
+    const keyframesArray = useRef([1]);
     const callbackId = useRef(null);
+    const dimensions = useRef({ width: 0, height: 0 });
 
-    const width = videoRef.current ? videoRef.current.videoWidth / 3 : 0;
-    const height = videoRef.current ? videoRef.current.videoHeight / 3 : 0;
-
+    // Set up canvas context when component mounts
     useEffect(() => {
         contextRef.current = canvasRef.current.getContext('2d');
-        const video = videoRef.current;
 
+        const video = videoRef.current;
         return (() => {
+            video.cancelVideoFrameCallback(callbackId.current)
             video.src = "";
             video.load();
         });
     }, [])
 
+    // Check if keyframes are present in task
     useEffect(() => {
         if (keyframes.size) {
             setState(keyframeState.done);
         } else {
-            setState(keyframeState.ready);
+            setState(keyframeState.waiting);
         }
-        console.log(keyframes)
     }, [keyframes])
 
     useEffect(() => {
-        console.log(framerate)
-        videoRef.current.cancelVideoFrameCallback(callbackId.current);
-        if (src && framerate) {
+        if (src) {
             videoRef.current.src = src;
             videoRef.current.load();
-            callbackId.current = videoRef.current.requestVideoFrameCallback(
-                (now, metadata) => {
-                    hashingCallback(metadata)
-                })
+        } else {
+            setState(keyframeState.waiting);
         }
-
-        // Initialise these values
-        rateAverage.current = { mean: 1, count: 0 };
-
-    }, [src, framerate, triggerUpdate]);
+    }, [src, forceUpdate])
 
     useEffect(() => {
-        // console.log(state);
+        videoRef.current.cancelVideoFrameCallback(callbackId.current);
+
+        keyframesArray.current = [1];
+        rateAverage.current = { mean: 1, count: 0 };
+
+        const hashingCallback = (metadata, prevHash = null, prevFrame = 1) => {
+            const currFrame = getTimeAsFrames(metadata.mediaTime, framerate);
+            console.log(framerate, currFrame, metadata.mediaTime);
+
+            const { width, height } = dimensions.current;
+
+            contextRef.current.drawImage(videoRef.current, 0, 0, width, height)
+            const imageData = contextRef.current.getImageData(0, 0, width, height);
+            const nextHash = bmvbhash(imageData, HASH_BITS);
+
+            if (prevHash) {
+                const hamming = hammingDistance(prevHash, nextHash);
+                if (hamming > HAMMING_THRESHOLD) {
+                    keyframesArray.current.push(currFrame);
+                    console.log(videoRef.current.playbackRate, currFrame, hamming);
+                }
+            }
+
+            if (currFrame - prevFrame > FRAME_SKIP &&
+                videoRef.current.playbackRate > 1.2) {
+                videoRef.current.playbackRate -= 0.2;
+            } else if (currFrame - prevFrame < FRAME_SKIP &&
+                videoRef.current.playbackRate < 15.8) {
+                videoRef.current.playbackRate += 0.2;
+            }
+
+            callbackId.current = videoRef.current.requestVideoFrameCallback(
+                (now, metadata) => {
+                    hashingCallback(metadata, nextHash, currFrame);
+                })
+        };
+
+        callbackId.current = videoRef.current.requestVideoFrameCallback(
+            (now, metadata) => {
+                hashingCallback(metadata)
+            })
+
+    }, [framerate, forceUpdate]);
+
+    useEffect(() => {
+        console.log(Object.keys(keyframeState)[state]);
         switch (state) {
             case keyframeState.waiting:
                 setButtonState(keyframeButtonStates.waiting);
@@ -91,38 +129,39 @@ export function KeyframeDetector(props) {
                 setButtonState(keyframeButtonStates.reset);
                 setProgressState(keyframeProgressStates.done);
                 break;
-
             default:
                 throw new Error("Unrecognised keyframe state");
         }
     }, [state])
 
     const handleClick = async () => {
-        if (state === keyframeState.ready) {
-            setState(keyframeState.processing);
-            keyframesRef.current = [];
-            await videoRef.current.play();
+        switch (state) {
+            case keyframeState.ready: {
+                setState(keyframeState.processing);
+                await videoRef.current.play();
+                break;
+            }
+            case keyframeState.cancel: {
+                setState(keyframeState.waiting);
 
-        } else if (state === keyframeState.cancel) {
-            videoRef.current.load();
-            setState(keyframeState.waiting);
-            keyframesRef.current = [];
+                setTriggerUpdate(forceUpdate + 1);
+                break;
+            }
+            case keyframeState.reset: {
+                projectDispatch({
+                    type: 'SET_KEYFRAMES',
+                    payload: { keyframes: [] }
+                });
 
-            console.log("HELLO");
-            videoRef.current.cancelVideoFrameCallback(callbackId.current);
-            setTriggerUpdate(triggerUpdate + 1);
-        }
-        else if (state === keyframeState.reset) {
-            projectDispatch({
-                type: 'SET_KEYFRAMES',
-                payload: { keyframes: [] }
-            });
-            videoRef.current.load()
-            keyframesRef.current = [];
-
-            console.log("HELLO");
-            videoRef.current.cancelVideoFrameCallback(callbackId.current);
-            setTriggerUpdate(triggerUpdate + 1);
+                setTriggerUpdate(forceUpdate + 1);
+                break;
+            }
+            case keyframeState.processing: {
+                // Do nothing
+                break;
+            }
+            default:
+                throw new Error("Unrecognised keyframe click state");
         }
     };
 
@@ -143,9 +182,14 @@ export function KeyframeDetector(props) {
     };
 
     const handleTimeUpdate = () => {
+        console.log(Object.keys(keyframeState)[state]);
         switch (state) {
             case keyframeState.waiting: {
                 setState(keyframeState.ready);
+                break;
+            }
+            case keyframeState.ready: {
+                // Do nothing
                 break;
             }
             case keyframeState.processing: {
@@ -160,55 +204,32 @@ export function KeyframeDetector(props) {
                 setProgressState(keyframeProgressStates.processing(progress));
                 break;
             }
+            case keyframeState.done: {
+                // Do nothing
+                break;
+            }
             default: {
-                //throw new Error("Unknow keyframe state");
+                throw new Error("Timeupdate unknown keyframe state");
             }
         }
     };
 
     const handleEnded = () => {
-        setState(keyframeState.done);
-        // console.log(keyframesRef.current);
         projectDispatch({
             type: 'SET_KEYFRAMES',
-            payload: { keyframes: keyframesRef.current }
+            payload: { keyframes: keyframesArray.current }
         });
 
         videoRef.current.cancelVideoFrameCallback(callbackId.current);
         videoRef.current.pause();
     };
 
-    const hashingCallback = (metadata, prevHash = null, prevFrame = 1) => {
-        const currFrame = getTimeAsFrames(metadata.mediaTime, framerate);
-        console.log(framerate, currFrame, metadata.mediaTime);
-        const width = videoRef.current.videoWidth / 3;
-        const height = videoRef.current.videoHeight / 3;
-
-        contextRef.current.drawImage(videoRef.current, 0, 0, width, height)
-        const imageData = contextRef.current.getImageData(0, 0, width, height);
-        const nextHash = bmvbhash(imageData, HASH_BITS);
-
-        if (prevHash) {
-            const hamming = hammingDistance(prevHash, nextHash);
-            if (hamming > HAMMING_THRESHOLD) {
-                keyframesRef.current.push(currFrame);
-                //console.log(videoRef.current.playbackRate, currFrame, hamming);
-            }
-        }
-
-        if (currFrame - prevFrame > FRAME_SKIP &&
-            videoRef.current.playbackRate > 1.2) {
-            videoRef.current.playbackRate -= 0.2;
-        } else if (currFrame - prevFrame < FRAME_SKIP &&
-            videoRef.current.playbackRate < 16) {
-            videoRef.current.playbackRate += 0.2;
-        }
-
-        callbackId.current = videoRef.current.requestVideoFrameCallback(
-            (now, metadata) => {
-                hashingCallback(metadata, nextHash, currFrame);
-            })
-    };
+    const handleLoadedMetadata = () => {
+        dimensions.current = {
+            width: videoRef.current.videoWidth / VIDEO_SCALING,
+            height: videoRef.current.videoHeight / VIDEO_SCALING,
+        };
+    }
 
     const getTimeRemaining = () => {
         const remain = videoRef.current.duration - videoRef.current.currentTime;
@@ -243,7 +264,6 @@ export function KeyframeDetector(props) {
         <div className="helper-keyframe-bar">
             <Button
                 className="helper-keyframe-button"
-                large={true}
                 outlined={true}
                 icon={buttonState.icon}
                 intent={buttonState.intent}
@@ -261,16 +281,17 @@ export function KeyframeDetector(props) {
             <div
                 hidden={true}>
                 <video
-                    width={width}
-                    height={height}
+                    width={dimensions.current.width}
+                    height={dimensions.current.height}
                     muted={true}
                     ref={videoRef}
                     src={src ? src : null}
                     onTimeUpdate={handleTimeUpdate}
-                    onEnded={handleEnded} />
+                    onEnded={handleEnded}
+                    onLoadedMetadata={handleLoadedMetadata} />
                 <canvas
-                    width={width}
-                    height={height}
+                    width={dimensions.current.width}
+                    height={dimensions.current.height}
                     ref={canvasRef} />
             </div>
         </div>
