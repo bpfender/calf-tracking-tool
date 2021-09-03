@@ -4,12 +4,13 @@ export const colourPalette = [
     "#C274C2", "#AD99FF", "#669EFF",
     "#2EE6D6", "#62D96B", "#FFC940"]
 
-function* colourGenerator(colours) {
+export function* colourGenerator(colours) {
     // FIXME this is duplicated for colour palette
     let i = 0;
 
     while (true) {
         yield colours[i]
+        console.log(colours[i]);
         i = (i + 1) % colours.length;
     }
 }

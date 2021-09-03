@@ -1,5 +1,5 @@
 import { List, setIn } from "immutable";
-import { colourGen } from "../utils";
+import { colourGen, colourGenerator, colourPalette } from "../utils";
 import { getNextAnchor, getPrevAnchor, setAnchorFrame } from "./Anchor";
 import { LabelFactory, loadLabel } from "./LabelFactory";
 
