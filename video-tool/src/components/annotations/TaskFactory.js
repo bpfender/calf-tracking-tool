@@ -179,13 +179,12 @@ export function loadTask(parsedTask) {
     const task = TaskFactory();
     task.videoHandle = parsedTask[0];
     task.totalFrames = parsedTask[1];
-    task.select = parsedTask[2];
+    task.selected = parsedTask[2];
     task.tracks = Map(Object.entries(parsedTask[3]).map(entry => [entry[0], loadTrack(entry[1])]));
     task.reviewed = List(parsedTask[4]);
     task.keyframes = List(parsedTask[5]);
 
-    task.tags = Map(parsedTask[6]);
-
+    task.tags = Map(Object.entries(parsedTask[6]).map(entry => [entry[0], List(entry[1])]));
     return task;
 }
 
