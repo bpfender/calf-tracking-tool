@@ -8,19 +8,11 @@ import { getTrack } from '../annotations/TaskFactory';
 export function Labels(props) {
     // TEMPORARY STATES
     const { tag, annotations, projectDispatch, currentFrame } = props;
-    //const ids = ["1", "2", "3", "4"];
-    const [tagIds, setTagIds] = useState([]);
 
-    useEffect(() => {
+    const getTagIds = () => {
         const ids = annotations.tags.get(tag);
-        setTagIds(ids ? [...ids] : []);
-
-    }, [annotations, tag])
-
-    /* const getTagIds = () => {
-         const ids = annotations.tags.get(tag);
-         return ids ? [...ids] : [];
-     };*/
+        return ids ? [...ids] : [];
+    };
 
     const handleAdd = () => {
         const key = uuidv4();
@@ -38,13 +30,13 @@ export function Labels(props) {
             name={tag}
             content={
                 <Menu>
-                    {tagIds.map(key =>
+                    {getTagIds().map(key =>
                         <LabelEntry
                             key={key}
                             tag={tag}
                             id={key}
                             selected={annotations.selected}
-                            track={getTrack(annotations, key)}
+                            track={annotations.getTrack(key)}
                             projectDispatch={projectDispatch}
                             currentFrame={currentFrame} />
                     )}

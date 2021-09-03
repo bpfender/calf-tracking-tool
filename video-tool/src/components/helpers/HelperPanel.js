@@ -76,7 +76,10 @@ export function HelperPanel(props) {
             </div>
 
             <div className="helper-panel-top-right">
-                <Callout className="helper-panel-frame-count">
+                <Callout
+                    intent={getIndex() > 0 ? "primary" : "none"}
+                    icon={null}
+                    className="helper-panel-frame-count">
                     <H4>{`${type}: ${formatKeyframeNumber()}`}</H4>
                 </Callout>
             </div>

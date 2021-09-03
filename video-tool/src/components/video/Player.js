@@ -32,7 +32,17 @@ function Player(props) {
         if (key) {
             switch (key.keyCode) {
                 case keyCode.enter: {
-
+                    projectDispatch({
+                        type: 'CONFIRM_FRAME',
+                        payload: { frame: playerState.currentFrame }
+                    });
+                    break;
+                }
+                case keyCode.backspace: {
+                    projectDispatch({
+                        type: 'REJECT_FRAME',
+                        payload: { frame: playerState.currentFrame }
+                    });
                     break;
                 }
                 case keyCode.space: {
