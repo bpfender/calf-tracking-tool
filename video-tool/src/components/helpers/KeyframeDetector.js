@@ -258,7 +258,7 @@ export function KeyframeDetector(props) {
                 value={progressState.value} />
 
             <div
-                hidden={false}>
+                hidden={true}>
                 <video
                     width={width}
                     height={height}
