@@ -133,16 +133,16 @@ export function TaskFactory() {
         setReviewed: function (frame) {
             const i = this.reviewed.findIndex(val => frame <= val);
             if (i === -1) {
-                console.log("NO INDEX");
+                // console.log("NO INDEX");
                 return updateIn(this, ['reviewed'], list =>
                     list.push(frame)
                 );
             }
             else if (this.reviewed.get(i) === frame) {
-                console.log("EXISTS");
+                // console.log("EXISTS");
                 return this;
             } else {
-                console.log("NEW");
+                // console.log("NEW");
                 return updateIn(this, ['reviewed'], list =>
                     list.insert(i, frame)
                 );

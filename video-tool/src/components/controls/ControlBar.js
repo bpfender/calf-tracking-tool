@@ -7,7 +7,7 @@ import { NextFrame, PrevFrame, NextNFrames, PrevNFrames, Rewind } from './FrameN
 import VideoSlider from './VideoSlider';
 import FrameSelector from './FrameSelector';
 import PlaybackSettings from './PlaybackSettings';
-import { getFramesAsTime } from '../video/video-functions';
+import { getFramesAsTime, getTimeAsFrames } from '../video/video-functions';
 
 export default function ControlBar(props) {
     const {

@@ -5,8 +5,8 @@ import { trackReducer } from "./track-reducer";
 
 export function taskReducer(state, action) {
     const payload = action.payload;
-    console.log(state);
-    console.log("TASK: ", action.type);
+    // console.log(state);
+    // console.log("TASK: ", action.type);
 
 
     switch (action.type) {

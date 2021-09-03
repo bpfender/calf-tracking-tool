@@ -5,35 +5,33 @@ import { hammingDistance } from '../utils';
 import { getTimeAsFrames } from '../video/video-functions';
 import { keyframeButtonStates, keyframeProgressStates, keyframeState } from './keyframeStates';
 
-//FIXME load video and remove?
-
 const HAMMING_THRESHOLD = 6;
 const FRAME_SKIP = 5;
 const HASH_BITS = 16;
 
-// TODO handle error, handle new files, remove video element
-// https://stackoverflow.com/questions/3258587/how-to-properly-unload-destroy-a-video-element?answertab=oldest#tab-top
-
+// TODO handle error, handle new files
 export function KeyframeDetector(props) {
-    const { src, framerate, projectDispatch } = props;
+    const { src, framerate, projectDispatch, keyframes } = props;
+
+    const [triggerUpdate, setTriggerUpdate] = useState(0);
 
     const [state, setState] = useState(keyframeState.waiting);
     const [buttonState, setButtonState] = useState(keyframeButtonStates.waiting);
     const [progressState, setProgressState] = useState(keyframeProgressStates.ready);
 
-    const rateAverage = useRef(null);
-
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const contextRef = useRef(null);
+
+    const rateAverage = useRef(null);
     const keyframesRef = useRef([]);
+    const callbackId = useRef(null);
 
     const width = videoRef.current ? videoRef.current.videoWidth / 3 : 0;
     const height = videoRef.current ? videoRef.current.videoHeight / 3 : 0;
 
     useEffect(() => {
         contextRef.current = canvasRef.current.getContext('2d');
-
         const video = videoRef.current;
 
         return (() => {
@@ -43,24 +41,32 @@ export function KeyframeDetector(props) {
     }, [])
 
     useEffect(() => {
-
-    }, [])
+        if (keyframes.size) {
+            setState(keyframeState.done);
+        } else {
+            setState(keyframeState.ready);
+        }
+        console.log(keyframes)
+    }, [keyframes])
 
     useEffect(() => {
+        console.log(framerate)
         if (src && framerate) {
             videoRef.current.src = src;
             videoRef.current.load();
-            videoRef.current.requestVideoFrameCallback(
-                (now, metadata) => { hashingCallback(metadata) })
+            callbackId.current = videoRef.current.requestVideoFrameCallback(
+                (now, metadata) => {
+                    hashingCallback(metadata)
+                })
         }
 
         // Initialise these values
         rateAverage.current = { mean: 1, count: 0 };
 
-    }, [src, framerate]);
+    }, [src, framerate, triggerUpdate]);
 
     useEffect(() => {
-        console.log(state);
+        // console.log(state);
         switch (state) {
             case keyframeState.waiting:
                 setButtonState(keyframeButtonStates.waiting);
@@ -71,7 +77,7 @@ export function KeyframeDetector(props) {
                 setProgressState(keyframeProgressStates.ready);
                 break;
             case keyframeState.processing:
-
+                // Do nothing
                 break;
             case keyframeState.cancel:
                 setButtonState(keyframeButtonStates.cancel);
@@ -95,10 +101,27 @@ export function KeyframeDetector(props) {
             setState(keyframeState.processing);
             keyframesRef.current = [];
             await videoRef.current.play();
-        } else if (state === keyframeState.cancel ||
-            state === keyframeState.reset) {
+
+        } else if (state === keyframeState.cancel) {
             videoRef.current.load();
             setState(keyframeState.waiting);
+            keyframesRef.current = [];
+
+            console.log("HELLO");
+            videoRef.current.cancelVideoFrameCallback(callbackId.current);
+            setTriggerUpdate(triggerUpdate + 1);
+        }
+        else if (state === keyframeState.reset) {
+            projectDispatch({
+                type: 'SET_KEYFRAMES',
+                payload: { keyframes: [] }
+            });
+            videoRef.current.load()
+            keyframesRef.current = [];
+
+            console.log("HELLO");
+            videoRef.current.cancelVideoFrameCallback(callbackId.current);
+            setTriggerUpdate(triggerUpdate + 1);
         }
     };
 
@@ -144,17 +167,21 @@ export function KeyframeDetector(props) {
 
     const handleEnded = () => {
         setState(keyframeState.done);
-        console.log(keyframesRef.current);
+        // console.log(keyframesRef.current);
         projectDispatch({
             type: 'SET_KEYFRAMES',
             payload: { keyframes: keyframesRef.current }
         });
 
+        videoRef.current.cancelVideoFrameCallback(callbackId.current);
         videoRef.current.pause();
     };
 
     const hashingCallback = (metadata, prevHash = null, prevFrame = 1) => {
         const currFrame = getTimeAsFrames(metadata.mediaTime, framerate);
+        console.log(currFrame);
+        const width = videoRef.current.videoWidth / 3;
+        const height = videoRef.current.videoHeight / 3;
 
         contextRef.current.drawImage(videoRef.current, 0, 0, width, height)
         const imageData = contextRef.current.getImageData(0, 0, width, height);
@@ -164,19 +191,19 @@ export function KeyframeDetector(props) {
             const hamming = hammingDistance(prevHash, nextHash);
             if (hamming > HAMMING_THRESHOLD) {
                 keyframesRef.current.push(currFrame);
-                console.log(videoRef.current.playbackRate, currFrame, hamming);
+                //console.log(videoRef.current.playbackRate, currFrame, hamming);
             }
         }
 
         if (currFrame - prevFrame > FRAME_SKIP &&
-            videoRef.current.playbackRate > 0.4) {
+            videoRef.current.playbackRate > 1.2) {
             videoRef.current.playbackRate -= 0.2;
         } else if (currFrame - prevFrame < FRAME_SKIP &&
             videoRef.current.playbackRate < 16) {
             videoRef.current.playbackRate += 0.2;
         }
 
-        videoRef.current.requestVideoFrameCallback(
+        callbackId.current = videoRef.current.requestVideoFrameCallback(
             (now, metadata) => {
                 hashingCallback(metadata, nextHash, currFrame);
             })
@@ -231,7 +258,7 @@ export function KeyframeDetector(props) {
                 value={progressState.value} />
 
             <div
-                hidden={true}>
+                hidden={false}>
                 <video
                     width={width}
                     height={height}

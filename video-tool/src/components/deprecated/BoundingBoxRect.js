@@ -65,7 +65,7 @@ class BoundingBox {
     }
 
     draw(context) {
-        console.log("x: ", this.x, "y: ", this.y, "h: ", this.height, "w: ", this.width, "rot: ", this.rotation);
+        // console.log("x: ", this.x, "y: ", this.y, "h: ", this.height, "w: ", this.width, "rot: ", this.rotation);
         context.setTransform(this.transform);
         this._drawBox(context);
         if (this.hit) {

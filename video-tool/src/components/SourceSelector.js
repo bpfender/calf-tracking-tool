@@ -32,14 +32,14 @@ export default function SourceSelector(props) {
             <Button
                 onClick={() => {
                     storeAnnotationData(generateJSON(annotations));
-                    //console.log(JSON.stringify(generateJSON(annotations)));
+                    //// console.log(JSON.stringify(generateJSON(annotations)));
                 }}>
                 Export
             </Button>
             <Button
                 onClick={() => {
                     getAnnotationData().then(async (val) => {
-                        console.log(readJSON(val));
+                        // console.log(readJSON(val));
                     })
                 }}>
                 Import
@@ -69,7 +69,7 @@ export default function SourceSelector(props) {
 
 async function filePicker() {
     let [videoHandle] = await window.showOpenFilePicker();
-    console.log(videoHandle);
+    // console.log(videoHandle);
     storeCurrentVideoFile(videoHandle);
-    console.log(await videoHandle.getFile());
+    // console.log(await videoHandle.getFile());
 }

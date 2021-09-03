@@ -111,7 +111,7 @@ class Video extends React.Component {
         const [prevTime, prevFrames, prevFps] = prev;
 
         const fps = Math.round((frames - prevFrames) / (time - prevTime) * 1000);
-        // console.log(fps, prevFps, frames, prevFrames, time, prevTime);
+        // // console.log(fps, prevFps, frames, prevFrames, time, prevTime);
 
         if (fps === prevFps) {
             this.video.pause();

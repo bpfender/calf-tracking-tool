@@ -50,7 +50,7 @@ export class VideoFunctions {
     }
 
     getTimeAsFrames(time) {
-        return Math.round(time * this.framerate + 1)
+        return Math.round(time * this.framerate) + 1;
     }
 
     getFrameOffset() {
@@ -96,13 +96,16 @@ export class VideoFunctions {
 
 }
 
+
+
+
 export function getFramesAsTime(n, fps) {
-    return n / fps;
+    return (n - 1) / fps;
 }
 
 //FIXME not sure about rounding here
 export function getTimeAsFrames(time, fps) {
-    return Math.round(time * fps + 1); // +1 starting frame offset
+    return Math.round(time * fps) + 1; // +1 starting frame offset
 }
 
 // media time is at beginning of given frame, so "frameTime" is
@@ -128,14 +131,14 @@ async function framerateCalcCallback(video, metadata, prev) {
     const time = metadata.mediaTime;
     const [prevTime, prevFrames, prevFps, prevAvgFps] = prev;
     const fps = Math.round((frames - prevFrames) / (time - prevTime) * 1000);
-    console.log(fps / 1000);
-    console.log("presented", frames, time);
+    // console.log(fps / 1000);
+    // console.log("presented", frames, time);
 
     const avgFps = Math.floor(frames / time * 1000);
-    console.log(avgFps);
-    console.log(video.currentTime / frames);
+    // console.log(avgFps);
+    // console.log(video.currentTime / frames);
 
-    console.log(avgFps)
+    // console.log(avgFps)
     if (avgFps === prevAvgFps) {
         return avgFps / 1000;
     } else {
@@ -167,11 +170,13 @@ export function load(video) {
 }
 
 export function seekTime(video, time) {
+    console.log("SEEKED", time);
     video.currentTime = time;
 }
 
 export function seekFrame(video, frame, framerate) {
-    video.currentTime = getFramesAsTime(frame, framerate) - getFrameOffset(framerate);
+    console.log("SEEKED", getFramesAsTime(frame, framerate) + getFrameOffset(framerate));
+    video.currentTime = getFramesAsTime(frame, framerate) + getFrameOffset(framerate);
 }
 
 export function rewind(video) {

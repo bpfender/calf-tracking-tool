@@ -19,7 +19,7 @@ export default function VideoSlider(props) {
     }
 
     const handleChange = (time) => {
-        console.log(time);
+        // console.log(time);
         setSelectedFrame(getTimeAsFrames(time, framerate));
     }
 

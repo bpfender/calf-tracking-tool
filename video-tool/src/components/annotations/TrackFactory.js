@@ -38,7 +38,7 @@ export function TrackFactory(totalFrames) {
             const nextFrame = getNextAnchor(this.anchors, frame);
             let newLabels = null;
 
-            console.log(frame, label);
+            // console.log(frame, label);
             if (prevFrame === -1 && nextFrame === -1) {
                 newLabels = List(Array(this.labels.size).fill(label));
 
@@ -139,7 +139,7 @@ export function TrackFactory(totalFrames) {
         insertLabel: function (frame) {
             const nextFrame = getNextAnchor(this.anchors, frame);
             const prevFrame = getPrevAnchor(this.anchors, frame);
-            console.log(prevFrame, nextFrame);
+            // console.log(prevFrame, nextFrame);
             //Get last label before cut
             let prevLabel = null;
             if (prevFrame === -1) {
@@ -230,7 +230,7 @@ export function setLabel(track, frame, label) {
     const nextFrame = getNextAnchor(track.anchors, frame);
     let newLabels = null;
 
-    console.log(frame, label);
+    // console.log(frame, label);
     if (prevFrame === -1 && nextFrame === -1) {
         newLabels = List(Array(track.labels.size).fill(label));
 
@@ -284,10 +284,10 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
             key,
             (endLabel[key] - startLabel[key]) / frameCount
         ];
-        console.log(val);
+        // console.log(val);
         return val;
     }))
-    console.log("FRAME_DELTA", frameDelta);
+    // console.log("FRAME_DELTA", frameDelta);
 
     for (let i = startFrame; i < endFrame - 1; i++) {
 
@@ -315,7 +315,7 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
             newVals.h,
             newVals.rotation,
         );
-        console.log(label);
+        // console.log(label);
         mutableList.set(i, label);
     }
 }

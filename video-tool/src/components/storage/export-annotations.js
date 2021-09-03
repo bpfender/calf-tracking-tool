@@ -25,7 +25,7 @@ export function exportYOLOv5(task) {
         }
         fileArray.push(s);
     }
-    console.log(fileArray)
+    // console.log(fileArray)
     return fileArray;
 }
 

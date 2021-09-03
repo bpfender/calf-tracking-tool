@@ -2,7 +2,7 @@ import { addLabel, addTask, initialiseProject, ProjectFactory, removeLabel, setS
 import { taskReducer } from "./task-reducer";
 
 export function projectReducer(state, action) {
-    console.log("PROJECT: ", action.type);
+    // console.log("PROJECT: ", action.type);
     const payload = action.payload;
     switch (action.type) {
         case 'NEW_PROJECT':

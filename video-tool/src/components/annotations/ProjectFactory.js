@@ -39,7 +39,7 @@ export function ProjectFactory() {
             const newProject = updateIn(this, ['tasks'], tasks =>
                 tasks.set(key, TaskFactory(videoHandle)));
             newProject.selectedTask = key;
-            console.log(newProject)
+            // console.log(newProject)
             return newProject;
         },
 
@@ -48,7 +48,7 @@ export function ProjectFactory() {
                 tasks.delete(key)
             )
 
-            console.log(key === newProject.selectedTask)
+            // console.log(key === newProject.selectedTask)
             if (newProject.selectedTask === key) {
                 newProject.selectedTask = newProject.tasks.keys().next().value;
             }
@@ -106,7 +106,7 @@ export async function verifyVideoFiles(project, videoDirHandle) {
             task.videoHandle = videoHandle;
 
         } catch (error) {
-            console.log(error);
+            // console.log(error);
         }
     }
 }

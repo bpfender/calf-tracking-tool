@@ -86,7 +86,7 @@ export function Keyframes(props) {
   }, [src, framerate]);
 
   useEffect(() => {
-    console.log(state);
+    // console.log(state);
     switch (state) {
       case keyframeState.waiting:
         setButtonState(keyframeButtonStates.waiting);
@@ -169,7 +169,7 @@ export function Keyframes(props) {
 
   const handleEnded = () => {
     setState(keyframeState.done);
-    console.log(keyframesRef.current);
+    // console.log(keyframesRef.current);
     projectDispatch({
       type: 'SET_KEYFRAMES',
       payload: { keyframes: keyframesRef.current }
@@ -189,7 +189,7 @@ export function Keyframes(props) {
       const hamming = hammingDistance(prevHash, nextHash);
       if (hamming > HAMMING_THRESHOLD) {
         keyframesRef.current.push(currFrame);
-        console.log(videoRef.current.playbackRate, currFrame, hamming);
+        // console.log(videoRef.current.playbackRate, currFrame, hamming);
       }
     }
 

@@ -143,7 +143,7 @@ export default function VideoSource(props) {
     };
 
     const loadVideo = (file, handle) => {
-        console.log(handle);
+        // console.log(handle);
         projectDispatch({
             type: 'SET_VIDEO_HANDLE',
             payload: {

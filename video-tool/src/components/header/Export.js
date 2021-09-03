@@ -54,7 +54,7 @@ function ExportMenuItem(props) {
             const exportDirHandle = await getCreateDirHandle(dirHandle, `${content} - ${taskName}`);
 
             const annotationArray = exportFunction();
-            console.log(annotationArray);
+            // console.log(annotationArray);
             const size = annotationArray.length;
             const digits = size.toString().length;
             for (let i = 0; i < size; i++) {
@@ -67,7 +67,7 @@ function ExportMenuItem(props) {
 
 
         } catch (error) {
-            console.log(error);
+            // console.log(error);
         }
     };
 

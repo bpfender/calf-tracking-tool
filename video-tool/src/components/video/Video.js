@@ -1,3 +1,4 @@
+import { isKeyboardClick } from '@blueprintjs/core/lib/esm/common/keys';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { defaultPlayerState } from '../state/player-reducer';
 import { HAVE_ENOUGH_DATA } from './video-constants';
@@ -10,17 +11,21 @@ export default function Video(props) {
         playerDispatch,
         src,
         readyState,
-        framerate } = props;
+        framerate,
+        paused,
+        seeking,
+        mediaTime, } = props;
+
 
     useEffect(() => {
         videoRef.current.load();
     }, [src, videoRef]);
 
     const handleVideoFrameCallback = useCallback((now, metadata) => {
-
         playerDispatch({
             type: 'FRAME_CALLBACK',
             payload: {
+                currentTime: videoRef.current.currentTime,
                 ...metadata,
                 vsync: metadata.expectedDisplayTime - now,
             }
@@ -30,7 +35,7 @@ export default function Video(props) {
 
     useEffect(() => {
         if (readyState === HAVE_ENOUGH_DATA && framerate === 0) {
-            console.log("HEELO");
+            // console.log("HEELO");
             (async () => {
                 const fps = await calculateFramerate(videoRef.current);
                 playerDispatch({

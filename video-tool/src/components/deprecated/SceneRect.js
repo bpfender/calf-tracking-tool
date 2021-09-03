@@ -61,7 +61,7 @@ class Scene {
     _hitTestBox(mouseX, mouseY) {
         for (const element of this.BBoxes) {
             if (element.hitTest(mouseX, mouseY, this.context)) {
-                console.log("BOX HIT");
+                // console.log("BOX HIT");
                 return element;
             }
         }
@@ -76,7 +76,7 @@ class Scene {
 
         for (const handle of handles) {
             if (handle.hitTest(mouseX, mouseY, this.context)) {
-                console.log("HANDLE HIT");
+                // console.log("HANDLE HIT");
                 return handle;
             }
         }

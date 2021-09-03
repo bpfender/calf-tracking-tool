@@ -49,7 +49,8 @@ export function playerReducer(state, action) {
                 expectedDisplayTime: payload.expectedDisplayTime,
                 mediaTime: payload.mediaTime,
                 presentedFrames: payload.presentedFrames,
-                processingDuration: payload.processingDuration
+                processingDuration: payload.processingDuration,
+                currentTime: payload.currentTime,
             };
         case 'ABORT':
             return state;

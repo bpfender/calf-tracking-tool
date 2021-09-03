@@ -2,7 +2,7 @@ import React from 'react';
 
 
 function Info(props) {
-    //console.log(props.videoState);
+    //// console.log(props.videoState);
     const { videoState } = props;
 
     let seek = props.videoState.seeking === true ? <p>seeking</p> : <p> ready </p>;

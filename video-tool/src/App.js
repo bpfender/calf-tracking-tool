@@ -24,6 +24,7 @@ export default function App(props) {
   const [project, setProject] = useState(undoableProject.current);
 
   useEffect(() => {
+    console.log(undoableProject);
     setProject(undoableProject.current);
   }, [undoableProject])
 
@@ -40,8 +41,9 @@ export default function App(props) {
 
   // FIXME how to make sure annotations are persistent
   useEffect(() => {
-
-  }, [project])
+    console.log('MEDIA', playerState.mediaTime);
+    console.log('CURRENT', playerState.currentTime);
+  }, [playerState.currentFrame])
 
   useEffect(() => {
     if (playerState.totalFrames) {
@@ -64,7 +66,7 @@ export default function App(props) {
       });
     }
 
-    console.log(project.getSelectedTask());
+    // console.log(project.getSelectedTask());
 
   }, [project.selectedTask])
 

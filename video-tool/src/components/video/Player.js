@@ -28,9 +28,9 @@ function Player(props) {
     }, [videoContainerRef]);
 
     useEffect(() => {
-        console.log("MEDIA TIME", playerState.mediaTime);
-        console.log("Seeked time", playerState.mediaTime + getFrameOffset(playerState.framerate))
-        console.log("Video current time", videoRef.current.currentTime);
+        // console.log("MEDIA TIME", playerState.mediaTime);
+        // console.log("Seeked time", playerState.mediaTime + getFrameOffset(playerState.framerate))
+        // console.log("Video current time", videoRef.current.currentTime);
     }, [playerState.mediaTime])
 
     useEffect(() => {
@@ -112,7 +112,9 @@ function Player(props) {
                             mediaTime={playerState.mediaTime}
                             framerate={playerState.framerate}
                             readyState={playerState.readyState}
-                            vsync={playerState.vsync} />
+                            vsync={playerState.vsync}
+                            paused={playerState.paused}
+                            seeking={playerState.seeking} />
                         <Annotation
                             className="video-window annotation-overlay"
                             videoDimensions={videoDimensions}

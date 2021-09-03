@@ -21,7 +21,7 @@ export function Header(props) {
     // FIXME this requires some form of timeout
     useEffect(() => {
         setSaved(false);
-        /*console.log("AUTOSAVE");
+        /*// console.log("AUTOSAVE");
         const autoSave = async () => {
             await set('autoSave', {
                 project: JSON.stringify(project),
@@ -40,14 +40,14 @@ export function Header(props) {
                 setProjectFlag(true);
             }
         } catch (error) {
-            console.log(error);
+            // console.log(error);
         }
     };
 
     const handleSaveProject = async () => {
         // FIXME where to store filehandle reference?
         const fileHandle = getHandle(project);
-        console.log(project);
+        // console.log(project);
 
         let progToast = null;
         try {
@@ -60,7 +60,7 @@ export function Header(props) {
         } catch (error) {
             AppToaster.dismiss(progToast);
             AppToaster.show(saveFailed);
-            console.log(error);
+            // console.log(error);
         }
     };
 
@@ -88,7 +88,7 @@ export function Header(props) {
             });
 
         } catch (error) {
-            console.log(error);
+            // console.log(error);
         }
     }
 
