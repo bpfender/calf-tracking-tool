@@ -30,6 +30,11 @@ export function StartupOverlay(props) {
         await handleOpenProject();
     };
 
+    const handleKeyDown = (event) => {
+        if (event.keyCode === 13) {
+            handleNew();
+        }
+    }
 
     const newProjectOverlay = (
         <Overlay
@@ -37,7 +42,8 @@ export function StartupOverlay(props) {
             canEscapeKeyClose={false}
             canOutsideClickClose={false}
             isOpen={open}>
-            <Card className="overlay">
+            <Card
+                className="overlay">
                 <Icon
                     className="overlay-icon"
                     icon="folder-new"
@@ -66,7 +72,9 @@ export function StartupOverlay(props) {
             canEscapeKeyClose={false}
             canOutsideClickClose={false}
             isOpen={open}>
-            <Card className="overlay">
+            <Card
+                className="overlay"
+                onKeyDown={handleKeyDown}>
                 <Icon
                     className="overlay-icon"
                     icon="folder-new"

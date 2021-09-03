@@ -1,16 +1,12 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import './App.scss';
 import { defaultPlayerState, playerReducer } from './components/state/player-reducer.js';
-import { annotationReducer } from './components/state/task-reducer';
 import Player from './components/video/Player';
 import RightSidebar from './components/right-sidebar/RightSidebar';
-import LeftSidebar from './components/left-sidebar/LeftSidebar';
 import { Header } from './components/header/Header';
 import { projectReducer } from './components/state/project-reducer';
-import { getCurrentTask, getTask, ProjectFactory } from './components/annotations/ProjectFactory';
-import { TaskFactory } from './components/annotations/TaskFactory';
+import { ProjectFactory } from './components/annotations/ProjectFactory';
 import { Helpers } from './components/helpers/Helpers';
-import { Divider } from '@blueprintjs/core';
 import { useUndo } from './components/state/useUndo';
 
 // TODO check if React.Fragment is applicabe anywhere
@@ -29,21 +25,6 @@ export default function App(props) {
   }, [undoableProject])
 
   const videoRef = useRef(null);
-  // Check whether VAT directory has been set before
-  /* useEffect(() => {
-     (async function () {
-       const parentDir = await get('parentDir');
-       if (parentDir) {
-         setParentDir(parentDir);
-       }
-     })();
-   }, [])*/
-
-  // FIXME how to make sure annotations are persistent
-  useEffect(() => {
-    console.log('MEDIA', playerState.mediaTime);
-    console.log('CURRENT', playerState.currentTime);
-  }, [playerState.currentFrame])
 
   useEffect(() => {
     if (playerState.totalFrames) {
@@ -56,29 +37,11 @@ export default function App(props) {
 
   useEffect(() => {
     if (project.selectedTask) {
-      /*projectDispatch({
-        type: 'LOAD_TASK',
-        payload: { task: project.getCurrentTask() },
-      });*/
-
       playerDispatch({
         type: 'RESET',
       });
     }
-
-    // console.log(project.getSelectedTask());
-
   }, [project.selectedTask])
-
-  // When selected task updates, this also needs to be update in project state
-  /* useEffect(() => {
-     if (project.selectedTask) {
-       projectDispatch({
-         type: 'UPDATE_TASK',
-         payload: { task: annotations }
-       });
-     }
-   }, [annotations])*/
 
   const currentVideoHandle = project.getSelectedTask().videoHandle;
 
@@ -102,10 +65,10 @@ export default function App(props) {
     }
   }, [currentVideoHandle]);
 
-
-
   return (
-    <div className="App bp3-dark">
+    <div
+      onKeyDown={(event) => { console.log(event) }}
+      className="App bp3-dark">
       <Header
         className="App-header"
         project={project}
@@ -132,7 +95,6 @@ export default function App(props) {
         playerVidRef={videoRef}
         currentFrame={playerState.currentFrame}
         paused={playerState.paused} />
-
       <RightSidebar
         className="right-sidebar"
         playerState={playerState}
@@ -140,8 +102,7 @@ export default function App(props) {
         projectDispatch={projectDispatch}
         project={project}
         labels={project.tags}
-        currentFrame={playerState.currentFrame}
-      />
+        currentFrame={playerState.currentFrame} />
     </div >
   );
 }

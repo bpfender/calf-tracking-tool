@@ -6,9 +6,12 @@ import Annotation from './Annotation.js';
 import "./Player.scss";
 import { VideoBar } from './VideoBar';
 import VideoSource from './VideoSource';
-import { getFrameOffset, nextFrame } from './video-functions';
+import { getFrameOffset, nextFrame, pause, play, prevFrame, seekFrame } from './video-functions';
 
 import { useDimensions } from './useDimensions';
+import { keyCode, useKeydown } from './useKeydown';
+import { PLAY } from '@blueprintjs/icons/lib/esm/generated/iconContents';
+
 
 //FIXME position of video isn't quite right yet. Not sure what's happen
 
@@ -21,6 +24,61 @@ function Player(props) {
 
     const videoContainerRef = useRef(null);
     const videoDimensions = useDimensions(videoRef);
+
+    const key = useKeydown();
+
+    useEffect(() => {
+        console.log(key);
+        if (key) {
+            switch (key.keyCode) {
+                case keyCode.enter: {
+
+                    break;
+                }
+                case keyCode.space: {
+                    playerState.paused ?
+                        play(videoRef.current) :
+                        pause(videoRef.current, playerState.mediaTime, playerState.vsync);
+
+                    break;
+                }
+                case keyCode.arrowRight: {
+                    let n = 1;
+                    if (key.ctrlKey) {
+                        n = playerState.framesToSkip;
+                    }
+                    nextFrame(videoRef.current, playerState.currentFrame, playerState.framerate, n);
+                    break;
+                }
+                case keyCode.arrowLeft: {
+                    let n = 1;
+                    if (key.ctrlKey) {
+                        n = playerState.framesToSkip;
+                    }
+                    prevFrame(videoRef.current, playerState.currentFrame, playerState.framerate, n);
+                    break;
+                }
+                case keyCode.bracketLeft: {
+                    const prevKeyframe = annotations.keyframes.find(val => val > playerState.currentFrame, this, -1);
+                    if (prevKeyframe > 0) {
+                        seekFrame(videoRef.current, prevKeyframe, playerState.framerate);
+                    }
+                    break;
+                }
+                case keyCode.bracketRight: {
+                    const nextKeyframe = annotations.keyframes.findLast(val => val < playerState.currentFrame, this, -1);
+                    if (nextKeyframe > 0) {
+                        seekFrame(videoRef.current, nextKeyframe, playerState.framerate);
+                    }
+                    break;
+                }
+
+                default:
+                    break;
+            }
+        }
+
+    }, [key])
 
     // Initialise component with video elements hidden
     useEffect(() => {

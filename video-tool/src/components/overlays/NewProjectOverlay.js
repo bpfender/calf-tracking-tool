@@ -60,6 +60,13 @@ export function NewProjectOverlay(props) {
         setOpen(false);
     }
 
+    const handleKeyDown = (event) => {
+        if (event.keyCode === 13) {
+            handleConfirm()
+        }
+    }
+
+
     return (
         <Overlay
             className="bp3-dark"
@@ -67,7 +74,9 @@ export function NewProjectOverlay(props) {
             canOutsideClickClose={false}
             onClosed={() => { setInput("") }}
             isOpen={open}>
-            <Card className="overlay">
+            <Card
+                className="overlay"
+                onKeyDown={handleKeyDown}>
                 <Icon
                     className="overlay-icon"
                     icon="document"
