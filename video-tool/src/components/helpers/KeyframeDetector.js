@@ -51,6 +51,7 @@ export function KeyframeDetector(props) {
 
     useEffect(() => {
         console.log(framerate)
+        videoRef.current.cancelVideoFrameCallback(callbackId.current);
         if (src && framerate) {
             videoRef.current.src = src;
             videoRef.current.load();
@@ -179,7 +180,7 @@ export function KeyframeDetector(props) {
 
     const hashingCallback = (metadata, prevHash = null, prevFrame = 1) => {
         const currFrame = getTimeAsFrames(metadata.mediaTime, framerate);
-        console.log(currFrame);
+        console.log(framerate, currFrame, metadata.mediaTime);
         const width = videoRef.current.videoWidth / 3;
         const height = videoRef.current.videoHeight / 3;
 
