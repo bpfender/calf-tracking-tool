@@ -30,12 +30,6 @@ export function StartupOverlay(props) {
         await handleOpenProject();
     };
 
-    const handleKeyDown = (event) => {
-        if (event.keyCode === 13) {
-            handleNew();
-        }
-    }
-
     const newProjectOverlay = (
         <Overlay
             className="bp3-dark"
@@ -73,8 +67,7 @@ export function StartupOverlay(props) {
             canOutsideClickClose={false}
             isOpen={open}>
             <Card
-                className="overlay"
-                onKeyDown={handleKeyDown}>
+                className="overlay">
                 <Icon
                     className="overlay-icon"
                     icon="folder-new"

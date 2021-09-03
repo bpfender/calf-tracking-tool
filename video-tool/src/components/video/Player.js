@@ -58,17 +58,17 @@ function Player(props) {
                     prevFrame(videoRef.current, playerState.currentFrame, playerState.framerate, n);
                     break;
                 }
-                case keyCode.bracketLeft: {
-                    const prevKeyframe = annotations.keyframes.find(val => val > playerState.currentFrame, this, -1);
-                    if (prevKeyframe > 0) {
-                        seekFrame(videoRef.current, prevKeyframe, playerState.framerate);
+                case keyCode.bracketRight: {
+                    const nextKeyframe = annotations.keyframes.find(val => val > playerState.currentFrame, this, -1);
+                    if (nextKeyframe > 0) {
+                        seekFrame(videoRef.current, nextKeyframe, playerState.framerate);
                     }
                     break;
                 }
-                case keyCode.bracketRight: {
-                    const nextKeyframe = annotations.keyframes.findLast(val => val < playerState.currentFrame, this, -1);
-                    if (nextKeyframe > 0) {
-                        seekFrame(videoRef.current, nextKeyframe, playerState.framerate);
+                case keyCode.bracketLeft: {
+                    const prevKeyframe = annotations.keyframes.findLast(val => val < playerState.currentFrame, this, -1);
+                    if (prevKeyframe > 0) {
+                        seekFrame(videoRef.current, prevKeyframe, playerState.framerate);
                     }
                     break;
                 }
