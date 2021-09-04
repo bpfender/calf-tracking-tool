@@ -7,7 +7,7 @@ export function TaskEntry(props) {
     const [handleIntent, setHandleIntent] = useState("none");
     const [descr, setDescr] = useState();
 
-    const { selected, videoHandle, id, handleOpen, handleDelete } = props;
+    const { selected, videoHandle, id, handleOpen, handleDelete, disabled } = props;
 
     useEffect(() => {
         if (videoHandle) {
@@ -42,7 +42,7 @@ export function TaskEntry(props) {
                             icon="trash"
                             intent={trashIntent}
                             onClick={handleDelete}
-                            disabled={!videoHandle}
+                            disabled={disabled}
                             onMouseEnter={() => { setTrashIntent("danger") }}
                             onMouseLeave={() => { setTrashIntent("none") }}
                         />

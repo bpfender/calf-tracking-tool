@@ -39,6 +39,7 @@ export function Tasks(props) {
                                     key={key}
                                     id={key}
                                     selected={selected}
+                                    disabled={tasks.size === 1}
                                     handleOpen={() => { handleOpen(key) }}
                                     handleDelete={() => { handleDelete(key) }}
                                     videoHandle={value.videoHandle} />
