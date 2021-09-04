@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Video from './Video';
 import ControlBar from '../controls/ControlBar';
-import Info from '../Info';
 import Annotation from './Annotation.js';
 import "./Player.scss";
 import { VideoBar } from './VideoBar';
@@ -10,11 +9,8 @@ import { getFrameOffset, nextFrame, pause, play, prevFrame, seekFrame } from './
 
 import { useDimensions } from './useDimensions';
 import { keyCode, useKeydown } from './useKeydown';
-import { PLAY } from '@blueprintjs/icons/lib/esm/generated/iconContents';
-
 
 //FIXME position of video isn't quite right yet. Not sure what's happen
-
 function Player(props) {
     const {
         annotations, projectDispatch,

@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Classes, Divider, EditableText, Icon, InputGroup, MenuItem } from '@blueprintjs/core';
+import { Button, ButtonGroup, Divider, EditableText, MenuItem } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import ColourPalettePopover from './ColourPalette';
 

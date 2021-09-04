@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Icon, MenuItem, Text } from '@blueprintjs/core';
+import { Button, ButtonGroup, MenuItem, Text } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 
 export function TaskEntry(props) {
@@ -35,7 +35,6 @@ export function TaskEntry(props) {
                         <Button
                             icon="document-open"
                             intent={openIntent}
-                            disabled={!videoHandle}
                             onClick={handleOpen}
                             onMouseEnter={() => { setOpenIntent("success") }}
                             onMouseLeave={() => { setOpenIntent("primary") }} />
@@ -43,6 +42,7 @@ export function TaskEntry(props) {
                             icon="trash"
                             intent={trashIntent}
                             onClick={handleDelete}
+                            disabled={!videoHandle}
                             onMouseEnter={() => { setTrashIntent("danger") }}
                             onMouseLeave={() => { setTrashIntent("none") }}
                         />

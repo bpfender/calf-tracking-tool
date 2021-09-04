@@ -1,5 +1,5 @@
 import { Menu } from '@blueprintjs/core';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { LabelEntry } from './LabelEntry';
 import { SidebarPanel } from './SidebarPanel';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,6 +27,7 @@ export function Labels(props) {
     return (
         <SidebarPanel
             name={tag}
+            disabled={annotations.videoHandle ? false : true}
             content={
                 <Menu>
                     {getTagIds.map(key =>

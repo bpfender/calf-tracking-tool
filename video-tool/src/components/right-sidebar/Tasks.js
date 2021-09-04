@@ -42,21 +42,10 @@ export function Tasks(props) {
                                     handleOpen={() => { handleOpen(key) }}
                                     handleDelete={() => { handleDelete(key) }}
                                     videoHandle={value.videoHandle} />
-                            )
-                        }
+                            )}
                     </Menu>
                 </div>
             }
             handleAdd={handleAdd} />
     );
 }
-
-/*
-const videos = ["video1", "video2", "video3"];
-
-<Menu>
-{videos.map(video => <TaskEntry
-    key={video}
-    selected={selected}
-    name={video} />)}
-</Menu>*/

@@ -2,8 +2,7 @@ import { Button, Collapse, H4, Icon } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
 export function SidebarPanel(props) {
-    const { name, content, handleAdd } = props;
-
+    const { name, content, handleAdd, disabled } = props;
     const [expand, setExpand] = useState(true);
     const [intent, setIntent] = useState("none");
 
@@ -28,6 +27,7 @@ export function SidebarPanel(props) {
                 <Button
                     icon="add"
                     intent={intent}
+                    disabled={disabled || false}
                     onMouseEnter={() => { setIntent("primary") }}
                     onMouseLeave={() => { setIntent("none") }}
                     minimal={true}
