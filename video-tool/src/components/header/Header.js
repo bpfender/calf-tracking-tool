@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Divider, } from '@blueprintjs/core';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
 import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-access';
 import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
@@ -21,15 +21,6 @@ export function Header(props) {
     // FIXME this requires some form of timeout
     useEffect(() => {
         setSaved(false);
-        /*// console.log("AUTOSAVE");
-        const autoSave = async () => {
-            await set('autoSave', {
-                project: JSON.stringify(project),
-                timeSaved: Date.now(),
-            });
-        }
-
-        autoSave();*/
     }, [project])
 
     const handleNewProject = async () => {
@@ -44,7 +35,7 @@ export function Header(props) {
         }
     };
 
-    const handleSaveProject = async () => {
+    const handleSaveProject = useCallback(async () => {
         // FIXME where to store filehandle reference?
         const fileHandle = getHandle(project);
         // console.log(project);
@@ -62,7 +53,15 @@ export function Header(props) {
             AppToaster.show(saveFailed);
             // console.log(error);
         }
-    };
+    }, [project]);
+
+    useEffect(() => {
+        window.addEventListener("beforeunload", handleSaveProject);
+
+        return (() => {
+            window.removeEventListener("beforeunload", handleSaveProject);
+        });
+    }, [handleSaveProject])
 
     const handleOpenProject = async () => {
         try {
