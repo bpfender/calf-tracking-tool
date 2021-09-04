@@ -1,6 +1,7 @@
 import { Button, Card, Classes, FormGroup, Icon, InputGroup, Overlay } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { createNewProjectHandle, verifyPermission } from '../storage/file-access';
+import { ProjectFactory } from '../annotations/ProjectFactory';
+import { createNewProjectHandle, verifyPermission, writeFile } from '../storage/file-access';
 import { retrieveAppDirHandle, storeRecentProjectHandle } from '../storage/indexedDB';
 import "./Overlay.scss"
 
@@ -32,14 +33,16 @@ export function NewProjectOverlay(props) {
             }
 
             const projectHandle = await createNewProjectHandle(dirHandle, input);
+            // Initialisation of save file
+            const newProject = ProjectFactory().initialiseProject(projectHandle);
+            await writeFile(projectHandle, JSON.stringify(newProject));
 
             storeRecentProjectHandle(projectHandle);
 
             projectDispatch({
                 type: 'NEW_PROJECT',
                 payload: {
-                    name: input,
-                    fileHandle: projectHandle
+                    project: newProject,
                 }
             });
 

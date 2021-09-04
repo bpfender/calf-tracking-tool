@@ -7,7 +7,7 @@ export function projectReducer(state, action) {
     switch (action.type) {
         case 'NEW_PROJECT':
             {
-                return ProjectFactory().initialiseProject(payload.fileHandle)
+                return payload.project
                 //return initialiseProject(state, payload.fileHandle);
             }
         case 'LOAD_PROJECT':
