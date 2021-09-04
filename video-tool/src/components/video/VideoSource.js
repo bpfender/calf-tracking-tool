@@ -67,7 +67,11 @@ export default function VideoSource(props) {
             const videoHandle = await getVideoHandle(appDirHandle);
             checkCopyLoadVideo(videoHandle);
         } catch (error) {
-            setSourceState(sourceStates.start);
+            if (typeof (videoHandle) === "string") {
+                setSourceState(sourceStates.notFound(videoHandle));
+            } else {
+                setSourceState(sourceStates.start);
+            }
         }
     }
 
