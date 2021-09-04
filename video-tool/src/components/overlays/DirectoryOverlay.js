@@ -2,7 +2,6 @@ import { Button, Card, Classes, Icon, Overlay } from '@blueprintjs/core';
 import React from 'react';
 import { getParentDirectory, getVideoDirHandle } from '../storage/file-access';
 import { storeAppDirHandle, storeVideoDirHandle } from '../storage/indexedDB';
-
 import "./Overlay.scss"
 
 export function DirectoryOverlay(props) {
@@ -19,7 +18,6 @@ export function DirectoryOverlay(props) {
             setDirFlag(false);
         } catch (error) {
             // No error handling
-            // TODO error handling for indexed db functions?
         }
     };
 

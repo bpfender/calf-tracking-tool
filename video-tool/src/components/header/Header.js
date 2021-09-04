@@ -19,11 +19,17 @@ export function Header(props) {
     const [dirFlag, setDirFlag] = useState(false);
     const [projectFlag, setProjectFlag] = useState(false);
 
+    const loadedFlag = useRef(false);
+
     const [openIcon, setOpenIcon] = useState("folder-close");
 
     // FIXME this requires some form of timeout
     useEffect(() => {
-        setSaved(false);
+        if (!loadedFlag.current) {
+            setSaved(false);
+        } else {
+            loadedFlag.current = false;
+        }
     }, [project])
 
     const handleNewProject = async () => {
@@ -34,14 +40,12 @@ export function Header(props) {
                 setProjectFlag(true);
             }
         } catch (error) {
-            // console.log(error);
+            // Do nothing
         }
     };
 
     const handleSaveProject = async () => {
-        // FIXME where to store filehandle reference?
         const fileHandle = getHandle(project);
-        // console.log(project);
 
         let progToast = null;
         try {
@@ -83,14 +87,14 @@ export function Header(props) {
 
                 await storeRecentProjectHandle(projectHandle);
 
+                loadedFlag.current = true;
                 projectDispatch({
                     type: 'LOAD_PROJECT',
                     payload: { project: project },
                 });
             }
-
         } catch (error) {
-            // console.log(error);
+            // Do nothing
         }
     }
 
