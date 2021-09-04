@@ -27,7 +27,8 @@ export function TaskEntry(props) {
         <MenuItem
             onDoubleClick={handleOpen}
             className={"sidebar-menu-entry"}
-            icon={<Icon intent={handleIntent} icon="video" />}
+            icon="video"
+            intent={handleIntent}
             label={
                 < div >
                     <ButtonGroup minimal={true}>
