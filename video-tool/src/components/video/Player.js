@@ -96,12 +96,6 @@ function Player(props) {
     }, [videoContainerRef]);
 
     useEffect(() => {
-        // console.log("MEDIA TIME", playerState.mediaTime);
-        // console.log("Seeked time", playerState.mediaTime + getFrameOffset(playerState.framerate))
-        // console.log("Video current time", videoRef.current.currentTime);
-    }, [playerState.mediaTime])
-
-    useEffect(() => {
         if (playerState.framerate === 0) {
             videoContainerRef.current.hidden = true
             setHidden(false);
@@ -112,13 +106,6 @@ function Player(props) {
             }, 500);
         }
     }, [playerState.framerate]);
-
-    /*useEffect(() => {
-        if (typeof (annotations.videoHandle) === 'string') {
-            setHidden(false);
-            videoContainerRef.current.hidden = true;
-        }
-    }, [annotations.videoHandle])*/
 
     const isReviewed = () => {
         if (playerState.paused) {
@@ -170,8 +157,7 @@ function Player(props) {
                 <div
                     ref={videoContainerRef}
                     className="video-container">
-                    <div className="video-window-container"
-                    >
+                    <div className="video-window-container">
                         <Video
                             videoRef={videoRef}
                             playerDispatch={playerDispatch}
@@ -208,46 +194,8 @@ function Player(props) {
                 framesToSkip={playerState.framesToSkip}
                 playbackRate={playerState.playbackRate}
                 vsync={playerState.vsync} />
-
-
-
         </div >
     );
 }
 
 export default Player;
-
-/*<KeyFrames
-framerate={playerState.framerate}
-src={playerState.src}
-duration={playerState.duration}
-projectDispatch={projectDispatch}
-keyframes={annotations.keyframes}
-playerVidRef={videoRef}
-currentFrame={playerState.currentFrame}
-/>*/
-
-
-
-//<Info videoState={playerState} />
-
-/*
-<div className="video-container">
-<div className="video-window-container"
-style={style}>
-<Video
-    className="video-window"
-    ref={videoRef}
-    playerDispatch={playerDispatch}
-    src={playerState.src}
-    fps={playerState.framerate}
-    vsync={playerState.vsync} />
-<Annotation
-    className="video-window annotation-overlay"
-    currentFrame={playerState.currentFrame}
-    annotations={annotations}
-    projectDispatch={projectDispatch}
-    pauseVideo={() => { videoRef.current.pause() }} />
-</div>
-</div>
-*/

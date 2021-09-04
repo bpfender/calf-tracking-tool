@@ -5,10 +5,11 @@ import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-a
 import { DirectoryOverlay } from '../overlays/DirectoryOverlay';
 import { saveFailed, saveProgress, saveSuccess, AppToaster } from '../overlays/toaster';
 import { StartupOverlay } from '../overlays/StartupOverlay';
-import { getHandle, loadProject, verifyVideoFiles } from '../annotations/ProjectFactory';
+import { loadProject } from '../annotations/ProjectFactory';
 import { retrieveAppDirHandle, retrieveVideoDirHandle, storeRecentProjectHandle } from '../storage/indexedDB';
 import { ExportPopover } from './Export';
 import { History } from './History';
+
 
 export function Header(props) {
     const { projectDispatch, playerDispatch, project, annotations, canUndo, canRedo } = props;
@@ -45,7 +46,7 @@ export function Header(props) {
     };
 
     const handleSaveProject = async () => {
-        const fileHandle = getHandle(project);
+        const fileHandle = project.getHandle();
 
         let progToast = null;
         try {
@@ -83,7 +84,7 @@ export function Header(props) {
                 const project = loadProject(projectJSON);
                 project.fileHandle = projectHandle;
 
-                await verifyVideoFiles(project, videoDirHandle);
+                await project.registerVideoHandles(videoDirHandle);
 
                 await storeRecentProjectHandle(projectHandle);
 

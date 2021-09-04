@@ -188,6 +188,8 @@ export function loadTask(parsedTask) {
     return task;
 }
 
+
+/*
 // TODO Video name and handle can be combined
 export function setVideoName(task, name) {
     return setIn(task, ['videoName'], name);
@@ -276,3 +278,4 @@ export function getBoundingBoxes(task, frame) {
             );
         });
 }
+*/

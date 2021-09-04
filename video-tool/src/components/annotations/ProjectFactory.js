@@ -25,6 +25,25 @@ export function ProjectFactory() {
             return setIn(this, ['fileHandle'], fileHandle);
         },
 
+        registerVideoHandles: async function (videoDirHandle) {
+            const tasks = this.tasks;
+
+            for (const task of tasks.values()) {
+                try {
+                    const videoHandle = await videoDirHandle.getFileHandle(task.videoHandle);
+                    task.videoHandle = videoHandle;
+
+                } catch (error) {
+                    // Do nothing
+                }
+            }
+            console.log(tasks);
+        },
+
+        getHandle: function () {
+            return this.fileHandle;
+        },
+
         setSelectedTask: function (key) {
             return setIn(this, ['selectedTask'], key);
         },
@@ -89,7 +108,7 @@ export function loadProject(projectJSON) {
 
 
 
-
+/*
 
 export function initialiseProject(project, fileHandle) {
     const newProject = setIn(project, ['fileHandle'], fileHandle);
@@ -163,4 +182,4 @@ export function getCurrentTask(project) {
     return project.tasks.get(project.selectedTask);
 }
 
-
+*/

@@ -44,18 +44,17 @@ export default function VideoSource(props) {
     }, []);
 
     // When player.src state changes, new video has been added
-    // TODO potentially use readyState instead?
     useEffect(() => {
         if (src) {
             setSourceState(sourceStates.success);
-        } else {
-            setSourceState(sourceStates.start);
         }
     }, [src]);
 
     useEffect(() => {
         if (typeof (videoHandle) === "string") {
             setSourceState(sourceStates.notFound(videoHandle));
+        } else {
+            setSourceState(sourceStates.start);
         }
     }, [videoHandle])
 
@@ -63,7 +62,7 @@ export default function VideoSource(props) {
         try {
             setSourceState(sourceStates.click);
 
-            // FIXME what to do if appdirhandle can't be retrieved?
+            // FIXME what to do if not retrievable?
             const appDirHandle = await retrieveAppDirHandle();
             const videoHandle = await getVideoHandle(appDirHandle);
             checkCopyLoadVideo(videoHandle);
@@ -168,7 +167,6 @@ export default function VideoSource(props) {
                 sourceState.intent,
                 hidden ? "hidden" : ""
             ].join(" ")}
-
             onClick={handleClick}
             onDrop={handleDrop}
             onDragOver={handleDragOver}

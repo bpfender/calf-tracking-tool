@@ -1,16 +1,23 @@
-import { Button, ButtonGroup, MenuItem, Text } from '@blueprintjs/core';
+import { Button, ButtonGroup, Icon, MenuItem, Text } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 
 export function TaskEntry(props) {
     const [trashIntent, setTrashIntent] = useState("none");
     const [openIntent, setOpenIntent] = useState("primary");
+    const [handleIntent, setHandleIntent] = useState("none");
     const [descr, setDescr] = useState();
 
     const { selected, videoHandle, id, handleOpen, handleDelete } = props;
 
     useEffect(() => {
         if (videoHandle) {
-            setDescr("../" + videoHandle.name);
+            if (typeof videoHandle === "string") {
+                setDescr("../" + videoHandle);
+                setHandleIntent("warning");
+            } else {
+                setDescr("../" + videoHandle.name);
+                setHandleIntent("none");
+            }
         } else {
             setDescr("Add a video file.");
         }
@@ -20,7 +27,7 @@ export function TaskEntry(props) {
         <MenuItem
             onDoubleClick={handleOpen}
             className={"sidebar-menu-entry"}
-            icon="video"
+            icon={<Icon intent={handleIntent} icon="video" />}
             label={
                 < div >
                     <ButtonGroup minimal={true}>
@@ -41,7 +48,6 @@ export function TaskEntry(props) {
                     </ButtonGroup>
                 </div >}
             active={selected === id ? true : false}
-            disabled={!videoHandle}
             text={
                 < Text
                     ellipsize={true} >
