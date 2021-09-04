@@ -14,8 +14,11 @@ export function Header(props) {
     const { projectDispatch, playerDispatch, project, annotations, canUndo, canRedo } = props;
 
     const [saved, setSaved] = useState(false);
+
+    const [startupFlag, setStartupFlag] = useState(true);
     const [dirFlag, setDirFlag] = useState(false);
     const [projectFlag, setProjectFlag] = useState(false);
+
     const [openIcon, setOpenIcon] = useState("folder-close");
 
     // FIXME this requires some form of timeout
@@ -35,7 +38,7 @@ export function Header(props) {
         }
     };
 
-    const handleSaveProject = useCallback(async () => {
+    const handleSaveProject = async () => {
         // FIXME where to store filehandle reference?
         const fileHandle = getHandle(project);
         // console.log(project);
@@ -53,30 +56,38 @@ export function Header(props) {
             AppToaster.show(saveFailed);
             // console.log(error);
         }
-    }, [project]);
+    };
+
+    const checkDirHandleSet = async () => {
+        return await retrieveAppDirHandle() ? true : false;
+    }
 
     const handleOpenProject = async () => {
         try {
-            const appDirHandle = await retrieveAppDirHandle();
-            const videoDirHandle = await retrieveVideoDirHandle();
+            if (!await checkDirHandleSet()) {
+                setDirFlag(true);
+            } else {
+                const appDirHandle = await retrieveAppDirHandle();
+                const videoDirHandle = await retrieveVideoDirHandle();
 
-            await verifyPermission(appDirHandle);
+                await verifyPermission(appDirHandle);
 
-            const projectHandle = await getProjectHandle(appDirHandle);
-            const projectFile = await projectHandle.getFile();
-            const projectJSON = await projectFile.text();
+                const projectHandle = await getProjectHandle(appDirHandle);
+                const projectFile = await projectHandle.getFile();
+                const projectJSON = await projectFile.text();
 
-            const project = loadProject(projectJSON);
-            project.fileHandle = projectHandle;
+                const project = loadProject(projectJSON);
+                project.fileHandle = projectHandle;
 
-            await verifyVideoFiles(project, videoDirHandle);
+                await verifyVideoFiles(project, videoDirHandle);
 
-            await storeRecentProjectHandle(projectHandle);
+                await storeRecentProjectHandle(projectHandle);
 
-            projectDispatch({
-                type: 'LOAD_PROJECT',
-                payload: { project: project },
-            });
+                projectDispatch({
+                    type: 'LOAD_PROJECT',
+                    payload: { project: project },
+                });
+            }
 
         } catch (error) {
             // console.log(error);
@@ -98,6 +109,8 @@ export function Header(props) {
         <header className={props.className}>
             <StartupOverlay
                 project={project}
+                open={startupFlag}
+                setOpen={setStartupFlag}
                 handleNewProject={handleNewProject}
                 handleOpenProject={handleOpenProject} />
             <DirectoryOverlay

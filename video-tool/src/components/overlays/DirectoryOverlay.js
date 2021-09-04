@@ -6,7 +6,7 @@ import { storeAppDirHandle, storeVideoDirHandle } from '../storage/indexedDB';
 import "./Overlay.scss"
 
 export function DirectoryOverlay(props) {
-    const { open, setDirFlag, setProjectFlag } = props;
+    const { open, setDirFlag } = props;
 
     const handleConfirm = async () => {
         try {
@@ -17,7 +17,6 @@ export function DirectoryOverlay(props) {
             await storeVideoDirHandle(videoDirHandle);
 
             setDirFlag(false);
-            setProjectFlag(true);
         } catch (error) {
             // No error handling
             // TODO error handling for indexed db functions?
@@ -42,9 +41,9 @@ export function DirectoryOverlay(props) {
                 <div className="overlay-content">
                     <h5
                         className={Classes.HEADING}
-                    >Choose VAT Directory</h5>
-                    <p>Please create a new folder where your VAT projects will be stored.</p>
-                    <p>If you have done this previously done this, please navigate to the folder.</p>
+                    >Please select your VAT Directory</h5>
+                    <p>Please select a folder where your VAT projects will be stored.</p>
+                    <p>If you have not done this previously, create a new one. Otherwise, please navigate to the folder.</p>
                     <div className="overlay-buttons-right">
                         <Button
                             className="overlay-buttons-space"

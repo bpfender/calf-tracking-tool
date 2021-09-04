@@ -1,26 +1,16 @@
 import { Button, Card, Classes, Icon, Overlay } from '@blueprintjs/core';
-import { get } from 'immutable';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import "./Overlay.scss";
 
 export function StartupOverlay(props) {
-    const { handleNewProject, handleOpenProject, project } = props;
-    const [open, setOpen] = useState(true);
-
-    useEffect(() => {
-        (async () => {
-            const parentDir = await get('parentDir');
-            const autoSave = await get('autosave');
-            const recent = await get('recent');
-        })();
-    }, []);
+    const { handleNewProject, handleOpenProject, project, open, setOpen } = props;
 
     // When project is initialised, this can be closed
     useEffect(() => {
         if (project.fileHandle) {
             setOpen(false);
         }
-    }, [project.fileHandle])
+    }, [project.fileHandle, setOpen])
 
     const handleNew = async () => {
         await handleNewProject();
