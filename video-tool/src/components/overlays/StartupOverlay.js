@@ -30,36 +30,6 @@ export function StartupOverlay(props) {
         await handleOpenProject();
     };
 
-    const newProjectOverlay = (
-        <Overlay
-            className="bp3-dark"
-            canEscapeKeyClose={false}
-            canOutsideClickClose={false}
-            isOpen={open}>
-            <Card
-                className="overlay">
-                <Icon
-                    className="overlay-icon"
-                    icon="folder-new"
-                />
-                <div className="overlay-content">
-                    <h5
-                        className={Classes.HEADING}
-                    >Welcome to VAT!</h5>
-                    <p>Please create a new project to get started</p>
-                    <div className="overlay-buttons-right">
-                        <Button
-                            icon="tick"
-                            intent="success"
-                            onClick={handleNew}>
-                            Continue
-                        </Button>
-                    </div>
-                </div>
-            </Card >
-        </Overlay >
-    );
-
     const openExistingOverlay = (
         <Overlay
             className="bp3-dark"
@@ -73,31 +43,22 @@ export function StartupOverlay(props) {
                     icon="folder-new"
                 />
                 <div className="overlay-content">
-                    <h5
-                        className={Classes.HEADING}
-                    >Welcome to VAT!</h5>
+                    <h5 className={Classes.HEADING}>Welcome to VAT</h5>
                     <p>Please open an existing project or create a new one</p>
-                    <div className="overlay-buttons">
-                        <Button
-                            icon="repeat"
-                            onClick={handleOpen}>
-                            Last open
-                        </Button>
 
-                        <div className="overlay-buttons-right">
-                            <Button
-                                className="overlay-buttons-space"
-                                icon="folder-open"
-                                onClick={handleOpen}>
-                                Open
-                            </Button>
-                            <Button
-                                icon="folder-new"
-                                intent="primary"
-                                onClick={handleNew}>
-                                New
-                            </Button>
-                        </div>
+                    <div className="overlay-buttons-right">
+                        <Button
+                            className="overlay-buttons-space"
+                            icon="folder-open"
+                            onClick={handleOpen}>
+                            Open
+                        </Button>
+                        <Button
+                            icon="folder-new"
+                            intent="primary"
+                            onClick={handleNew}>
+                            New
+                        </Button>
                     </div>
                 </div>
             </Card >
