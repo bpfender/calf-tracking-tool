@@ -2,7 +2,7 @@ import { isKeyboardClick } from '@blueprintjs/core/lib/esm/common/keys';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { defaultPlayerState } from '../state/player-reducer';
 import { HAVE_ENOUGH_DATA } from './video-constants';
-import { calculateFramerate, VideoFunctions } from './video-functions';
+import { calculateFramerate, rewind, seekFrame, VideoFunctions } from './video-functions';
 import "./Video.scss";
 
 export default function Video(props) {
@@ -45,6 +45,7 @@ export default function Video(props) {
                     }
                 });
 
+                rewind(videoRef.current);
                 // Register initial callback when video has loaded properly
                 videoRef.current.requestVideoFrameCallback(handleVideoFrameCallback);
             })();

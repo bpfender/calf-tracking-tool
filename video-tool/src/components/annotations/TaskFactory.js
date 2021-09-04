@@ -18,8 +18,14 @@ export function TaskFactory() {
         tags: Map(), // add ids for tag association
 
         toJSON: function () {
+            let name = this.videoHandle;
+            if (this.videoHandle &&
+                typeof this.videoHandle !== 'string') {
+                name = this.videoHandle.name;
+            }
+
             return [
-                this.videoHandle ? this.videoHandle.name : null,
+                name,
                 this.totalFrames,
                 this.selected,
                 this.tracks,

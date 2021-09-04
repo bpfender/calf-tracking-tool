@@ -1,9 +1,10 @@
-import { Button, H5 } from '@blueprintjs/core';
+import { Button, H5, Icon } from '@blueprintjs/core';
+import { List } from 'immutable';
 import React from 'react';
 import { HelperPanel } from './HelperPanel';
 
 export function Anchors(props) {
-    const { projectDispatch, anchors, currentFrame, paused, videoRef, framerate } = props;
+    const { projectDispatch, track, currentFrame, paused, videoRef, framerate } = props;
 
     const handleSetAnchor = () => { };
 
@@ -20,7 +21,10 @@ export function Anchors(props) {
     const content =
         <div>
             <Button
-                icon="paperclip"
+                icon={<Icon
+                    icon="paperclip"
+                    color={track ? track.colour : null} />
+                }
                 text="Set anchor"
                 outlined={true}
                 onClick={handleSetAnchor} />
@@ -31,7 +35,7 @@ export function Anchors(props) {
             type="Anchor"
             description={description}
             content={content}
-            frameList={anchors}
+            frameList={track ? track.anchors : List()}
             currentFrame={currentFrame}
             paused={paused}
             videoRef={videoRef}

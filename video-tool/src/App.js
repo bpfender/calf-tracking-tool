@@ -92,6 +92,7 @@ export default function App(props) {
         projectDispatch={projectDispatch}
         keyframes={project.getSelectedTask().keyframes}
         reviewed={project.getSelectedTask().reviewed}
+        track={project.getSelectedTask().getSelectedTrack()}
         playerVidRef={videoRef}
         currentFrame={playerState.currentFrame}
         paused={playerState.paused} />

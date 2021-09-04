@@ -32,13 +32,17 @@ export function Reviewed(props) {
                     icon="tick"
                     intent="success"
                     text="Confirm annotations"
+                    active={reviewed.includes(currentFrame)}
+                    disabled={framerate ? false : true}
                     outlined={true}
                     onClick={handleConfirm} />
-
                 <Button
+                    className="helper-reviewed-button"
                     icon="cross"
                     intent="danger"
                     text="Reject annotations"
+                    active={!reviewed.includes(currentFrame)}
+                    disabled={framerate ? false : true}
                     outlined={true}
                     onClick={handleReject} />
             </ButtonGroup>

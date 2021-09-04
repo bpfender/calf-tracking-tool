@@ -76,10 +76,12 @@ export function VideoBar(props) {
                     icon="tick"
                     intent="success"
                     active={isReviewed}
+                    disabled={src ? false : true}
                     onClick={handleConfirm} />
                 <Button
                     icon="cross"
                     intent="warning"
+                    disabled={src ? false : true}
                     onClick={handleReject} />
             </ButtonGroup >
         </ div >
