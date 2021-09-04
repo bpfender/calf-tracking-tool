@@ -55,14 +55,6 @@ export function Header(props) {
         }
     }, [project]);
 
-    useEffect(() => {
-        window.addEventListener("beforeunload", handleSaveProject);
-
-        return (() => {
-            window.removeEventListener("beforeunload", handleSaveProject);
-        });
-    }, [handleSaveProject])
-
     const handleOpenProject = async () => {
         try {
             const appDirHandle = await retrieveAppDirHandle();
