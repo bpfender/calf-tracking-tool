@@ -7,14 +7,14 @@
 .App {
   display:grid;
   grid-template-columns: 0.8fr 0.2fr;
-  grid-template-rows:$pt-navbar-height .8fr 0.2fr;
+  grid-template-rows:$pt-navbar-height auto 0.2fr;
   grid-template-areas:"header settings"
                       "main right-sidebar"
                       "helpers right-sidebar";
 
 
   height:100vh;
-  min-height: 650px;
+  min-height: 800px;
   min-width: 1000px;
   background-color: $pt-dark-app-background-color;
 }
