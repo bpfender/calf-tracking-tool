@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, MenuDivider } from '@blueprintjs/core';
+import { Callout, Card, MenuDivider } from '@blueprintjs/core';
 import "./RightSidebar.scss"
 
 import { Tags } from './Tags';

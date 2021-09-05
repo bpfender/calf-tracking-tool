@@ -10,6 +10,7 @@ import { retrieveAppDirHandle, retrieveVideoDirHandle, storeRecentProjectHandle 
 import { ExportPopover } from './Export';
 import { History } from './History';
 import './Header.scss';
+import { HelpDrawer } from '../overlays/HelpDrawer';
 
 
 export function Header(props) {
@@ -20,6 +21,7 @@ export function Header(props) {
     const [startupFlag, setStartupFlag] = useState(true);
     const [dirFlag, setDirFlag] = useState(false);
     const [projectFlag, setProjectFlag] = useState(false);
+    const [drawerFlag, setDrawerFlag] = useState(false);
 
     const loadedFlag = useRef(false);
 
@@ -128,6 +130,9 @@ export function Header(props) {
                 setOpen={setProjectFlag}
                 projectDispatch={projectDispatch}
                 playerDispatch={playerDispatch} />
+            <HelpDrawer
+                open={drawerFlag}
+                setOpen={setDrawerFlag} />
 
             <div
                 className="header-panel">
@@ -160,7 +165,8 @@ export function Header(props) {
             <div className="header-settings">
                 <Button
                     minimal={true}
-                    icon="help" />
+                    icon="help"
+                    onClick={() => { setDrawerFlag(!drawerFlag) }} />
             </div>
         </header>
     );
