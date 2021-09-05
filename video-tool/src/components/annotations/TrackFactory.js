@@ -1,5 +1,5 @@
 import { List, setIn } from "immutable";
-import { colourGen, colourGenerator, colourPalette } from "../utils";
+import { colourGen } from "../utils";
 import { getNextAnchor, getPrevAnchor, setAnchorFrame } from "./Anchor";
 import { LabelFactory, loadLabel } from "./LabelFactory";
 
@@ -206,7 +206,7 @@ export function loadTrack(parsedTrack) {
 
 
 
-
+/*
 
 
 export function setName(track, name) {
@@ -278,7 +278,7 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
         h: (endLabel.h - startLabel.h) / frameCount,
         rotation: (endLabel.rotation - startLabel.rotation) / frameCount,
     }*/
-
+/*
     const frameDelta = Object.fromEntries(keys.map(key => {
         const val = [
             key,
@@ -298,7 +298,7 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
              h: startLabel.h + frameDelta.h * (i - (startFrame - 1)),
              rotation: startLabel.rotation + frameDelta.rotation * (i - (startFrame - 1)),
          }*/
-
+/*
         const newVals = Object.fromEntries(keys.map(key => {
             const val = ([
                 key,
@@ -318,4 +318,4 @@ function interpolateLabels(mutableList, startFrame, endFrame) {
         // console.log(label);
         mutableList.set(i, label);
     }
-}
+}*/

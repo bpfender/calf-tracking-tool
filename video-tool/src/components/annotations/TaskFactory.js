@@ -1,6 +1,6 @@
 import { List, Map, setIn, updateIn } from "immutable";
 import BoundingBox from "../canvas/BoundingBox";
-import { getLabel, loadTrack, TrackFactory } from "./TrackFactory";
+import { loadTrack, TrackFactory } from "./TrackFactory";
 
 // TODO add videoname key
 export function TaskFactory() {
@@ -119,10 +119,10 @@ export function TaskFactory() {
 
         getBoundingBoxes: function (frame, width, height) {
             return [...this.tracks.entries()]
-                .filter(([key, track]) => getLabel(track, frame)) //filter nulls(cut)
+                .filter(([key, track]) => track.getLabel(frame)) //filter nulls(cut)
                 .filter(([key, track]) => track.visible)
                 .map(([key, track]) => {
-                    const label = getLabel(track, frame);
+                    const label = track.getLabel(frame);
                     return new BoundingBox(
                         key,
                         track.colour,
@@ -139,16 +139,14 @@ export function TaskFactory() {
         setReviewed: function (frame) {
             const i = this.reviewed.findIndex(val => frame <= val);
             if (i === -1) {
-                // console.log("NO INDEX");
                 return updateIn(this, ['reviewed'], list =>
                     list.push(frame)
                 );
             }
             else if (this.reviewed.get(i) === frame) {
-                // console.log("EXISTS");
+
                 return this;
             } else {
-                // console.log("NEW");
                 return updateIn(this, ['reviewed'], list =>
                     list.insert(i, frame)
                 );

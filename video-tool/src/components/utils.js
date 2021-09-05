@@ -4,18 +4,19 @@ export const colourPalette = [
     "#C274C2", "#AD99FF", "#669EFF",
     "#2EE6D6", "#62D96B", "#FFC940"]
 
-export function* colourGenerator(colours) {
+function* colourGenerator(colours) {
     // FIXME this is duplicated for colour palette
     let i = 0;
 
     while (true) {
         yield colours[i]
         console.log(i);
-        i = (i + 1) % colours.length;
+        i = i % colours.length;
     }
 }
 
 export const colourGen = colourGenerator(colourPalette);
+
 
 //https://stackoverflow.com/questions/7193238/wait-until-a-condition-is-true/52652681#52652681
 //https://stackoverflow.com/questions/22125865/wait-until-flag-true?answertab=votes#tab-top

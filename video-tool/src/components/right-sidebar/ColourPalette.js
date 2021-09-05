@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Card, Icon } from "@blueprintjs/core";
 import { Popover2 } from "@blueprintjs/popover2";
+import { colourPalette } from "../utils";
 
 
 export default function ColourPalettePopover(props) {
@@ -20,17 +21,9 @@ export default function ColourPalettePopover(props) {
 }
 
 function ColourPalette(props) {
-    // Colours from https://blueprintjs.com/docs/#core/colors
-    // FIXME probably define as static?
-    const colours = [
-        "#48AFF0", "#3DCC91", "#FFB366",
-        "#FF7373", "#FF6E4A", "#FF66A1",
-        "#C274C2", "#AD99FF", "#669EFF",
-        "#2EE6D6", "#62D96B", "#FFC940"]
-
     return (
         <Card className="colour-palette">
-            {colours.map((colour) => {
+            {colourPalette.map((colour) => {
                 return (
                     <Button
                         key={colour}
