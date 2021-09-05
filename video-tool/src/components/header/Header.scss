@@ -1,0 +1,37 @@
+@import "~@blueprintjs/core/lib/scss/variables";
+
+.App-header{
+    display:flex;
+    align-items: center;
+}
+
+.header-settings{
+    width:20vw;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 $pt-grid-size;
+}
+
+.header-panel{
+    width:80vw;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 $pt-grid-size
+}
+
+.header-buttons{
+    flex:1;
+}
+
+.header-title{
+    flex:1;
+    justify-content: center;
+}
+
+.header-history{
+    flex:1;
+    justify-content: flex-end;
+}

@@ -45,7 +45,7 @@ export default function Video(props) {
                     }
                 });
 
-                rewind(videoRef.current);
+                videoRef.current.currentTime = 0;
                 // Register initial callback when video has loaded properly
                 videoRef.current.requestVideoFrameCallback(handleVideoFrameCallback);
             })();

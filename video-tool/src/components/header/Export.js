@@ -23,6 +23,7 @@ function ExportButton(props) {
     return (
         <Button
             icon="export"
+            text="Export"
         />
     );
 }

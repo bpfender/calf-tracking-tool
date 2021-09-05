@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Divider, } from '@blueprintjs/core';
+import { Button, ButtonGroup, Divider, Navbar, } from '@blueprintjs/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { NewProjectOverlay } from '../overlays/NewProjectOverlay';
 import { getProjectHandle, verifyPermission, writeFile } from '../storage/file-access';
@@ -9,6 +9,7 @@ import { loadProject } from '../annotations/ProjectFactory';
 import { retrieveAppDirHandle, retrieveVideoDirHandle, storeRecentProjectHandle } from '../storage/indexedDB';
 import { ExportPopover } from './Export';
 import { History } from './History';
+import './Header.scss';
 
 
 export function Header(props) {
@@ -127,35 +128,40 @@ export function Header(props) {
                 setOpen={setProjectFlag}
                 projectDispatch={projectDispatch}
                 playerDispatch={playerDispatch} />
-            <ButtonGroup
-                minimal={true}>
-                <Button
-                    icon="document"
-                    onClick={handleNewProject} />
-                <Button
-                    icon={openIcon}
-                    onClick={handleOpenProject}
-                    onMouseEnter={() => { setOpenIcon("folder-open") }}
-                    onMouseLeave={() => { setOpenIcon("folder-close") }} />
-                <Button
-                    icon="floppy-disk"
-                    onClick={handleSaveProject} />
 
-                <Divider />
-                <ExportPopover task={annotations} />
-            </ButtonGroup>
-            <text>{getTitle(project.fileHandle)}</text>
-            <History
-                project={project}
-                projectDispatch={projectDispatch}
-                canRedo={canRedo}
-                canUndo={canUndo} />
-            <ButtonGroup
-                minimal={true}>
-
-                <Divider />
-                <Button icon="help" />
-            </ButtonGroup>
+            <div
+                className="header-panel">
+                <ButtonGroup
+                    minimal={true}
+                    className="header-buttons">
+                    <Button
+                        icon="document"
+                        text="New"
+                        onClick={handleNewProject} />
+                    <Button
+                        icon={openIcon}
+                        text="Open"
+                        onClick={handleOpenProject}
+                        onMouseEnter={() => { setOpenIcon("folder-open") }}
+                        onMouseLeave={() => { setOpenIcon("folder-close") }} />
+                    <Button
+                        icon="floppy-disk"
+                        text="Save"
+                        onClick={handleSaveProject} />
+                    <ExportPopover task={annotations} />
+                </ButtonGroup>
+                <text className="header-title">{getTitle(project.fileHandle)}</text>
+                <History
+                    project={project}
+                    projectDispatch={projectDispatch}
+                    canRedo={canRedo}
+                    canUndo={canUndo} />
+            </div>
+            <div className="header-settings">
+                <Button
+                    minimal={true}
+                    icon="help" />
+            </div>
         </header>
     );
 }

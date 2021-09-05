@@ -31,8 +31,7 @@ export function Anchors(props) {
                 key: trackKey,
                 frame: currentFrame
             }
-        }
-        );
+        });
     };
 
     const handleUnsetAnchor = () => {
@@ -42,8 +41,7 @@ export function Anchors(props) {
                 key: trackKey,
                 frame: currentFrame
             }
-        }
-        );
+        });
     }
 
     const description =

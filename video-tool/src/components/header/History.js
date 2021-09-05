@@ -21,7 +21,8 @@ export function History(props) {
 
     return (
         <ButtonGroup
-            minimal={true}>
+            minimal={true}
+            className="header-history">
             <Button
                 icon="undo"
                 disabled={!canUndo}

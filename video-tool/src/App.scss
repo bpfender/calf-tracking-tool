@@ -8,7 +8,7 @@
   display:grid;
   grid-template-columns: 0.8fr 0.2fr;
   grid-template-rows:$pt-navbar-height auto 0.3fr;
-  grid-template-areas:"header settings"
+  grid-template-areas:"header header"
                       "main right-sidebar"
                       "helpers right-sidebar";
 
@@ -23,11 +23,6 @@
   grid-area:header;
   height:$pt-navbar-height;
   background-color: $dark-gray1;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
 }
 
 .main-content{
