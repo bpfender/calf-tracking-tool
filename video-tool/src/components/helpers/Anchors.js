@@ -4,9 +4,27 @@ import React from 'react';
 import { HelperPanel } from './HelperPanel';
 
 export function Anchors(props) {
-    const { projectDispatch, track, currentFrame, paused, videoRef, framerate } = props;
+    const {
+        projectDispatch,
+        track,
+        trackKey,
+        currentFrame,
+        paused,
+        videoRef,
+        framerate } = props;
 
-    const handleSetAnchor = () => { };
+    const handleSetAnchor = () => {
+        console.log(trackKey);
+
+        projectDispatch({
+            type: 'SET_ANCHOR',
+            payload: {
+                key: trackKey,
+                frame: currentFrame
+            }
+        }
+        );
+    };
 
     const description =
         <div>
@@ -21,6 +39,7 @@ export function Anchors(props) {
     const content =
         <div>
             <Button
+                disabled={!track}
                 icon={<Icon
                     icon="paperclip"
                     color={track ? track.colour : null} />

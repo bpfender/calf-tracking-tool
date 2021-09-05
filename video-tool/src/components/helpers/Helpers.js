@@ -13,6 +13,7 @@ export function Helpers(props) {
         projectDispatch,
         keyframes,
         track,
+        trackKey,
         reviewed,
         playerVidRef,
         currentFrame,
@@ -54,6 +55,7 @@ export function Helpers(props) {
                     <Anchors
                         projectDispatch={projectDispatch}
                         track={track}
+                        trackKey={trackKey}
                         currentFrame={currentFrame}
                         paused={paused}
                         videoRef={playerVidRef}

@@ -266,7 +266,7 @@ export function TrackFactory(totalFrames) {
                 }
             }
             else {
-                const interpEnd = mutableList.get(endFrame - 2);
+                const interpEnd = endLabel ? endLabel : mutableList.get(endFrame - 2);
                 const frameDelta = Object.fromEntries(keys.map(key => {
                     const val = [
                         key,

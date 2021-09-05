@@ -21,6 +21,12 @@ export function trackReducer(state, action) {
         case 'INSERT_LABEL': {
             return state.insertLabel(payload.frame);
         }
+        case 'SET_ANCHOR': {
+            return state.setAnchor(payload.frame);
+        }
+        case 'UNSET_ANCHOR': {
+            return state.unsetAnchor(payload.frame);
+        }
         default:
             throw new Error("Unrecognised project action");
     }
