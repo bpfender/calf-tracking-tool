@@ -1,5 +1,5 @@
 import React from 'react';
-import { MenuDivider } from '@blueprintjs/core';
+import { Card, MenuDivider } from '@blueprintjs/core';
 import "./RightSidebar.scss"
 
 import { Tags } from './Tags';
@@ -13,19 +13,21 @@ export default function RightSidebar(props) {
     // FIXME not sure about getTrack calls way to optimise?
     return (
         <div className={props.className}>
-            <Tasks
-                projectDispatch={projectDispatch}
-                tasks={project.tasks}
-                selected={project.selectedTask} />
-            <Tags
-                projectDispatch={projectDispatch}
-                labels={labels} />
-            <MenuDivider></MenuDivider>
-            <LabelStack
-                projectDispatch={projectDispatch}
-                annotations={annotations}
-                labels={labels}
-                currentFrame={currentFrame} />
+            <Card className="sidebar-panel">
+                <Tasks
+                    projectDispatch={projectDispatch}
+                    tasks={project.tasks}
+                    selected={project.selectedTask} />
+                <Tags
+                    projectDispatch={projectDispatch}
+                    labels={labels} />
+                <MenuDivider></MenuDivider>
+                <LabelStack
+                    projectDispatch={projectDispatch}
+                    annotations={annotations}
+                    labels={labels}
+                    currentFrame={currentFrame} />
+            </Card>
         </div >
     );
 }

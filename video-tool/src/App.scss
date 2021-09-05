@@ -28,12 +28,14 @@
 .main-content{
   display: flex;
   flex-direction: column;
-  padding: $pt-grid-size 2*$pt-grid-size;
+  padding: $pt-grid-size 0.5*$pt-grid-size;
+  padding-left: 2*$pt-grid-size;
   grid-area: main;
   }
 
 .helpers{
-  padding: $pt-grid-size 2*$pt-grid-size;
+  padding: $pt-grid-size 0.5*$pt-grid-size;
+  padding-left:2*$pt-grid-size;
   grid-area:helpers;
 }
 
@@ -42,7 +44,8 @@
   padding:0;
   overflow-y: auto;
   grid-area:right-sidebar;
-  background-color: $dark-gray4;
+  padding: $pt-grid-size 0.5*$pt-grid-size;
+  padding-right: 2*$pt-grid-size
 }
 
 // https://css-tricks.com/custom-scrollbars-in-webkit/

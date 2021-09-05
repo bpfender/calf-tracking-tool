@@ -33,7 +33,6 @@ function ExportMenu(props) {
 
     return (
         <Menu>
-            <H5>Export</H5>
             <ExportMenuItem
                 taskName={task.videoHandle.name}
                 content="YOLOv5"

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@blueprintjs/core";
+import { Button, Menu } from "@blueprintjs/core";
 import { Popover2 } from "@blueprintjs/popover2";
 import "./PlaybackSetting.scss"
 import FrameSkipSelect from "./FrameSkipSelect";
@@ -40,6 +40,6 @@ function PlaybackSettingsMenu(props) {
             <FrameSkipSelect
                 playerDispatch={playerDispatch}
                 framesToSkip={framesToSkip} />
-        </div>
+        </ div>
     );
 }

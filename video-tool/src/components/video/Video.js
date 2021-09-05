@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { defaultPlayerState } from '../state/player-reducer';
 import { HAVE_ENOUGH_DATA } from './video-constants';
 import { calculateFramerate, rewind, seekFrame, VideoFunctions } from './video-functions';
-import "./Video.scss";
 
 export default function Video(props) {
     const {
