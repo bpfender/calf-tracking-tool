@@ -10,7 +10,7 @@ export function* colourGenerator(colours) {
 
     while (true) {
         yield colours[i]
-        console.log(colours[i]);
+        console.log(i);
         i = (i + 1) % colours.length;
     }
 }
