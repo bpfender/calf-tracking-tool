@@ -1,6 +1,6 @@
 import { Button, H5, Icon } from '@blueprintjs/core';
 import { List } from 'immutable';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { HelperPanel } from './HelperPanel';
 
 export function Anchors(props) {
@@ -12,6 +12,15 @@ export function Anchors(props) {
         paused,
         videoRef,
         framerate } = props;
+
+    const [anchorFrame, setAnchorFrame] = useState(false);
+
+    useEffect(() => {
+        if (track) {
+            setAnchorFrame(track.isAnchor(currentFrame));
+        }
+    }, [track, currentFrame])
+
 
     const handleSetAnchor = () => {
         console.log(trackKey);
@@ -25,6 +34,17 @@ export function Anchors(props) {
         }
         );
     };
+
+    const handleUnsetAnchor = () => {
+        projectDispatch({
+            type: 'UNSET_ANCHOR',
+            payload: {
+                key: trackKey,
+                frame: currentFrame
+            }
+        }
+        );
+    }
 
     const description =
         <div>
@@ -44,9 +64,9 @@ export function Anchors(props) {
                     icon="paperclip"
                     color={track ? track.colour : null} />
                 }
-                text="Set anchor"
+                text={anchorFrame ? "Unset anchor" : "Set anchor"}
                 outlined={true}
-                onClick={handleSetAnchor} />
+                onClick={anchorFrame ? handleUnsetAnchor : handleSetAnchor} />
         </div>
 
     return (
