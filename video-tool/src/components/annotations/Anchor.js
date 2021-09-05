@@ -8,6 +8,12 @@ export function setAnchorFrame(anchors, frame) {
     return anchors.insert(i, frame);
 }
 
+export function deleteAnchorFrame(anchors, frame) {
+    const i = anchors.indexOf(frame);
+
+    return anchors.delete(i);
+}
+
 // Find index of equal or greater anchor value
 function getInsertionIndex(anchors, frame) {
     if (anchors.size === 0) {

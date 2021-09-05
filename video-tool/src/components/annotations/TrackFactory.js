@@ -1,6 +1,6 @@
 import { List, setIn } from "immutable";
 import { colourGen } from "../utils";
-import { getNextAnchor, getPrevAnchor, setAnchorFrame } from "./Anchor";
+import { deleteAnchorFrame, getNextAnchor, getPrevAnchor, setAnchorFrame } from "./Anchor";
 import { LabelFactory, loadLabel } from "./LabelFactory";
 
 export function TrackFactory(totalFrames) {
@@ -33,7 +33,15 @@ export function TrackFactory(totalFrames) {
             return setIn(this, ['visible'], !this.visible);
         },
 
-        setLabel: function (frame, label) {
+        isAnchor: function (frame) {
+            return this.anchors.includes(frame);
+        },
+
+        getLabel: function (frame) {
+            return this.labels.get(frame - 1);
+        },
+
+        /*setLabel: function (frame, label) {
             const prevFrame = getPrevAnchor(this.anchors, frame);
             const nextFrame = getNextAnchor(this.anchors, frame);
             let newLabels = null;
@@ -113,9 +121,6 @@ export function TrackFactory(totalFrames) {
             }
         },
 
-        getLabel: function (frame) {
-            return this.labels.get(frame - 1);
-        },
 
         // FIXME not sure about naming of interpolation function
         cutLabel: function (frame) {
@@ -168,9 +173,7 @@ export function TrackFactory(totalFrames) {
             return setIn(trackNewAnchors, ['labels'], newLabels);
         },
 
-        isAnchor: function (frame) {
-            return this.anchors.includes(frame);
-        },
+
 
         setAnchor: function (frame) {
             const label = this.getLabel(frame);
@@ -182,10 +185,118 @@ export function TrackFactory(totalFrames) {
         },
 
         unsetAnchor: function (frame) {
+        },*/
 
-        }
+        setLabel: function (frame, label) {
+            const prevFrame = getPrevAnchor(this.anchors, frame);
+            const nextFrame = getNextAnchor(this.anchors, frame);
+            let newLabels = null;
 
+            // console.log(frame, label);
+            if (prevFrame === -1 && nextFrame === -1) {
+                newLabels = List(Array(this.labels.size).fill(label));
 
+            } else if (prevFrame === -1) {
+                newLabels = this.labels.withMutations(list => {
+                    for (let i = 0; i < frame; i++) {
+                        list.set(i, label);
+                    }
+                    this.interpolate_new(list, frame, nextFrame);
+                });
+            } else if (nextFrame === -1) {
+                newLabels = this.labels.withMutations(list => {
+                    for (let i = frame - 1; i < this.labels.size; i++) {
+                        list.set(i, label);
+                    }
+                    this.interpolate_new(list, prevFrame, frame);
+                });
+            } else {
+                newLabels = this.labels.withMutations(list => {
+                    list.set(frame - 1, label);
+                    this.interpolate_new(list, prevFrame, frame);
+                    this.interpolate_new(list, frame, nextFrame);
+                });
+            }
+
+            const newAnchors = setAnchorFrame(this.anchors, frame);
+            const trackNewAnchors = setIn(this, ['anchors'], newAnchors);
+
+            return setIn(trackNewAnchors, ['labels'], newLabels);
+        },
+
+        cutLabel: function (frame) {
+            return this.setLabel(frame, null);
+        },
+
+        insertLabel: function (frame) {
+            const label = LabelFactory();
+            return this.setLabel(frame, label);
+        },
+
+        setAnchor: function (frame) {
+            const label = this.getLabel(frame);
+            return this.setLabel(frame, label);
+        },
+
+        unsetAnchor: function (frame) {
+            const prevAnchor = getPrevAnchor(this.anchors, frame);
+            const nextAnchor = getNextAnchor(this.anchors, frame);
+
+            const newLabels = this.labels.withMutations(list => {
+                this.interpolate_new(list, prevAnchor, nextAnchor);
+            })
+
+            const newAnchors = deleteAnchorFrame(this.anchors, frame);
+            const trackNewAnchors = setIn(this, ['anchors'], newAnchors);
+            return setIn(trackNewAnchors, ['labels'], newLabels);
+        },
+
+        interpolate_new: function (mutableList, startFrame, endFrame) {
+            const startLabel = mutableList.get(startFrame - 1);
+            const endLabel = mutableList.get(endFrame - 1);
+            const frameCount = endFrame - startFrame;
+            const keys = ['x', 'y', 'w', 'h', 'rotation'];
+
+            if (!startLabel && !endLabel) {
+                //Do nothing, nothing to interpolate
+            }
+            else if (!startLabel) {
+                for (let i = startFrame; i < endFrame - 1; i++) {
+                    mutableList.set(i, null);
+                }
+            }
+            else {
+                const interpEnd = mutableList.get(endFrame - 2);
+                const frameDelta = Object.fromEntries(keys.map(key => {
+                    const val = [
+                        key,
+                        (interpEnd[key] - startLabel[key]) / (frameCount - 1)
+                    ];
+                    return val;
+                }))
+
+                for (let i = startFrame; i < endFrame - 1; i++) {
+                    const newVals = Object.fromEntries(keys.map(key => {
+                        const val = ([
+                            key,
+                            startLabel[key] + frameDelta[key] * (i - (startFrame - 1))
+                        ]);
+
+                        return val;
+                    }));
+
+                    const label = LabelFactory(
+                        newVals.x,
+                        newVals.y,
+                        newVals.w,
+                        newVals.h,
+                        newVals.rotation,
+                    );
+                    mutableList.set(i, label);
+                }
+            }
+
+        },
     };
 }
 
