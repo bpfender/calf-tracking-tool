@@ -5,7 +5,7 @@ import { hammingDistance } from '../utils';
 import { getTimeAsFrames } from '../video/video-functions';
 import { keyframeButtonStates, keyframeProgressStates, keyframeState } from './keyframeStates';
 
-const HAMMING_THRESHOLD = 6;
+const HAMMING_THRESHOLD = 5;
 const FRAME_SKIP = 5;
 const HASH_BITS = 16;
 const VIDEO_SCALING = 3;
