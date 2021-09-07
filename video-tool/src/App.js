@@ -78,6 +78,8 @@ export default function App(props) {
         canUndo={canUndo}
         canRedo={canRedo} />
       <Player
+        canUndo={canUndo}
+        canRedo={canRedo}
         className="main-content"
         videoRef={videoRef}
         project={project}

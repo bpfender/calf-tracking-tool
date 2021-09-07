@@ -14,7 +14,8 @@ import { keyCode, useKeydown } from './useKeydown';
 function Player(props) {
     const {
         annotations, projectDispatch, project,
-        playerState, playerDispatch, videoRef } = props;
+        playerState, playerDispatch, videoRef
+        , canUndo, canRedo } = props;
 
     const [hidden, setHidden] = useState(false);
 
@@ -79,18 +80,22 @@ function Player(props) {
                     break;
                 }
                 case keyCode.z: {
-                    if (key.ctrlKey) {
-                        projectDispatch({
-                            type: 'UNDO'
-                        });
-                    }
-                    break;
+                    if (canUndo) {
+                        if (key.ctrlKey) {
+                            projectDispatch({
+                                type: 'UNDO'
+                            });
+                        }
+                    } break;
                 }
                 case keyCode.y: {
-                    if (key.ctrlKey) {
-                        projectDispatch({
-                            type: 'REDO'
-                        });
+                    if (canRedo) {
+
+                        if (key.ctrlKey) {
+                            projectDispatch({
+                                type: 'REDO'
+                            });
+                        }
                     }
                     break;
                 }
