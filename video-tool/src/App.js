@@ -71,6 +71,7 @@ export default function App(props) {
       className="App bp3-dark">
       <Header
         className="App-header"
+        playerState={playerState}
         project={project}
         projectDispatch={projectDispatch}
         playerDispatch={playerDispatch}

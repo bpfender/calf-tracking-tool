@@ -15,7 +15,7 @@ import { keyCode, useKeydown } from '../video/useKeydown';
 
 
 export function Header(props) {
-    const { projectDispatch, playerDispatch, project, annotations, canUndo, canRedo } = props;
+    const { projectDispatch, playerDispatch, project, annotations, canUndo, canRedo, playerState } = props;
 
     const [saved, setSaved] = useState(false);
 
@@ -154,7 +154,7 @@ export function Header(props) {
                         icon="floppy-disk"
                         text="Save"
                         onClick={handleSaveProject} />
-                    <ExportPopover task={annotations} />
+                    <ExportPopover task={annotations} playerState={playerState} />
                 </ButtonGroup>
                 <text className="header-title">{getTitle(project.fileHandle)}</text>
                 <History

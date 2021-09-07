@@ -1,5 +1,5 @@
 // FIXME no scaling yet
-export function exportYOLOv5(task) {
+export function exportYOLOv5(task, width, height) {
     const tags = [...task.tags.keys()];
     const fileArray = [];
 
@@ -11,11 +11,11 @@ export function exportYOLOv5(task) {
             for (const key of keys) {
                 const label = task.getTrack(key).getLabel(frame);
                 if (label) {
-                    const rotation = label.rotation;
+                    const rotation = label.rotation * Math.PI / 180;
                     const x = label.x;
                     const y = label.y;
-                    const h = label.w * Math.cos(rotation) + label.h * Math.sin(rotation);
-                    const w = label.w * Math.sin(rotation) + label.h * Math.cos(rotation);
+                    const w = (Math.abs(label.w * width * Math.cos(rotation)) + Math.abs(label.h * height * Math.sin(rotation))) / width;
+                    const h = (Math.abs(label.w * width * Math.sin(rotation)) + Math.abs(label.h * height * Math.cos(rotation))) / height;
 
                     s += `${tagIndex} ${x} ${y} ${w} ${h}\n`;
                 }

@@ -5,14 +5,16 @@ import { exportYOLOv5, exportYOLOv5Rotated } from '../storage/export-annotations
 import { getCreateDirHandle, getCreateFileHandle, getParentDirectory, writeFile } from '../storage/file-access';
 
 export function ExportPopover(props) {
-    const { task } = props;
+    const { task, playerState } = props;
 
     return (
         <Popover2
             children={<ExportButton />}
             content={
                 <ExportMenu
-                    task={task} />
+                    task={task}
+                    width={playerState.videoWidth}
+                    height={playerState.videoHeight} />
             }
             position="bottom-left"
         />
@@ -29,14 +31,14 @@ function ExportButton(props) {
 }
 
 function ExportMenu(props) {
-    const { task } = props;
+    const { task, width, height } = props;
 
     return (
         <Menu>
             <ExportMenuItem
                 taskName={task.videoHandle.name}
                 content="YOLOv5"
-                exportFunction={() => exportYOLOv5(task)} />
+                exportFunction={() => exportYOLOv5(task, width, height)} />
             <ExportMenuItem
                 taskName={task.videoHandle.name}
                 content="YOLOv5 rotated"

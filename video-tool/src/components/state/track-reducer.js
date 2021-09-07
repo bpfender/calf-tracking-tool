@@ -13,6 +13,7 @@ export function trackReducer(state, action) {
             return state.toggleVisible();
         }
         case 'SET_FRAME_LABEL': {
+            console.log(payload.label);
             return state.setLabel(payload.frame, payload.label);
         }
         case 'CUT_LABEL': {
