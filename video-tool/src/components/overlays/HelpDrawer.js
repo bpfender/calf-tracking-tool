@@ -67,12 +67,6 @@ export function HelpDrawer(props) {
                     <UL className="help-list">
                         <li>
                             <Code className="help-list-entry">
-                                CTRL + S
-                            </Code>
-                            Save project
-                        </li>
-                        <li>
-                            <Code className="help-list-entry">
                                 CTRL + Z
                             </Code>
                             Undo

@@ -4,7 +4,8 @@ export function useKeydown() {
     const [key, setKey] = useState(null);
 
     useEffect(() => {
-        window.addEventListener('keydown', handleKeydown)
+        window.addEventListener('keydown', handleKeydown);
+        window.addEventListener('keyup', handleKeyup);
         return (() => {
             window.removeEventListener('keydown', handleKeydown);
         })
@@ -13,6 +14,10 @@ export function useKeydown() {
     const handleKeydown = (event) => {
         setKey(event);
     };
+
+    const handleKeyup = () => {
+        setKey(null);
+    }
 
     return key;
 }
@@ -33,4 +38,6 @@ export const keyCode = {
     dot: 190,
     semicolon: 186,
     apost: 192,
+    s: 83,
+    o: 79,
 };

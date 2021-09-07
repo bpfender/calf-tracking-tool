@@ -11,6 +11,7 @@ import { ExportPopover } from './Export';
 import { History } from './History';
 import './Header.scss';
 import { HelpDrawer } from '../overlays/HelpDrawer';
+import { keyCode, useKeydown } from '../video/useKeydown';
 
 
 export function Header(props) {
@@ -26,6 +27,8 @@ export function Header(props) {
     const loadedFlag = useRef(false);
 
     const [openIcon, setOpenIcon] = useState("folder-close");
+
+    const key = useKeydown();
 
     // FIXME this requires some form of timeout
     useEffect(() => {
