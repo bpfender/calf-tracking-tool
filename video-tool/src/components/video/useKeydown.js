@@ -25,4 +25,12 @@ export const keyCode = {
     space: 32,
     bracketRight: 221,
     bracketLeft: 219,
+    c: 67,
+    x: 88,
+    z: 90,
+    y: 89,
+    comma: 188,
+    dot: 190,
+    semicolon: 186,
+    apost: 192,
 };

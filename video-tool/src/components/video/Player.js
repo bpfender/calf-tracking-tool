@@ -13,7 +13,7 @@ import { keyCode, useKeydown } from './useKeydown';
 //FIXME position of video isn't quite right yet. Not sure what's happen
 function Player(props) {
     const {
-        annotations, projectDispatch,
+        annotations, projectDispatch, project,
         playerState, playerDispatch, videoRef } = props;
 
     const [hidden, setHidden] = useState(false);
@@ -27,14 +27,14 @@ function Player(props) {
         console.log(key);
         if (key) {
             switch (key.keyCode) {
-                case keyCode.enter: {
+                case keyCode.c: {
                     projectDispatch({
                         type: 'CONFIRM_FRAME',
                         payload: { frame: playerState.currentFrame }
                     });
                     break;
                 }
-                case keyCode.backspace: {
+                case keyCode.x: {
                     projectDispatch({
                         type: 'REJECT_FRAME',
                         payload: { frame: playerState.currentFrame }
@@ -78,7 +78,60 @@ function Player(props) {
                     }
                     break;
                 }
-
+                case keyCode.z: {
+                    if (key.ctrlKey) {
+                        projectDispatch({
+                            type: 'UNDO'
+                        });
+                    }
+                    break;
+                }
+                case keyCode.y: {
+                    if (key.ctrlKey) {
+                        projectDispatch({
+                            type: 'REDO'
+                        });
+                    }
+                    break;
+                }
+                case keyCode.semicolon: {
+                    const task = project.getSelectedTask();
+                    const prevReviewed = task.reviewed.findLast(val => val < playerState.currentFrame, this, -1);
+                    if (prevReviewed > 0) {
+                        seekFrame(videoRef.current, prevReviewed, playerState.framerate);
+                    }
+                    break;
+                }
+                case keyCode.apost: {
+                    const task = project.getSelectedTask();
+                    const nextReviewed = task.reviewed.find(val => val > playerState.currentFrame, this, -1);
+                    if (nextReviewed > 0) {
+                        seekFrame(videoRef.current, nextReviewed, playerState.framerate);
+                    }
+                    break;
+                }
+                case keyCode.comma: {
+                    const task = project.getSelectedTask();
+                    if (task.selected) {
+                        const track = task.getSelectedTrack();
+                        const prevAnchor = track.anchors.findLast(val => val < playerState.currentFrame, this, -1);
+                        if (prevAnchor > 0) {
+                            seekFrame(videoRef.current, prevAnchor, playerState.framerate);
+                        }
+                    }
+                    break;
+                }
+                case keyCode.dot: {
+                    const task = project.getSelectedTask();
+                    if (task.selected) {
+                        const track = task.getSelectedTrack();
+                        const nextAnchor = track.anchors.find(val => val > playerState.currentFrame, this, -1);
+                        if (nextAnchor > 0) {
+                            seekFrame(videoRef.current, nextAnchor, playerState.framerate);
+                        }
+                    }
+                    break;
+                }
                 default:
                     break;
             }

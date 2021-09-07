@@ -80,6 +80,7 @@ export default function App(props) {
       <Player
         className="main-content"
         videoRef={videoRef}
+        project={project}
         playerState={playerState}
         playerDispatch={playerDispatch}
         annotations={project.getSelectedTask()}

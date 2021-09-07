@@ -85,12 +85,15 @@ export function HelpDrawer(props) {
                         </li>
                         <li>
                             <Code className="help-list-entry">
-                                <Icon
-                                    className="help-icon"
-                                    icon="key-enter" />
-                                Enter
+                                C
                             </Code>
                             Confirm annotations
+                        </li>
+                        <li>
+                            <Code className="help-list-entry">
+                                X
+                            </Code>
+                            Reject annotations
                         </li>
                         <li>
                             <Code className="help-list-entry">
@@ -98,15 +101,7 @@ export function HelpDrawer(props) {
                             </Code>
                             Set/unset anchor
                         </li>
-                        <li>
-                            <Code className="help-list-entry">
-                                <Icon
-                                    className="help-icon"
-                                    icon="key-backspace" />
-                                Backspace
-                            </Code>
-                            Reject annotations
-                        </li>
+
                         <li>
                             <Code className="help-list-entry">
                                 Space
@@ -145,13 +140,13 @@ export function HelpDrawer(props) {
                         </li>
                         <li>
                             <Code className="help-list-entry">
-                                [Left bracket
+                                [ Left bracket
                             </Code>
                             Previous keyframe
                         </li>
                         <li>
                             <Code className="help-list-entry">
-                                ]Right bracket
+                                ] Right bracket
                             </Code>
                             Next keyframe
                         </li>
