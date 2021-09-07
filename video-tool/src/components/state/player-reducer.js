@@ -169,7 +169,7 @@ export function playerReducer(state, action) {
             return {
                 ...state,
                 framerate: payload.framerate,
-                totalFrames: Math.floor(state.duration * payload.framerate + 1),
+                totalFrames: Math.floor(state.duration * payload.framerate),
             }
         case 'RESET':
             return defaultPlayerState;

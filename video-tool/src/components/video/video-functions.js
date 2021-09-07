@@ -1,4 +1,4 @@
-export class VideoFunctions {
+/*export class VideoFunctions {
     constructor(videoElem) {
         this.video = videoElem;
         this.framerate = null;
@@ -77,7 +77,7 @@ export class VideoFunctions {
         const [prevTime, prevFrames, prevFpsScaled] = prev;
 
         const fpsScaled = Math.round((frames - prevFrames) / (time - prevTime) * 1000);
-
+        console.log(fpsScaled);
         if (fpsScaled === prevFpsScaled) {
             return fpsScaled / 1000;
         } else {
@@ -94,7 +94,7 @@ export class VideoFunctions {
         })
     }
 
-}
+}*/
 
 
 
@@ -115,7 +115,7 @@ export function getFrameOffset(fps) {
 }
 
 export async function calculateFramerate(video, prev = [0, 0, 0, 0]) {
-    setPlaybackRate(video, 0.25);
+    setPlaybackRate(video, 0.3);
 
     await video.play();
     const metadata = await requestVideoFramePromise(video)
@@ -134,13 +134,15 @@ async function framerateCalcCallback(video, metadata, prev) {
     // console.log(fps / 1000);
     // console.log("presented", frames, time);
 
-    const avgFps = Math.floor(frames / time * 1000);
+    const avgFps = Math.floor(frames / time * 10000);
+    console.log(avgFps);
     // console.log(avgFps);
     // console.log(video.currentTime / frames);
 
     // console.log(avgFps)
     if (avgFps === prevAvgFps) {
-        return avgFps / 1000;
+        let fps = Math.floor(avgFps / 10);
+        return fps / 1000;
     } else {
         return await calculateFramerate(video, [time, frames, fps, avgFps]);
     }
