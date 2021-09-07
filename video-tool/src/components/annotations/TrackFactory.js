@@ -267,13 +267,20 @@ export function TrackFactory(totalFrames) {
             }
             else {
                 const interpEnd = endLabel ? endLabel : mutableList.get(endFrame - 2);
+                const end = endLabel ? 1 : 2;
                 const frameDelta = Object.fromEntries(keys.map(key => {
                     const val = [
                         key,
-                        (interpEnd[key] - startLabel[key]) / (frameCount - 1)
+                        (interpEnd[key] - startLabel[key]) / (frameCount - end)
                     ];
+
                     return val;
                 }))
+                frameDelta.rotation = ((interpEnd.rotation - startLabel.rotation) % 180) / (frameCount - end);
+                if (Math.abs(interpEnd.rotation - startLabel.rotation) > 180) {
+                    frameDelta.rotation = -frameDelta.rotation;
+                }
+
 
                 for (let i = startFrame; i < endFrame - 1; i++) {
                     const newVals = Object.fromEntries(keys.map(key => {

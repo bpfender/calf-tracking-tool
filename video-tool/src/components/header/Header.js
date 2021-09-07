@@ -28,8 +28,6 @@ export function Header(props) {
 
     const [openIcon, setOpenIcon] = useState("folder-close");
 
-    const key = useKeydown();
-
     // FIXME this requires some form of timeout
     useEffect(() => {
         if (!loadedFlag.current) {

@@ -130,7 +130,8 @@ export function KeyframeDetector(props) {
                 setProgressState(keyframeProgressStates.done);
                 break;
             default:
-                throw new Error("Unrecognised keyframe state");
+
+            //throw new Error("Unrecognised keyframe state");
         }
     }, [state])
 
@@ -161,7 +162,7 @@ export function KeyframeDetector(props) {
                 break;
             }
             default:
-                throw new Error("Unrecognised keyframe click state");
+            //throw new Error("Unrecognised keyframe click state");
         }
     };
 
@@ -209,7 +210,7 @@ export function KeyframeDetector(props) {
                 break;
             }
             default: {
-                throw new Error("Timeupdate unknown keyframe state");
+                // throw new Error("Timeupdate unknown keyframe state");
             }
         }
     };
