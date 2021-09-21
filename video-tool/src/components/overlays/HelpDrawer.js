@@ -14,7 +14,6 @@ export function HelpDrawer(props) {
             onClose={() => { setOpen(false) }}>
             <div className={Classes.DRAWER_BODY}>
                 <div className={Classes.DIALOG_BODY}>
-                    <p>NOT ALL SHORTCUTS WORK YET</p>
                     <p>
                         You will be asked to create a folder to store your project files.
                     </p>

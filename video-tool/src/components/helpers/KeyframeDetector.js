@@ -5,8 +5,8 @@ import { hammingDistance } from '../utils';
 import { getTimeAsFrames } from '../video/video-functions';
 import { keyframeButtonStates, keyframeProgressStates, keyframeState } from './keyframeStates';
 
-const HAMMING_THRESHOLD = 5;
-const FRAME_SKIP = 5;
+const HAMMING_THRESHOLD = 6;
+const FRAME_SKIP = 4;
 const HASH_BITS = 16;
 const VIDEO_SCALING = 3;
 
@@ -43,12 +43,12 @@ export function KeyframeDetector(props) {
 
     // Check if keyframes are present in task
     useEffect(() => {
-        if (keyframes.size) {
+        if (keyframes.size > 0) {
             setState(keyframeState.done);
         } else {
             setState(keyframeState.waiting);
         }
-    }, [keyframes])
+    }, [keyframes, src])
 
     useEffect(() => {
         if (src) {
@@ -73,14 +73,20 @@ export function KeyframeDetector(props) {
 
             contextRef.current.drawImage(videoRef.current, 0, 0, width, height)
             const imageData = contextRef.current.getImageData(0, 0, width, height);
-            const nextHash = bmvbhash(imageData, HASH_BITS);
+            const hash = bmvbhash(imageData, HASH_BITS);
+            let nextHash = null;
 
             if (prevHash) {
-                const hamming = hammingDistance(prevHash, nextHash);
+                const hamming = hammingDistance(prevHash, hash);
                 if (hamming > HAMMING_THRESHOLD) {
                     keyframesArray.current.push(currFrame);
+                    nextHash = hash;
                     console.log(videoRef.current.playbackRate, currFrame, hamming);
+                } else {
+                    nextHash = prevHash;
                 }
+            } else {
+                nextHash = hash;
             }
 
             if (currFrame - prevFrame > FRAME_SKIP &&

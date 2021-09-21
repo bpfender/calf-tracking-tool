@@ -43,6 +43,11 @@ export default function App(props) {
     }
   }, [project.selectedTask])
 
+  useEffect(() => {
+    console.log("MEDIA", playerState.mediaTime);
+    console.log("CURRENT", playerState.currentTime);
+  }, [playerState.currentFrame])
+
   const currentVideoHandle = project.getSelectedTask().videoHandle;
 
   useEffect(() => {

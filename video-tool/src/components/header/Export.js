@@ -1,7 +1,7 @@
 import { Button, H5, Menu, MenuItem } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import React from 'react';
-import { exportYOLOv5, exportYOLOv5Rotated } from '../storage/export-annotations';
+import { exportRotated, exportYOLOv5, exportYOLOv5Rotated } from '../storage/export-annotations';
 import { getCreateDirHandle, getCreateFileHandle, getParentDirectory, writeFile } from '../storage/file-access';
 
 export function ExportPopover(props) {
@@ -33,6 +33,16 @@ function ExportButton(props) {
 function ExportMenu(props) {
     const { task, width, height } = props;
 
+    /*   const handleJSONExport = async () => {
+           const dirHandle = await getParentDirectory();
+           const fileHandle = await getCreateFileHandle(dirHandle, 'arrayJSON');
+   
+           const array = exportRotated(task);
+           console.log(array);
+           await writeFile(fileHandle, JSON.stringify(array));
+       }*/
+
+
     return (
         <Menu>
             <ExportMenuItem
@@ -46,6 +56,8 @@ function ExportMenu(props) {
         </Menu>
     )
 }
+
+
 
 function ExportMenuItem(props) {
     const { content, exportFunction, taskName } = props;

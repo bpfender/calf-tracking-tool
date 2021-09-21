@@ -22,7 +22,7 @@ export function Reviewed(props) {
     const description =
         <div>
             <H5>Reviewed frames have been confirmed as correct. </H5>
-            <p>Use this panel to reviwed your reviewed frames.</p>
+            <p>Use this panel to look through your reviewed frames.</p>
         </div>
 
     const content =

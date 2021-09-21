@@ -57,3 +57,33 @@ export function exportYOLOv5Rotated(task) {
     }
     return fileArray;
 }
+
+export function exportRotated(task) {
+    const tags = [...task.tags.keys()];
+    const frameArray = [];
+
+    for (let frame = 1; frame <= task.totalFrames; frame++) {
+        let s = "";
+        const labels = [];
+        let tagIndex = 0;
+        for (const tag of tags) {
+            const keys = task.getTagIds(tag);
+            for (const key of keys) {
+                const label = task.getTrack(key).getLabel(frame);
+                if (label) {
+                    const x = label.x * 800;
+                    const y = label.y * 600;
+                    const w = label.w * 800;
+                    const h = label.h * 600;
+                    const rotation = label.rotation;
+
+                    labels.push([x, y, w, h, rotation]);
+                }
+            }
+
+            tagIndex++;
+        }
+        frameArray.push(labels);
+    }
+    return frameArray;
+}
